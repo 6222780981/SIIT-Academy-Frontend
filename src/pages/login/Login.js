@@ -1,6 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
+import siitlogo from './images/siitlogo.png';
+
 import './Login.css';
 
 const firebaseConfig = {
@@ -26,7 +28,39 @@ function loginWithGoogleHandler() {
 }
 
 function Login() {
-  return <div onClick={loginWithGoogleHandler}>Login</div>;
+  return (
+    <div className="LoginApp">
+      <div style={{ textAlign: "center" }}>
+        <div style={{
+          alignItems:"center"
+        }}>
+          <header>
+              <a href="/"><img class="siitlogo" src={siitlogo}/></a>
+              <h1>
+                  <a class="siittext">SIIT <span class="academytext">Academy</span></a>
+              </h1>
+              <p></p>
+              {/* <a href="#"><button class="button loginbutton">login</button></a> */}
+          </header>
+          <div class="login">
+            <div class="loginbox"> 
+              {/*Text div*/}
+              <h1 class="logintext">Sign in  </h1>
+
+              {/* replace this with the google login */}
+              <div class = "SignInWithGoogleButton">
+                  <button onClick={loginWithGoogleHandler}>Login</button>
+              </div>
+
+            </div>
+          </div>
+          {/* <h2><a class="longsiit">Sirindhorn International Institute of Technology</a></h2>
+          <img class="lineimg" src={line} width="550px" />
+          <h2><a class="longtu">Thammasart University</a></h2> */}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Login;
