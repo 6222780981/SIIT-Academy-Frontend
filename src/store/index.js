@@ -1,6 +1,6 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
 
-import setupReducer from "./setupSlice";
+import setupReducer from './setupSlice';
 
 const store = configureStore({
   reducer: { setup: setupReducer },

@@ -1,11 +1,21 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const setupSlice = createSlice({
-  name: "setup",
-  initialState: { items: [], totalAmount: 0 },
+  name: 'setup',
+  initialState: { userId: null, username: null, email: null, role: null },
   reducers: {
-    function(state, action) {
+    setEmail(state, action) {
       // do something
+      state.userId = action.payload.userId;
+      state.username = action.payload.username;
+      state.email = action.payload.email;
+      state.role = action.payload.role;
+
+      // console.log(action.payload);
+      // console.log(state.userId);
+      // console.log(state.username);
+      // console.log(state.email);
+      // console.log(state.role);
     },
   },
 });

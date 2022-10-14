@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.0",
+    "axios": "^1.1.2",
     "firebase": "^9.10.0",
     "node-sass": "^7.0.1",
     "react": "^17.0.2",
