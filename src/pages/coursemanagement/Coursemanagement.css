@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+.App {
+  font-family: sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  height: 100vh;
+  font-family: 'Poppins';
+  background-color: #f8f9fd;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.managementtext{
+  display: flex;
+  justify-content: center;
+  color: #672C84;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-size: 40px;
+
+}
+
+.courseandstudent{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-block-end: 0.67em;;
+}
+button.coursestudentbtns{
+  background: transparent;
+  color: #AF2035;
+  border: none;
+  margin: 40px 120px 40px;
+  display: block;
+  font-family: 'Poppins';
+  font-size: 25px;
+  outline: none;
+  position: relative;
+  transition: 0.3s;
+  padding: 10px;
+  font-weight: bold;
+}
+button.coursestudentbtns:before{
+  content: '';
+  border-bottom: 3px solid #AF2035;
+  padding :0 10px;
+  position :absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width :0;
+  transition: 0.3s;
+}
+button.coursestudentbtns:hover:before{
+  width: 100%;
+  padding: 0;
+}
+button.coursestudentbtns:active{
+  background: #AF2035;
+  color: white;
+  transition: none;
+}
+
+
+.createCourse{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.coursename{
+  margin-left: 20px;
+  margin-right: 20px;
+}
+button.submitbutton{
+  margin-left: 20px;
+  border-radius: 5px;
+  color: #FFFDF6;
+
+  background: #A2842A;
+  padding: 7px 7px;
+}
+button.submitbutton:hover{
+  background: #5e4c18;
+}
+.filterCourse{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.year{
+  margin-right: 20px;
+}
+input[type=text]{
+  box-sizing: border-box;
+  background: #FFFDF6;
+  border: 1px solid #A2842A;
+  border-radius: 5px;
+  color: #A2842A;
+  padding: 15px 7px;
+}
+
+::placeholder{
+  color: #A2842A;
+}
+
+select {
+  background-color: #FFFDF6;
+  border: 1px solid #A2842A;
+  border-radius: 5px;
+  padding: 7px 4px;
+  padding-right: 40px;
+  color: #A2842A;
+}
+.select-label{
+  padding-left: 10px;
+}
+
+/* Point the arrow upwards when the select box is open (active): */
+.select-selected.select-arrow-active:after {
+  border-color: #A2842A;
+  top: 7px;
+}
+
+/* style the items (options), including the selected item: */
+.select-items div,.select-selected {
+  color: #A2842A;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: #A2842A;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.select-selected{
+  display: none;
+}

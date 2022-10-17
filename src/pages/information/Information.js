@@ -40,7 +40,7 @@ function Information() {
                 SIIT <span className="academytext">Academy</span>
               </a>
             </h1>
-            <Link to="/login">
+            <Link to="/coursemanagement">
               <button className="button loginbutton">login</button>
             </Link>
           </header>
