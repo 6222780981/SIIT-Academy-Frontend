@@ -6,7 +6,7 @@ import './CourseManagement.css';
 const yearArr = [1, 2, 3, 4];
 const programArr = ['CPE', 'DE', 'ChE', 'CE', 'EE', 'ME', 'IE', 'MT', 'EM'];
 
-const coursemanagement = () => {
+const CourseManagement = () => {
   const [title, setCourseID] = useState('');
   const [coursename, setCourseName] = useState('');
   const [instructor, setInstructor] = useState('');
@@ -125,4 +125,5 @@ const coursemanagement = () => {
     </div>
   );
 };
-export default coursemanagement;
+
+export default CourseManagement;
