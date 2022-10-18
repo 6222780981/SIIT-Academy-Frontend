@@ -1,18 +1,24 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import Navbar from '../../components/navbar/Navbar';
 import './CourseManagement.css';
 
-const yearArr = [1, 2, 3, 4];
-const programArr = ['CPE', 'DE', 'ChE', 'CE', 'EE', 'ME', 'IE', 'MT', 'EM'];
+const allYearArr = [1, 2, 3, 4];
+const allprogramArr = ['CPE', 'DE', 'ChE', 'CE', 'EE', 'ME', 'IE', 'MT', 'EM'];
+
+var yearArr = [];
+var programArr = [];
 
 const CourseManagement = () => {
-  const [title, setCourseID] = useState('');
-  const [coursename, setCourseName] = useState('');
-  const [instructor, setInstructor] = useState('');
+  const [courseId, setCourseID] = useState('');
+  const [courseName, setCourseName] = useState('');
+  const [teacherUsername, setInstructor] = useState('');
   const [myyear, setYear] = useState('');
   const [myprogram, setProgram] = useState('');
+  const [checkedyear, setIsCheckedYear] = useState([]);
+  const [checkedprogram, setIsCheckedProgram] = useState([]);
 
   const handleChangeYear = (event) => {
     setYear(event.target.value);
@@ -22,9 +28,38 @@ const CourseManagement = () => {
     setProgram(event.target.value);
   };
 
+  const handleClickYearCheckbox = (event) => {
+    var yearList = [...checkedyear];
+    // updatedList.push(intcheckedyear);
+    if (event.target.checked) {
+      yearList = [...yearList, +event.target.value];
+    } else {
+      yearList.splice(yearList.indexOf(+event.target.value), 1);
+    }
+    setIsCheckedYear(yearList);
+    // console.log(yearList);
+    // update list to the global variable
+    yearArr = yearList;
+  };
+
+  const handleClickProgramCheckbox = (event) => {
+    var programList = [...checkedprogram];
+    if (event.target.checked) {
+      programList = [...programList, event.target.value];
+    } else {
+      programList.splice(programList.indexOf(event.target.value), 1);
+    }
+    setIsCheckedProgram(programList);
+    // console.log(programList);
+    // update list to the global variable
+    programArr = programList;
+  };
   function handleAddCourse(e) {
     e.preventDefault();
-    console.log(title, coursename, instructor);
+    console.log(courseId, courseName, teacherUsername, yearArr,programArr);
+    axios.post('https://api-dot-siit-academy.as.r.appspot.com/course', 
+    {courseId, courseName, teacherUsername, yearArr,programArr})
+    .then(response => {console.log(response)})
   }
 
   function handleSearchCourse(e) {
@@ -32,8 +67,7 @@ const CourseManagement = () => {
     if ((myyear != '' || 'null') && (myprogram != '' || 'null')) {
       console.log(myyear, myprogram);
     }
-    // console.log(typeof(myyear), typeof(myprogram));
-    // console.log(myyear, myprogram);
+
   }
 
   return (
@@ -52,26 +86,31 @@ const CourseManagement = () => {
         <div className="create-course__section">
           <p className="create-course__section--title">Add Course Information</p>
           <div className="create-course__section--input-container">
-            <input placeholder="Course ID" type="text" required value={title} onChange={(e) => setCourseID(e.target.value)} />
+            <input placeholder="Course ID" type="text" required value={courseId} onChange={(e) => setCourseID(e.target.value)} />
             <input
               className="long"
               placeholder="Course Name"
               type="text"
               required
-              value={coursename}
+              value={courseName}
               onChange={(e) => setCourseName(e.target.value)}
             />
-            <input placeholder="Instructor" type="text" required value={instructor} onChange={(e) => setInstructor(e.target.value)} />
+            <input placeholder="Instructor" type="text" required value={teacherUsername} onChange={(e) => setInstructor(e.target.value)} />
           </div>
         </div>
 
         <div className="create-course__section">
           <p className="create-course__section--title">Add to Year</p>
           <div className="create-course__section--input-container">
-            {yearArr.map((year) => (
+            {allYearArr.map((year) => (
               <div className="checkbox-container" key={year}>
                 <label htmlFor={`year-${year}`}>Year {year}</label>
-                <input id={`year-${year}`} type="checkbox"></input>
+                <input 
+                  id={`year-${year}`} 
+                  type="checkbox" 
+                  value={year} 
+                  onChange={handleClickYearCheckbox} 
+                />
               </div>
             ))}
           </div>
@@ -80,10 +119,15 @@ const CourseManagement = () => {
         <div className="create-course__section">
           <p className="create-course__section--title">Add to Program</p>
           <div className="create-course__section--input-container">
-            {programArr.map((program) => (
+            {allprogramArr.map((program) => (
               <label htmlFor={`program-${program}`} className="checkbox-container" key={program}>
                 <p>{program}</p>
-                <input id={`program-${program}`} type="checkbox"></input>
+                <input 
+                  id={`program-${program}`} 
+                  type="checkbox"
+                  value={program}
+                  onChange={handleClickProgramCheckbox}
+                />
               </label>
             ))}
           </div>
@@ -101,14 +145,13 @@ const CourseManagement = () => {
             <option disabled={true} value="">
               Select year
             </option>
-            {yearArr.map((year) => (
+            {allYearArr.map((year) => (
               <option value={year} key={year}>
                 {year}
               </option>
             ))}
           </select>
         </div>
-
         <div>
           <label>Select Program</label>
           <select value={myprogram} onChange={handleChangeProgram}>
@@ -122,7 +165,6 @@ const CourseManagement = () => {
             ))}
           </select>
         </div>
-
         <button className="filter-course__submit-button" type="submit">
           Search Course
         </button>
