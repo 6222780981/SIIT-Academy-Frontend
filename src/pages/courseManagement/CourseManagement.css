@@ -1,7 +1,7 @@
 .course-management {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 46px 34px 50px 34px;
+  padding: 10px 30px 40px;
 }
 
 .management-text {
@@ -19,8 +19,8 @@
   column-gap: 550px;
 }
 
-button.course-student-btn {
-  color: #af2035;
+.course-student-btn {
+  color: #646464;
   font-weight: 600;
   font-size: 24px;
   outline: none;
@@ -30,9 +30,13 @@ button.course-student-btn {
   font-weight: bold;
 }
 
-button.course-student-btn:before {
+.course-student-btn.active {
+  color: #af2035;
+}
+
+.course-student-btn:before {
   content: '';
-  border-bottom: 3px solid #af2035;
+  border-bottom: 3px solid #646464;
   padding: 0 10px;
   position: absolute;
   bottom: 0;
@@ -43,20 +47,29 @@ button.course-student-btn:before {
   transition: 0.3s;
 }
 
-button.course-student-btn:hover:before {
+.course-student-btn.active:before {
+  border-bottom: 3px solid #af2035;
+}
+
+.course-student-btn:hover:before {
   width: 100%;
   padding: 0;
 }
 
-button.course-student-btn:active {
-  background: #af2035;
+.course-student-btn:active {
+  background: #646464;
   color: white;
   transition: none;
 }
 
+.course-student-btn.active:active {
+  background: #af2035;
+}
+
 .create-course {
-  margin-top: 38px;
-  padding: 0 200px;
+  margin: 38px 85px 0;
+  padding: 0 115px 60px;
+  border-bottom: 2px solid #a2842a;
 }
 
 .create-course__section {

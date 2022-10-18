@@ -1,7 +1,7 @@
 .information {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 46px 34px 0;
+  padding: 10px 30px 0;
 }
 
 .information__calender {
@@ -18,7 +18,7 @@
 
 .information__footer.siit {
   width: fit-content;
-  margin: 40px auto 0;
+  margin: 48px auto 0;
   color: #672c84;
   border-bottom: 1px solid #000000;
 }

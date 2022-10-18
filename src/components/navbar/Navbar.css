@@ -1,19 +1,19 @@
 .navbar {
   position: relative;
-  padding-bottom: 22px;
+  margin-bottom: 48px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .navbar__logo {
-  width: 159px;
+  width: 130px;
   margin-bottom: -10px;
 }
 
 .navbar__title {
   position: absolute;
-  top: 35%;
+  top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
   font-weight: 600;
@@ -34,7 +34,7 @@
 
 .navbar__button-container--manage-link {
   font-weight: 600;
-  font-size: 20px;
+  font-size: 16px;
   color: #af2035;
   margin-right: 30px;
   border-bottom: 2px solid #af2035;
@@ -46,32 +46,24 @@
 
 .navbar__button-container--username {
   font-weight: 600;
-  font-size: 20px;
+  font-size: 16px;
   color: #af2035;
   margin-right: 30px;
 }
 
 .navbar__button-container--authenication-btn {
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding: 8px 10px;
+  font-size: 16px;
+  border-radius: 20px;
+  font-weight: 600;
 }
 
 .navbar__button-container--authenication-btn.sign-in {
-  padding-left: 15px;
-  padding-right: 15px;
-  font-weight: 600;
-  font-size: 22px;
   color: #af2035;
   border: 3px solid #af2035;
-  border-radius: 20px;
 }
 
 .navbar__button-container--authenication-btn.sign-out {
-  padding-left: 10px;
-  padding-right: 10px;
-  font-weight: 600;
-  font-size: 20px;
   color: #646464;
   border: 3px solid #646464;
-  border-radius: 20px;
 }

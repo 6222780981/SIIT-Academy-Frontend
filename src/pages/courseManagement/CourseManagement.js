@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 import Navbar from '../../components/navbar/Navbar';
 import './CourseManagement.css';
@@ -40,8 +41,12 @@ const CourseManagement = () => {
       <Navbar></Navbar>
       <h1 className="management-text">Management</h1>
       <div className="course-and-student">
-        <button className="course-student-btn">Course</button>
-        <button className="course-student-btn">Student</button>
+        <NavLink to="/management/course" className="course-student-btn">
+          Course
+        </NavLink>
+        <NavLink to="/management/student" className="course-student-btn">
+          Student
+        </NavLink>
       </div>
       <form className="create-course" onSubmit={handleAddCourse}>
         <div className="create-course__section">
