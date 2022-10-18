@@ -1,0 +1,65 @@
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory, useLocation, Link } from 'react-router-dom';
+
+import { userActions } from '../../store/userSlice';
+
+import profileIcon from '../../icons/profile icon.svg';
+import logo from '../../images/siitlogo.png';
+
+import './Navbar.css';
+
+function Navbar(props) {
+  const { showTitle } = props;
+
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  const userId = useSelector((store) => store.user.userId);
+  const username = useSelector((store) => store.user.username);
+  const role = useSelector((store) => store.user.role);
+
+  function authenicationBtnClickHandler() {
+    if (userId) {
+      dispatch(userActions.resetUser());
+    }
+
+    history.push('/login');
+  }
+
+  return (
+    <nav className="navbar">
+      <Link to={userId ? '/home' : '/information'}>
+        <img src={logo} className="navbar__logo"></img>
+      </Link>
+      {showTitle && (
+        <p className="navbar__title">
+          SIIT <span>Academy</span>
+        </p>
+      )}
+      {location.pathname !== '/login' && (
+        <div className="navbar__button-container">
+          {role === 'staff' && (
+            <Link to="/management/course" className="navbar__button-container--manage-link">
+              (Manage)
+            </Link>
+          )}
+          {username && (
+            <>
+              <img src={profileIcon} className="navbar__button-container--profile-icon"></img>
+              <p className="navbar__button-container--username">{username}</p>
+            </>
+          )}
+          <button
+            onClick={authenicationBtnClickHandler}
+            className={`navbar__button-container--authenication-btn ${userId ? 'sign-out' : 'sign-in'}`}
+          >
+            {userId ? 'Sign Out' : 'Sign In'}
+          </button>
+        </div>
+      )}
+    </nav>
+  );
+}
+
+export default Navbar;

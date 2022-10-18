@@ -2,7 +2,8 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 
 import Information from './pages/information/Information';
 import Login from './pages/login/Login';
-import Coursemanagement from './pages/coursemanagement/Coursemanagement';
+import Home from './pages/home/Home';
+import CourseManagement from './pages/courseManagement/CourseManagement';
 
 function App() {
   return (
@@ -13,8 +14,11 @@ function App() {
       <Route exact path="/login">
         <Login></Login>
       </Route>
-      <Route exact path="/coursemanagement">
-        <Coursemanagement></Coursemanagement>
+      <Route exact path="/home">
+        <Home></Home>
+      </Route>
+      <Route exact path="/management/course">
+        <CourseManagement></CourseManagement>
       </Route>
       <Route path="/">
         <Redirect to="/infomation"></Redirect>
