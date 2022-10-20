@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-
 import Navbar from '../../components/navbar/Navbar';
+import deletebtn from '../../icons/deletebtn.png'
 import './CourseManagement.css';
 
 const allYearArr = [1, 2, 3, 4];
-const allprogramArr = ['CPE', 'DE', 'ChE', 'CE', 'EE', 'ME', 'IE', 'MT', 'EM'];
+const allProgramArr = ['CPE', 'DE', 'ChE', 'CE', 'EE', 'ME', 'IE', 'MT', 'EM'];
 
 var yearArr = [];
 var programArr = [];
@@ -15,10 +15,11 @@ const CourseManagement = () => {
   const [courseId, setCourseID] = useState('');
   const [courseName, setCourseName] = useState('');
   const [teacherUsername, setInstructor] = useState('');
-  const [myyear, setYear] = useState('');
-  const [myprogram, setProgram] = useState('');
+  const [year, setYear] = useState('');
+  const [program, setProgram] = useState('');
   const [checkedyear, setIsCheckedYear] = useState([]);
   const [checkedprogram, setIsCheckedProgram] = useState([]);
+  const [selectedCourse, getCourse] = useState([]);
 
   const handleChangeYear = (event) => {
     setYear(event.target.value);
@@ -30,14 +31,12 @@ const CourseManagement = () => {
 
   const handleClickYearCheckbox = (event) => {
     var yearList = [...checkedyear];
-    // updatedList.push(intcheckedyear);
     if (event.target.checked) {
       yearList = [...yearList, +event.target.value];
     } else {
       yearList.splice(yearList.indexOf(+event.target.value), 1);
     }
     setIsCheckedYear(yearList);
-    // console.log(yearList);
     // update list to the global variable
     yearArr = yearList;
   };
@@ -50,24 +49,26 @@ const CourseManagement = () => {
       programList.splice(programList.indexOf(event.target.value), 1);
     }
     setIsCheckedProgram(programList);
-    // console.log(programList);
-    // update list to the global variable
     programArr = programList;
   };
   function handleAddCourse(e) {
     e.preventDefault();
     console.log(courseId, courseName, teacherUsername, yearArr,programArr);
-    axios.post('https://api-dot-siit-academy.as.r.appspot.com/course', 
-    {courseId, courseName, teacherUsername, yearArr,programArr})
+    axios.post('https://api-dot-siit-academy.as.r.appspot.com/course',{courseId, courseName, teacherUsername, yearArr,programArr})
     .then(response => {console.log(response)})
   }
 
   function handleSearchCourse(e) {
     e.preventDefault();
-    if ((myyear != '' || 'null') && (myprogram != '' || 'null')) {
-      console.log(myyear, myprogram);
-    }
-
+    console.log(year, program);
+    console.log(`https://api-dot-siit-academy.as.r.appspot.com/course?year=${year}&program=${program}`)
+    axios.get(`https://api-dot-siit-academy.as.r.appspot.com/course?year=${year}&program=${program}`)
+    .then(response => {
+      console.log(response.data.data.courseArr);
+      const courseArr = response.data.data.courseArr;
+      getCourse(courseArr);
+    })
+    .catch(error => console.error(`Error: ${error}`));
   }
 
   return (
@@ -119,7 +120,7 @@ const CourseManagement = () => {
         <div className="create-course__section">
           <p className="create-course__section--title">Add to Program</p>
           <div className="create-course__section--input-container">
-            {allprogramArr.map((program) => (
+            {allProgramArr.map((program) => (
               <label htmlFor={`program-${program}`} className="checkbox-container" key={program}>
                 <p>{program}</p>
                 <input 
@@ -141,7 +142,7 @@ const CourseManagement = () => {
       <form className="filter-course" onSubmit={handleSearchCourse}>
         <div>
           <label>Select Year</label>
-          <select value={myyear} onChange={handleChangeYear}>
+          <select value={year} onChange={handleChangeYear}>
             <option disabled={true} value="">
               Select year
             </option>
@@ -154,11 +155,11 @@ const CourseManagement = () => {
         </div>
         <div>
           <label>Select Program</label>
-          <select value={myprogram} onChange={handleChangeProgram}>
+          <select value={program} onChange={handleChangeProgram}>
             <option disabled={true} value="">
               Select program
             </option>
-            {programArr.map((program) => (
+            {allProgramArr.map((program) => (
               <option value={program} key={program}>
                 {program}
               </option>
@@ -166,9 +167,37 @@ const CourseManagement = () => {
           </select>
         </div>
         <button className="filter-course__submit-button" type="submit">
-          Search Course
+          <span>Search Course</span>
         </button>
       </form>
+      <div className='filtered-course'>
+        <table>
+          <tbody>
+          <tr>
+            <th className='id'>ID</th>
+            <th>Name</th>
+            <th>Instructor</th>
+            <th className='buttoncolumn'></th>
+          </tr>
+          {selectedCourse.map((course) =>(
+          <tr value={course.course_id} key={course.course_id}>
+            <td>
+              <Link to={`/course/${course.course_id}`}>
+                <button className='course_id-btn'>{course.course_id}</button>
+              </Link>
+            </td>
+            <td>{course.course_name}</td>
+            <td>{course.username}</td>
+            <td>
+              <button className='deletebtn'>
+                <img className='deletebtn' src={deletebtn}/>
+              </button>
+            </td>
+          </tr>
+          ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
