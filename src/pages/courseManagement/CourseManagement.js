@@ -1,18 +1,12 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
 import deletebtn from '../../icons/deletebtn.png'
+import axios from 'axios';
 import './CourseManagement.css';
 
-const allYearArr = [1, 2, 3, 4];
-const allProgramArr = ['CPE', 'DE', 'ChE', 'CE', 'EE', 'ME', 'IE', 'MT', 'EM'];
-
-var yearArr = [];
-var programArr = [];
-
 const CourseManagement = () => {
-  const [courseId, setCourseID] = useState('');
+  const [courseId, setCourseId] = useState('');
   const [courseName, setCourseName] = useState('');
   const [teacherUsername, setInstructor] = useState('');
   const [year, setYear] = useState('');
@@ -20,6 +14,12 @@ const CourseManagement = () => {
   const [checkedyear, setIsCheckedYear] = useState([]);
   const [checkedprogram, setIsCheckedProgram] = useState([]);
   const [selectedCourse, getCourse] = useState([]);
+
+  const allYearArr = [1, 2, 3, 4];
+  const allProgramArr = ['CPE', 'DE', 'ChE', 'CE', 'EE', 'ME', 'IE', 'MT', 'EM'];
+
+  var yearArr = [];
+  var programArr = [];
 
   const handleChangeYear = (event) => {
     setYear(event.target.value);
@@ -29,14 +29,17 @@ const CourseManagement = () => {
     setProgram(event.target.value);
   };
 
+
   const handleClickYearCheckbox = (event) => {
     var yearList = [...checkedyear];
+    // updatedList.push(intcheckedyear);
     if (event.target.checked) {
       yearList = [...yearList, +event.target.value];
     } else {
       yearList.splice(yearList.indexOf(+event.target.value), 1);
     }
     setIsCheckedYear(yearList);
+    // console.log(yearList);
     // update list to the global variable
     yearArr = yearList;
   };
@@ -49,6 +52,8 @@ const CourseManagement = () => {
       programList.splice(programList.indexOf(event.target.value), 1);
     }
     setIsCheckedProgram(programList);
+    // console.log(programList);
+    // update list to the global variable
     programArr = programList;
   };
   function handleAddCourse(e) {
@@ -57,6 +62,7 @@ const CourseManagement = () => {
     axios.post('https://api-dot-siit-academy.as.r.appspot.com/course',{courseId, courseName, teacherUsername, yearArr,programArr})
     .then(response => {console.log(response)})
   }
+
 
   function handleSearchCourse(e) {
     e.preventDefault();
@@ -87,7 +93,14 @@ const CourseManagement = () => {
         <div className="create-course__section">
           <p className="create-course__section--title">Add Course Information</p>
           <div className="create-course__section--input-container">
-            <input placeholder="Course ID" type="text" required value={courseId} onChange={(e) => setCourseID(e.target.value)} />
+            <input
+              className="long"
+              placeholder="Course ID"
+              type="text"
+              required
+              value={courseId}
+              onChange={(e) => setCourseId(e.target.value)}
+            />
             <input
               className="long"
               placeholder="Course Name"
@@ -96,12 +109,18 @@ const CourseManagement = () => {
               value={courseName}
               onChange={(e) => setCourseName(e.target.value)}
             />
-            <input placeholder="Instructor" type="text" required value={teacherUsername} onChange={(e) => setInstructor(e.target.value)} />
+            <input 
+              placeholder="Instructor" 
+              type="text" 
+              required 
+              value={teacherUsername} 
+              onChange={(e) => setInstructor(e.target.value)} />
           </div>
         </div>
 
         <div className="create-course__section">
           <p className="create-course__section--title">Add to Year</p>
+          <p className="test">{yearArr}</p>
           <div className="create-course__section--input-container">
             {allYearArr.map((year) => (
               <div className="checkbox-container" key={year}>
@@ -110,6 +129,7 @@ const CourseManagement = () => {
                   id={`year-${year}`} 
                   type="checkbox" 
                   value={year} 
+                  key={year}
                   onChange={handleClickYearCheckbox} 
                 />
               </div>
@@ -127,6 +147,7 @@ const CourseManagement = () => {
                   id={`program-${program}`} 
                   type="checkbox"
                   value={program}
+                  key={program}
                   onChange={handleClickProgramCheckbox}
                 />
               </label>
@@ -153,6 +174,7 @@ const CourseManagement = () => {
             ))}
           </select>
         </div>
+
         <div>
           <label>Select Program</label>
           <select value={program} onChange={handleChangeProgram}>
@@ -165,7 +187,9 @@ const CourseManagement = () => {
               </option>
             ))}
           </select>
+          
         </div>
+
         <button className="filter-course__submit-button" type="submit">
           <span>Search Course</span>
         </button>
@@ -182,9 +206,9 @@ const CourseManagement = () => {
           {selectedCourse.map((course) =>(
           <tr value={course.course_id} key={course.course_id}>
             <td>
-              <Link to={`/course/${course.course_id}`}>
+              {/* <Link to={`/course/${course.course_id}`}> */}
                 <button className='course_id-btn'>{course.course_id}</button>
-              </Link>
+              {/* </Link> */}
             </td>
             <td>{course.course_name}</td>
             <td>{course.username}</td>
