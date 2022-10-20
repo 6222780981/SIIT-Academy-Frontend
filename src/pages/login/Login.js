@@ -33,17 +33,17 @@ function Login() {
     signInWithPopup(auth, provider)
       .then(async (result) => {
         const { email } = result.user;
-        const userData = await axios.get('https://api-dot-siit-academy.as.r.appspot.com/user?email=' + email);
+        const userData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user?email=${email}`);
 
         const { status, data, message } = userData.data;
-        if (status === 'success') {
-          dispatch(userActions.setUser(data));
-          history.push('/home');
-        } else if (status === 'fail') {
+
+        if (status !== 'success') {
           setErrorMsg(message);
-        } else {
-          setErrorMsg(message);
+          return;
         }
+
+        dispatch(userActions.setUser(data));
+        history.push('/home');
       })
       .catch(() => {
         setErrorMsg('Server error');
