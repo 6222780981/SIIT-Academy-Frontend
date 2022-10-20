@@ -11,15 +11,15 @@ const CourseManagement = () => {
   const [teacherUsername, setInstructor] = useState('');
   const [year, setYear] = useState('');
   const [program, setProgram] = useState('');
-  const [checkedyear, setIsCheckedYear] = useState([]);
-  const [checkedprogram, setIsCheckedProgram] = useState([]);
+  const [yearArr, setIsCheckedYear] = useState([]);
+  const [programArr, setIsCheckedProgram] = useState([]);
   const [selectedCourse, getCourse] = useState([]);
 
   const allYearArr = [1, 2, 3, 4];
   const allProgramArr = ['CPE', 'DE', 'ChE', 'CE', 'EE', 'ME', 'IE', 'MT', 'EM'];
 
-  var yearArr = [];
-  var programArr = [];
+  // var yearArr = [];
+  // var programArr = [];
 
   const handleChangeYear = (event) => {
     setYear(event.target.value);
@@ -31,30 +31,24 @@ const CourseManagement = () => {
 
 
   const handleClickYearCheckbox = (event) => {
-    var yearList = [...checkedyear];
-    // updatedList.push(intcheckedyear);
+    var yearList = [...yearArr];
+    // updatedList.push(intyearArr);
     if (event.target.checked) {
       yearList = [...yearList, +event.target.value];
     } else {
       yearList.splice(yearList.indexOf(+event.target.value), 1);
     }
     setIsCheckedYear(yearList);
-    // console.log(yearList);
-    // update list to the global variable
-    yearArr = yearList;
   };
 
   const handleClickProgramCheckbox = (event) => {
-    var programList = [...checkedprogram];
+    var programList = [...programArr];
     if (event.target.checked) {
       programList = [...programList, event.target.value];
     } else {
       programList.splice(programList.indexOf(event.target.value), 1);
     }
     setIsCheckedProgram(programList);
-    // console.log(programList);
-    // update list to the global variable
-    programArr = programList;
   };
   function handleAddCourse(e) {
     e.preventDefault();
@@ -120,7 +114,6 @@ const CourseManagement = () => {
 
         <div className="create-course__section">
           <p className="create-course__section--title">Add to Year</p>
-          <p className="test">{yearArr}</p>
           <div className="create-course__section--input-container">
             {allYearArr.map((year) => (
               <div className="checkbox-container" key={year}>
