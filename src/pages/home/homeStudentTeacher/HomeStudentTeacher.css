@@ -1,0 +1,50 @@
+.home-student-teacher__title {
+  font-weight: 600;
+  font-size: 36px;
+  color: #646464;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.home-student-teacher__title .purple {
+  color: #672c84;
+}
+
+.home-student-teacher__title .red {
+  color: #af2035;
+}
+
+.home-student-teacher__error-msg {
+  margin-top: 52px;
+  text-align: center;
+  font-size: 18px;
+  color: #646464;
+}
+
+.home-student-teacher__sub-title {
+  margin-top: 52px;
+  text-align: center;
+  font-size: 24px;
+  color: #a2842a;
+}
+
+.home-student-teacher__course-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 60px 140px;
+  column-gap: 66px;
+  row-gap: 45px;
+}
+
+.home-student-teacher__course-container a {
+  display: flex;
+  background: #fffdf6;
+  border: 1px solid #a2842a;
+  border-radius: 20px;
+  padding: 24px 17px;
+  width: calc((100% - (66px * 2)) / 3);
+  column-gap: 15px;
+  font-weight: 600;
+  font-size: 16px;
+  color: rgba(162, 132, 42, 0.8);
+}

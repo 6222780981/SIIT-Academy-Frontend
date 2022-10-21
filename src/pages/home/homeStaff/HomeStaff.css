@@ -1,0 +1,120 @@
+.home-staff__title {
+  font-weight: 600;
+  font-size: 36px;
+  color: #646464;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.home-staff__title .purple {
+  color: #672c84;
+}
+
+.home-staff__title .red {
+  color: #af2035;
+}
+
+.home-staff__input-container {
+  margin-top: 104px;
+  display: flex;
+  justify-content: center;
+  column-gap: 260px;
+}
+
+.home-staff__input-container label {
+  display: block;
+  font-weight: 600;
+  font-size: 22px;
+  color: #a2842a;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.home-staff__input-container select {
+  background: #fffdf6;
+  font-weight: 600;
+  font-size: 20px;
+  color: #a2842a;
+  padding: 14px 21px;
+  border: 1px solid #a2842a;
+  border-radius: 20px;
+  width: 370px;
+}
+
+.home-staff__submit-btn {
+  display: block;
+  margin: 0 auto;
+  margin-top: 97px;
+  font-weight: 600;
+  font-size: 22px;
+  color: #fff;
+  padding: 14px 22px;
+  background: #a2842a;
+  border-radius: 20px;
+}
+
+.home-staff__error-msg {
+  font-size: 18px;
+  color: #f20000;
+  margin-top: 30px;
+  text-align: center;
+}
+
+.home-staff__table {
+  margin: 36px auto 0;
+  border-spacing: 44px;
+  margin-bottom: -44px;
+}
+
+.home-staff__table--row {
+  font-size: 20px;
+  color: #646464;
+}
+
+.home-staff__table--row th {
+  font-weight: 600;
+  text-align: start;
+}
+
+.home-staff__table--row th {
+  font-weight: 600;
+  text-align: start;
+}
+
+.home-staff__table--row td.margin-right {
+  padding-right: 44px;
+}
+
+.home-staff__table--row a {
+  border-bottom: 1px solid #000000;
+}
+
+.home-staff__search-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 38px;
+  margin-top: 104px;
+}
+
+.home-staff__search-form input[type='text'] {
+  background: #fffdf6;
+  border: 1px solid #a2842a;
+  border-radius: 20px;
+  color: #a2842a;
+  padding: 14px 25px;
+  font-weight: 600;
+  font-size: 22px;
+  width: 225px;
+}
+
+.home-staff__search-form input[type='text']::placeholder {
+  color: rgba(162, 132, 42, 0.6);
+}
+
+.home-staff__search-form img {
+  display: block;
+  background: #a2842a;
+  border-radius: 10px;
+  padding: 11px;
+}
