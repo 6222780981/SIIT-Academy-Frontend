@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
+import ManagementNav from '../../components/managementNav/ManagementNav';
 import deletebtn from '../../icons/deletebtn.png'
 import axios from 'axios';
 import './CourseManagement.css';
@@ -20,7 +21,7 @@ const CourseManagement = () => {
 
   // var yearArr = [];
   // var programArr = [];
-
+  // var courseArr = [];
   const handleChangeYear = (event) => {
     setYear(event.target.value);
   };
@@ -60,13 +61,24 @@ const CourseManagement = () => {
 
   function handleSearchCourse(e) {
     e.preventDefault();
-    console.log(year, program);
+    // console.log(year, program);
     console.log(`https://api-dot-siit-academy.as.r.appspot.com/course?year=${year}&program=${program}`)
     axios.get(`https://api-dot-siit-academy.as.r.appspot.com/course?year=${year}&program=${program}`)
     .then(response => {
       console.log(response.data.data.courseArr);
       const courseArr = response.data.data.courseArr;
       getCourse(courseArr);
+      // if(typeof courseArr !== 'undefined'){
+      //   getCourse(courseArr);
+      //   console.log("test");
+      // }
+      // else if(typeof courseArr !== 'undefined'){
+      //   console.log("undefined");
+      // }
+      // else{
+      //   console.log("something else");
+      // }
+      
     })
     .catch(error => console.error(`Error: ${error}`));
   }
@@ -74,15 +86,7 @@ const CourseManagement = () => {
   return (
     <div className="course-management">
       <Navbar></Navbar>
-      <h1 className="management-text">Management</h1>
-      <div className="course-and-student">
-        <NavLink to="/management/course" className="course-student-btn">
-          Course
-        </NavLink>
-        <NavLink to="/management/student" className="course-student-btn">
-          Student
-        </NavLink>
-      </div>
+      <ManagementNav></ManagementNav>
       <form className="create-course" onSubmit={handleAddCourse}>
         <div className="create-course__section">
           <p className="create-course__section--title">Add Course Information</p>
@@ -199,9 +203,9 @@ const CourseManagement = () => {
           {selectedCourse.map((course) =>(
           <tr value={course.course_id} key={course.course_id}>
             <td>
-              {/* <Link to={`/course/${course.course_id}`}> */}
+              <Link to={`/course/${course.course_id}`}>
                 <button className='course_id-btn'>{course.course_id}</button>
-              {/* </Link> */}
+              </Link>
             </td>
             <td>{course.course_name}</td>
             <td>{course.username}</td>
