@@ -70,6 +70,7 @@
   margin: 38px 85px 0;
   padding: 0 115px 60px;
   border-bottom: 2px solid #a2842a;
+  position: relative;
 }
 
 .create-course__section {
@@ -185,7 +186,16 @@
 .filter-course__submit-button:hover{
   background: #a2842a9a;
 }
-
+.course-management__error-msg{
+  font-size: 18px;
+  color: #f20000;
+  margin-top: 30px;
+  text-align: center;
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 .filtered-course{
   display: flex;
   justify-content: center;

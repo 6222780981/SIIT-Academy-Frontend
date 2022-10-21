@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
 import ManagementNav from '../../components/managementNav/ManagementNav';
 import deletebtn from '../../icons/deletebtn.png'
@@ -15,6 +15,8 @@ const CourseManagement = () => {
   const [yearArr, setIsCheckedYear] = useState([]);
   const [programArr, setIsCheckedProgram] = useState([]);
   const [selectedCourse, getCourse] = useState([]);
+  const [searchErrorMsg, setSearchErrorMsg] = useState();
+  const [addErrorMsg, setAddErrorMsg] = useState();
 
   const allYearArr = [1, 2, 3, 4];
   const allProgramArr = ['CPE', 'DE', 'ChE', 'CE', 'EE', 'ME', 'IE', 'MT', 'EM'];
@@ -33,7 +35,6 @@ const CourseManagement = () => {
 
   const handleClickYearCheckbox = (event) => {
     var yearList = [...yearArr];
-    // updatedList.push(intyearArr);
     if (event.target.checked) {
       yearList = [...yearList, +event.target.value];
     } else {
@@ -53,19 +54,38 @@ const CourseManagement = () => {
   };
   function handleAddCourse(e) {
     e.preventDefault();
+    setAddErrorMsg();
     console.log(courseId, courseName, teacherUsername, yearArr,programArr);
+    
     axios.post('https://api-dot-siit-academy.as.r.appspot.com/course',{courseId, courseName, teacherUsername, yearArr,programArr})
-    .then(response => {console.log(response)})
+    .then(response => {
+      console.log(response.data);
+      const {status, data, message} = response.data;
+      if (status !== 'success'){
+        setAddErrorMsg(message);
+        return;
+      }
+    })
+    .catch((err) => {
+      setAddErrorMsg(err.message);
+    });
   }
 
 
   function handleSearchCourse(e) {
     e.preventDefault();
-    // console.log(year, program);
-    console.log(`https://api-dot-siit-academy.as.r.appspot.com/course?year=${year}&program=${program}`)
+    setSearchErrorMsg();
+    // console.log(`https://api-dot-siit-academy.as.r.appspot.com/course?year=${year}&program=${program}`)
     axios.get(`https://api-dot-siit-academy.as.r.appspot.com/course?year=${year}&program=${program}`)
     .then(response => {
-      console.log(response.data.data.courseArr);
+      console.log(response.data);
+      const {status, data, message} = response.data;
+      if (status !== 'success'){
+        setSearchErrorMsg(message);
+        const courseArr = [];
+        getCourse(courseArr);
+        return;
+      }
       const courseArr = response.data.data.courseArr;
       getCourse(courseArr);
       // if(typeof courseArr !== 'undefined'){
@@ -80,7 +100,9 @@ const CourseManagement = () => {
       // }
       
     })
-    .catch(error => console.error(`Error: ${error}`));
+    .catch((err) => {
+      setSearchErrorMsg(err.message);
+    });
   }
 
   return (
@@ -96,7 +118,7 @@ const CourseManagement = () => {
               placeholder="Course ID"
               type="text"
               required
-              value={courseId}
+              value={courseId.toUpperCase()}
               onChange={(e) => setCourseId(e.target.value)}
             />
             <input
@@ -155,7 +177,9 @@ const CourseManagement = () => {
         <button className="create-course__submit-btn" type="submit">
           Confirm
         </button>
+      {addErrorMsg && <p className="course-management__error-msg">** {addErrorMsg} **</p>}
       </form>
+      
 
       <form className="filter-course" onSubmit={handleSearchCourse}>
         <div>
@@ -191,7 +215,8 @@ const CourseManagement = () => {
           <span>Search Course</span>
         </button>
       </form>
-      <div className='filtered-course'>
+      {searchErrorMsg && <p className="course-management__error-msg">** {searchErrorMsg} **</p>}
+      {selectedCourse.length > 0 && <div className='filtered-course'>
         <table>
           <tbody>
           <tr>
@@ -200,6 +225,7 @@ const CourseManagement = () => {
             <th>Instructor</th>
             <th className='buttoncolumn'></th>
           </tr>
+          
           {selectedCourse.map((course) =>(
           <tr value={course.course_id} key={course.course_id}>
             <td>
@@ -218,7 +244,7 @@ const CourseManagement = () => {
           ))}
           </tbody>
         </table>
-      </div>
+      </div>}
     </div>
   );
 };
