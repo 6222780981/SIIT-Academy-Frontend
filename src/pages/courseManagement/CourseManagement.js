@@ -57,7 +57,7 @@ const CourseManagement = () => {
     setAddErrorMsg();
     console.log(courseId, courseName, teacherUsername, yearArr,programArr);
     
-    axios.post('https://api-dot-siit-academy.as.r.appspot.com/course',{courseId, courseName, teacherUsername, yearArr,programArr})
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/course`,{courseId, courseName, teacherUsername, yearArr,programArr})
     .then(response => {
       console.log(response.data);
       const {status, data, message} = response.data;
@@ -75,8 +75,7 @@ const CourseManagement = () => {
   function handleSearchCourse(e) {
     e.preventDefault();
     setSearchErrorMsg();
-    // console.log(`https://api-dot-siit-academy.as.r.appspot.com/course?year=${year}&program=${program}`)
-    axios.get(`https://api-dot-siit-academy.as.r.appspot.com/course?year=${year}&program=${program}`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/course?year=${year}&program=${program}`)
     .then(response => {
       console.log(response.data);
       const {status, data, message} = response.data;
