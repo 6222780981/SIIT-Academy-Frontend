@@ -146,7 +146,7 @@
   margin-top: 49px;
 }
 
-.create-course__submit-btn:hover{
+.create-course__submit-btn:hover {
   background-color: #af2035a2;
 }
 
@@ -183,10 +183,12 @@
   border-radius: 20px;
   padding: 14px 21px;
 }
-.filter-course__submit-button:hover{
+
+.filter-course__submit-button:hover {
   background: #a2842a9a;
 }
-.course-management__error-msg{
+
+.course-management__error-msg {
   font-size: 18px;
   color: #f20000;
   margin-top: 30px;
@@ -196,48 +198,57 @@
   left: 50%;
   transform: translateX(-50%);
 }
-.filtered-course{
+
+.filtered-course {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 30px;
 }
 
-table{
+.filtered-course table {
   width: 900px;
   height: 50px;
   table-layout: fixed;
 }
 
-th{
+.filtered-course th {
   color: #a2842a;
   font-size: 22px;
   font-weight: 600;
 }
-th.id{
-  width:15%;
+
+.filtered-course th.id {
+  width: 15%;
 }
-th.buttoncolumn{
-  width:10%;
+
+.filtered-course th.buttoncolumn {
+  width: 10%;
 }
-th, td{
+
+.filtered-course th,
+.filtered-course td {
   text-align: left;
   border-bottom: 1px solid #a2842a;
   padding: 15px;
   font-size: 22px;
 }
-button.course_id-btn{
+
+.filtered-course button.course_id-btn {
   font-size: 22px;
   border-bottom: 1px solid;
 }
-button.course_id-btn:hover{
+
+.filtered-course button.course_id-btn:hover {
   color: #a2842a;
   border-bottom: 1px solid #a2842a;
 }
-img.deletebtn{
-  width:60%;
+
+.filtered-course img.deletebtn {
+  width: 60%;
   height: 60%;
 }
-img.deletebtn:hover{
+
+.filtered-course img.deletebtn:hover {
   opacity: 0.7;
 }

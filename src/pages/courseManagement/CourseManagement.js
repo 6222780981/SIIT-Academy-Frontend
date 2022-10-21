@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
 import ManagementNav from '../../components/managementNav/ManagementNav';
-import deletebtn from '../../icons/deletebtn.png'
+import deletebtn from '../../icons/deletebtn.png';
 import axios from 'axios';
 import './CourseManagement.css';
 
@@ -32,7 +32,6 @@ const CourseManagement = () => {
     setProgram(event.target.value);
   };
 
-
   const handleClickYearCheckbox = (event) => {
     var yearList = [...yearArr];
     if (event.target.checked) {
@@ -55,53 +54,53 @@ const CourseManagement = () => {
   function handleAddCourse(e) {
     e.preventDefault();
     setAddErrorMsg();
-    console.log(courseId, courseName, teacherUsername, yearArr,programArr);
-    
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/course`,{courseId, courseName, teacherUsername, yearArr,programArr})
-    .then(response => {
-      console.log(response.data);
-      const {status, data, message} = response.data;
-      if (status !== 'success'){
-        setAddErrorMsg(message);
-        return;
-      }
-    })
-    .catch((err) => {
-      setAddErrorMsg(err.message);
-    });
-  }
+    console.log(courseId, courseName, teacherUsername, yearArr, programArr);
 
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/course`, { courseId, courseName, teacherUsername, yearArr, programArr })
+      .then((response) => {
+        console.log(response.data);
+        const { status, data, message } = response.data;
+        if (status !== 'success') {
+          setAddErrorMsg(message);
+          return;
+        }
+      })
+      .catch((err) => {
+        setAddErrorMsg(err.message);
+      });
+  }
 
   function handleSearchCourse(e) {
     e.preventDefault();
     setSearchErrorMsg();
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/course?year=${year}&program=${program}`)
-    .then(response => {
-      console.log(response.data);
-      const {status, data, message} = response.data;
-      if (status !== 'success'){
-        setSearchErrorMsg(message);
-        const courseArr = [];
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/course?year=${year}&program=${program}`)
+      .then((response) => {
+        console.log(response.data);
+        const { status, data, message } = response.data;
+        if (status !== 'success') {
+          setSearchErrorMsg(message);
+          const courseArr = [];
+          getCourse(courseArr);
+          return;
+        }
+        const courseArr = response.data.data.courseArr;
         getCourse(courseArr);
-        return;
-      }
-      const courseArr = response.data.data.courseArr;
-      getCourse(courseArr);
-      // if(typeof courseArr !== 'undefined'){
-      //   getCourse(courseArr);
-      //   console.log("test");
-      // }
-      // else if(typeof courseArr !== 'undefined'){
-      //   console.log("undefined");
-      // }
-      // else{
-      //   console.log("something else");
-      // }
-      
-    })
-    .catch((err) => {
-      setSearchErrorMsg(err.message);
-    });
+        // if(typeof courseArr !== 'undefined'){
+        //   getCourse(courseArr);
+        //   console.log("test");
+        // }
+        // else if(typeof courseArr !== 'undefined'){
+        //   console.log("undefined");
+        // }
+        // else{
+        //   console.log("something else");
+        // }
+      })
+      .catch((err) => {
+        setSearchErrorMsg(err.message);
+      });
   }
 
   return (
@@ -128,12 +127,7 @@ const CourseManagement = () => {
               value={courseName}
               onChange={(e) => setCourseName(e.target.value)}
             />
-            <input 
-              placeholder="Instructor" 
-              type="text" 
-              required 
-              value={teacherUsername} 
-              onChange={(e) => setInstructor(e.target.value)} />
+            <input placeholder="Instructor" type="text" required value={teacherUsername} onChange={(e) => setInstructor(e.target.value)} />
           </div>
         </div>
 
@@ -143,13 +137,7 @@ const CourseManagement = () => {
             {allYearArr.map((year) => (
               <div className="checkbox-container" key={year}>
                 <label htmlFor={`year-${year}`}>Year {year}</label>
-                <input 
-                  id={`year-${year}`} 
-                  type="checkbox" 
-                  value={year} 
-                  key={year}
-                  onChange={handleClickYearCheckbox} 
-                />
+                <input id={`year-${year}`} type="checkbox" value={year} key={year} onChange={handleClickYearCheckbox} />
               </div>
             ))}
           </div>
@@ -161,13 +149,7 @@ const CourseManagement = () => {
             {allProgramArr.map((program) => (
               <label htmlFor={`program-${program}`} className="checkbox-container" key={program}>
                 <p>{program}</p>
-                <input 
-                  id={`program-${program}`} 
-                  type="checkbox"
-                  value={program}
-                  key={program}
-                  onChange={handleClickProgramCheckbox}
-                />
+                <input id={`program-${program}`} type="checkbox" value={program} key={program} onChange={handleClickProgramCheckbox} />
               </label>
             ))}
           </div>
@@ -176,9 +158,8 @@ const CourseManagement = () => {
         <button className="create-course__submit-btn" type="submit">
           Confirm
         </button>
-      {addErrorMsg && <p className="course-management__error-msg">** {addErrorMsg} **</p>}
+        {addErrorMsg && <p className="course-management__error-msg">** {addErrorMsg} **</p>}
       </form>
-      
 
       <form className="filter-course" onSubmit={handleSearchCourse}>
         <div>
@@ -207,7 +188,6 @@ const CourseManagement = () => {
               </option>
             ))}
           </select>
-          
         </div>
 
         <button className="filter-course__submit-button" type="submit">
@@ -215,35 +195,37 @@ const CourseManagement = () => {
         </button>
       </form>
       {searchErrorMsg && <p className="course-management__error-msg">** {searchErrorMsg} **</p>}
-      {selectedCourse.length > 0 && <div className='filtered-course'>
-        <table>
-          <tbody>
-          <tr>
-            <th className='id'>ID</th>
-            <th>Name</th>
-            <th>Instructor</th>
-            <th className='buttoncolumn'></th>
-          </tr>
-          
-          {selectedCourse.map((course) =>(
-          <tr value={course.course_id} key={course.course_id}>
-            <td>
-              <Link to={`/course/${course.course_id}`}>
-                <button className='course_id-btn'>{course.course_id}</button>
-              </Link>
-            </td>
-            <td>{course.course_name}</td>
-            <td>{course.username}</td>
-            <td>
-              <button className='deletebtn'>
-                <img className='deletebtn' src={deletebtn}/>
-              </button>
-            </td>
-          </tr>
-          ))}
-          </tbody>
-        </table>
-      </div>}
+      {selectedCourse.length > 0 && (
+        <div className="filtered-course">
+          <table>
+            <tbody>
+              <tr>
+                <th className="id">ID</th>
+                <th>Name</th>
+                <th>Instructor</th>
+                <th className="buttoncolumn"></th>
+              </tr>
+
+              {selectedCourse.map((course) => (
+                <tr value={course.course_id} key={course.course_id}>
+                  <td>
+                    <Link to={`/course/${course.course_id}`}>
+                      <button className="course_id-btn">{course.course_id}</button>
+                    </Link>
+                  </td>
+                  <td>{course.course_name}</td>
+                  <td>{course.username}</td>
+                  <td>
+                    <button className="deletebtn">
+                      <img className="deletebtn" src={deletebtn} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
