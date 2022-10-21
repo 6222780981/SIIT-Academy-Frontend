@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import Navbar from '../../components/navbar/Navbar';
 import HomeStaff from './homeStaff/HomeStaff';
+import HomeStudentTeacher from './homeStudentTeacher/HomeStudentTeacher';
 import './Home.css';
 
 function Home() {
@@ -19,7 +20,7 @@ function Home() {
   return (
     <div className="home">
       <Navbar></Navbar>
-      {role === 'staff' && <HomeStaff></HomeStaff>}
+      {role === 'staff' ? <HomeStaff></HomeStaff> : <HomeStudentTeacher></HomeStudentTeacher>}
     </div>
   );
 }

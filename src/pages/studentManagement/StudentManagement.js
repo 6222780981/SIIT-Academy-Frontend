@@ -51,13 +51,13 @@ function StudentManagement() {
               return;
             }
 
-            setLoading(false);
             courseIdRef.current.value = '';
             fileRef.current.value = '';
           })
           .catch((err) => {
             setErrorMsg(err.message);
-          });
+          })
+          .finally(() => setLoading(false));
       }
     });
   }
