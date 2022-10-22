@@ -3,3 +3,12 @@
   height: 400px;
   border: 1px solid black;
 }
+.upload-material-and-week-selection{
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+.week-dropdown{
+  display: flex;
+  flex-direction: column;
+}

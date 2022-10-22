@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
 import ManagementNav from '../../components/managementNav/ManagementNav';
@@ -8,6 +8,7 @@ import './CourseManagement.css';
 
 const CourseManagement = () => {
   const [courseId, setCourseId] = useState('');
+  const [delCourseId, setDelCourseId] = useState('');
   const [courseName, setCourseName] = useState('');
   const [teacherUsername, setInstructor] = useState('');
   const [year, setYear] = useState('');
@@ -17,6 +18,10 @@ const CourseManagement = () => {
   const [selectedCourse, getCourse] = useState([]);
   const [searchErrorMsg, setSearchErrorMsg] = useState();
   const [addErrorMsg, setAddErrorMsg] = useState();
+  const [addSuccessMsg, setAddSuccessMsg] = useState();
+  const [deleteSuccessMsg, setDeleteSuccessMsg] = useState();
+  const [deleteErrorMsg, setDeleteErrorMsg] = useState();
+  // const [show, setShow] = useState(false);
 
   const allYearArr = [1, 2, 3, 4];
   const allProgramArr = ['CPE', 'DE', 'ChE', 'CE', 'EE', 'ME', 'IE', 'MT', 'EM'];
@@ -54,7 +59,8 @@ const CourseManagement = () => {
   function handleAddCourse(e) {
     e.preventDefault();
     setAddErrorMsg();
-    console.log(courseId, courseName, teacherUsername, yearArr, programArr);
+    setAddSuccessMsg();
+    console.log(`${process.env.REACT_APP_BACKEND_URL}/course`, { courseId, courseName, teacherUsername, yearArr, programArr });
 
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/course`, { courseId, courseName, teacherUsername, yearArr, programArr })
@@ -65,6 +71,7 @@ const CourseManagement = () => {
           setAddErrorMsg(message);
           return;
         }
+        setAddSuccessMsg(`${courseId} is added`);
       })
       .catch((err) => {
         setAddErrorMsg(err.message);
@@ -74,6 +81,7 @@ const CourseManagement = () => {
   function handleSearchCourse(e) {
     e.preventDefault();
     setSearchErrorMsg();
+    
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/course?year=${year}&program=${program}`)
       .then((response) => {
@@ -87,21 +95,40 @@ const CourseManagement = () => {
         }
         const courseArr = response.data.data.courseArr;
         getCourse(courseArr);
-        // if(typeof courseArr !== 'undefined'){
-        //   getCourse(courseArr);
-        //   console.log("test");
-        // }
-        // else if(typeof courseArr !== 'undefined'){
-        //   console.log("undefined");
-        // }
-        // else{
-        //   console.log("something else");
-        // }
       })
       .catch((err) => {
         setSearchErrorMsg(err.message);
       });
   }
+
+  function handleDeleteCourse(e){
+    e.preventDefault();
+    console.log(courseId);
+    console.log(`${process.env.REACT_APP_BACKEND_URL}/course`,{courseId});
+    axios
+      .delete(`${process.env.REACT_APP_BACKEND_URL}/course`,{courseId})
+      .then((response) => {
+        console.log(response.data);
+        const { status, data, message } = response.data;
+        if (status !== 'success') {
+          setDeleteErrorMsg(message);
+          return;
+        }
+        // remove the target course from selectedCourse array
+        selectedCourse.splice(selectedCourse.indexOf(courseId), 1);
+      })
+  }
+  
+  // useEffect(() => {
+  //   const timeId = setTimeout(() => {
+  //     // After 3 seconds set the show value to false
+  //     setShow(false)
+  //   }, 3000)
+
+  //   return () => {
+  //     clearTimeout(timeId)
+  //   }
+  // }, []);
 
   return (
     <div className="course-management">
@@ -159,6 +186,7 @@ const CourseManagement = () => {
           Confirm
         </button>
         {addErrorMsg && <p className="course-management__error-msg">** {addErrorMsg} **</p>}
+        {addSuccessMsg && <p className="course-management__success-msg">** {addSuccessMsg} **</p>}
       </form>
 
       <form className="filter-course" onSubmit={handleSearchCourse}>
@@ -195,37 +223,38 @@ const CourseManagement = () => {
         </button>
       </form>
       {searchErrorMsg && <p className="course-management__error-msg">** {searchErrorMsg} **</p>}
-      {selectedCourse.length > 0 && (
-        <div className="filtered-course">
-          <table>
-            <tbody>
-              <tr>
-                <th className="id">ID</th>
-                <th>Name</th>
-                <th>Instructor</th>
-                <th className="buttoncolumn"></th>
-              </tr>
-
-              {selectedCourse.map((course) => (
-                <tr value={course.course_id} key={course.course_id}>
-                  <td>
-                    <Link to={`/course/${course.course_id}`}>
-                      <button className="course_id-btn">{course.course_id}</button>
-                    </Link>
-                  </td>
-                  <td>{course.course_name}</td>
-                  <td>{course.username}</td>
-                  <td>
-                    <button className="deletebtn">
-                      <img className="deletebtn" src={deletebtn} />
-                    </button>
-                  </td>
+      <form onSubmit={handleDeleteCourse}>
+        {selectedCourse.length > 0 && (
+          <div className="filtered-course">
+            <table>
+              <tbody>
+                <tr>
+                  <th className="id">ID</th>
+                  <th>Name</th>
+                  <th>Instructor</th>
+                  <th className="buttoncolumn"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+                {selectedCourse.map((course) => (
+                  <tr value={course.course_id} key={course.course_id}>
+                    <td>
+                      <Link to={`/course/${course.course_id}`}>
+                        <button className="course_id-btn">{course.course_id}</button>
+                      </Link>
+                    </td>
+                    <td>{course.course_name}</td>
+                    <td>{course.username}</td>
+                    <td>
+                      <button className="deletebtn" id="deletebtn" value={course.course_id} type='submit' onClick={(e) => setCourseId(course.course_id)}>
+                        <img className="deletebtn" src={deletebtn} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </form>
     </div>
   );
 };

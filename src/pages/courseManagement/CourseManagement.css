@@ -199,6 +199,16 @@
   transform: translateX(-50%);
 }
 
+.course-management__success-msg {
+  font-size: 18px;
+  color: #08f200;
+  margin-top: 30px;
+  text-align: center;
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 .filtered-course {
   display: flex;
   justify-content: center;
