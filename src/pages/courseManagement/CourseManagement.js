@@ -103,10 +103,8 @@ const CourseManagement = () => {
   }
 
   function handleDeleteCourse(e){
-    // console.log(selectedCourse);
     e.preventDefault();
     var tempCourseList = [...selectedCourse];
-    // getCourse();
     console.log(courseId);
     console.log(`${process.env.REACT_APP_BACKEND_URL}/course`,{data:{courseId}});
     axios
@@ -121,9 +119,7 @@ const CourseManagement = () => {
         // remove the target course from selectedCourse array
         var index = tempCourseList.findIndex(e => e.course_id === courseId);
         tempCourseList.splice(index, 1);
-        console.log(tempCourseList);
         getCourse(tempCourseList);
-        // console.log(selectedCourse);
       })
   }
 
