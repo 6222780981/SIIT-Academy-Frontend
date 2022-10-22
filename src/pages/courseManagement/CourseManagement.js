@@ -8,7 +8,7 @@ import './CourseManagement.css';
 
 const CourseManagement = () => {
   const [courseId, setCourseId] = useState('');
-  const [delCourseId, setDelCourseId] = useState('');
+  // const [delCourseId, setDelCourseId] = useState('');
   const [courseName, setCourseName] = useState('');
   const [teacherUsername, setInstructor] = useState('');
   const [year, setYear] = useState('');
@@ -54,6 +54,7 @@ const CourseManagement = () => {
     } else {
       programList.splice(programList.indexOf(event.target.value), 1);
     }
+    console.log(programList);
     setIsCheckedProgram(programList);
   };
   function handleAddCourse(e) {
@@ -102,11 +103,14 @@ const CourseManagement = () => {
   }
 
   function handleDeleteCourse(e){
+    // console.log(selectedCourse);
     e.preventDefault();
+    var tempCourseList = [...selectedCourse];
+    // getCourse();
     console.log(courseId);
-    console.log(`${process.env.REACT_APP_BACKEND_URL}/course`,{courseId});
+    console.log(`${process.env.REACT_APP_BACKEND_URL}/course`,{data:{courseId}});
     axios
-      .delete(`${process.env.REACT_APP_BACKEND_URL}/course`,{courseId})
+      .delete(`${process.env.REACT_APP_BACKEND_URL}/course`,{data:{courseId}})
       .then((response) => {
         console.log(response.data);
         const { status, data, message } = response.data;
@@ -115,20 +119,13 @@ const CourseManagement = () => {
           return;
         }
         // remove the target course from selectedCourse array
-        selectedCourse.splice(selectedCourse.indexOf(courseId), 1);
+        var index = tempCourseList.findIndex(e => e.course_id === courseId);
+        tempCourseList.splice(index, 1);
+        console.log(tempCourseList);
+        getCourse(tempCourseList);
+        // console.log(selectedCourse);
       })
   }
-  
-  // useEffect(() => {
-  //   const timeId = setTimeout(() => {
-  //     // After 3 seconds set the show value to false
-  //     setShow(false)
-  //   }, 3000)
-
-  //   return () => {
-  //     clearTimeout(timeId)
-  //   }
-  // }, []);
 
   return (
     <div className="course-management">
@@ -226,14 +223,17 @@ const CourseManagement = () => {
       <form onSubmit={handleDeleteCourse}>
         {selectedCourse.length > 0 && (
           <div className="filtered-course">
+            
             <table>
               <tbody>
+                
                 <tr>
                   <th className="id">ID</th>
                   <th>Name</th>
                   <th>Instructor</th>
                   <th className="buttoncolumn"></th>
                 </tr>
+                
                 {selectedCourse.map((course) => (
                   <tr value={course.course_id} key={course.course_id}>
                     <td>
