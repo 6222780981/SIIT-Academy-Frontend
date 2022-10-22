@@ -5,6 +5,8 @@ import Login from './pages/login/Login';
 import Home from './pages/home/Home';
 import CourseManagement from './pages/courseManagement/CourseManagement';
 import StudentManagement from './pages/studentManagement/StudentManagement';
+import Course from './pages/course/Course';
+import AddResource from './pages/AddResource/AddResource';
 
 function App() {
   return (
@@ -23,6 +25,12 @@ function App() {
       </Route>
       <Route exact path="/management/student">
         <StudentManagement></StudentManagement>
+      </Route>
+      <Route exact path="/course/:courseId">
+        <Course></Course>
+      </Route>
+      <Route exact path="/course/:courseId/management">
+        <AddResource></AddResource>
       </Route>
 
       <Route path="/">

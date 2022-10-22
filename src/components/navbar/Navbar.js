@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useLocation, Link } from 'react-router-dom';
+import { useHistory, useLocation, useParams, Link } from 'react-router-dom';
 
 import { userActions } from '../../store/userSlice';
 
@@ -13,7 +13,8 @@ function Navbar(props) {
 
   const history = useHistory();
   const dispatch = useDispatch();
-  const location = useLocation();
+  const { pathname } = useLocation();
+  const { courseId } = useParams();
 
   const userId = useSelector((store) => store.user.userId);
   const username = useSelector((store) => store.user.username);
@@ -37,8 +38,13 @@ function Navbar(props) {
           SIIT <span>Academy</span>
         </p>
       )}
-      {location.pathname !== '/login' && (
+      {pathname !== '/login' && (
         <div className="navbar__button-container">
+          {role !== 'student' && pathname.includes('/course') && (
+            <Link to={`/course/${courseId}/management`} className="navbar__button-container--add-resource-link">
+              Add resource
+            </Link>
+          )}
           {role === 'staff' && (
             <Link to="/management/course" className="navbar__button-container--manage-link">
               (Manage)
