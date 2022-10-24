@@ -1,5 +1,7 @@
 import { Route, Redirect, Switch } from 'react-router-dom';
 
+import './firebase';
+
 import Information from './pages/information/Information';
 import Login from './pages/login/Login';
 import Home from './pages/home/Home';
