@@ -1,5 +1,94 @@
-.upload-assignment {
+.upload-assignment-container{
   /* temporary style */
   height: 400px;
   border: 1px solid black;
+}
+.upload-assignment-body{
+  display: flex;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+.upload-assignment-texts{
+  display: flex;
+  flex-direction: column;
+  padding-left: 30px;
+  justify-content: center;
+}
+.left-compartment{
+  display: flex;
+  flex-direction: column;
+  float: left;
+  width: 40%;
+}
+.right-compartment{
+  display: flex;
+  flex-direction: column;
+  float: right;
+  width: 50%;
+  padding-left: 48px;
+  padding-top: 30px;
+}
+.title-textbox, .description-textbox{
+  font-weight: 300;
+  font-size: 14px;
+  color: #a2842a;
+  padding: 7px 20px;
+  border: 1px solid #a2842a;
+  border-radius: 8px;
+}
+.description-textbox{
+  height: 200px;
+  resize: none;
+}
+.confirm-upload{
+  padding: 7px 30px;
+  color:#FFFDF6;
+  background: rgba(175, 32, 53, 0.9);
+  border-radius: 8px;
+
+}
+label[for=upload-assignment-btn]{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+label[for=upload-assignment-btn]:hover{
+  opacity: 0.5;
+}
+.upload-assignment-box{
+  display: flex;
+  background: rgba(103, 44, 132, 0.1);
+  border: 1px dashed #672C84;
+  border-radius: 8px;
+  padding: 20px ;
+}
+.assignment-week-dropdown{
+  display: flex;
+  flex-direction: column;
+  padding-top: 17px;
+  padding-left: 0;
+  padding-right: 120px;
+}
+.assignment-week-dropdown select {
+  font-weight: 300;
+  font-size: 14px;
+  color: #a2842a;
+  padding: 7px 20px;
+  border: 1px solid #a2842a;
+  border-radius: 8px;
+  width:150px
+}
+.due-date{
+  display: flex;
+  flex-direction: column;
+  padding-top: 17px;
+}
+.due-date-calendar{
+  font-weight: 300;
+  font-size: 14px;
+  color: #a2842a;
+  padding: 7px 20px;
+  border: 1px solid #a2842a;
+  border-radius: 8px;
+  width:150px
 }
