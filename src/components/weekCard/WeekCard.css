@@ -1,0 +1,81 @@
+.week-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  background: #ffffff;
+  border: 1px solid #a2842a;
+  border-radius: 8px;
+}
+
+.week-card__order {
+  font-weight: 600;
+  font-size: 18px;
+  color: #a2842a;
+  margin-right: 35px;
+  margin-bottom: 3px;
+}
+
+.week-card__title-label {
+  font-weight: 500;
+  font-size: 16px;
+  color: #a2842a;
+  margin-right: 18px;
+}
+
+.week-card__title {
+  font-weight: 700;
+  font-size: 16px;
+  color: #646464;
+  width: 300px;
+  margin-right: 35px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.week-card__title-input {
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 13px 18px;
+  font-size: 16px;
+  width: 300px;
+  margin-right: 35px;
+  border: 1px solid #a2842a93;
+}
+
+.week-card__file-path {
+  font-weight: 700;
+  font-size: 16px;
+  color: #672c84;
+  padding: 8px 30px;
+  background: rgba(103, 44, 132, 0.1);
+  border: 1px solid #672c84;
+  border-radius: 10px;
+  width: 230px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 35px;
+}
+
+.week-card__video-input {
+  width: 230px;
+  margin-right: 35px;
+}
+
+.week-card__video-input--label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #a2842a;
+}
+
+.week-card__video-input--file-input {
+  width: 100%;
+}
+
+.week-card__delete-btn {
+  width: 30px;
+}
+
+.week-card__delete-btn:hover {
+  cursor: pointer;
+}

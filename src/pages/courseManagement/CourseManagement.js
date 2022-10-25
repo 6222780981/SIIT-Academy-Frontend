@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
 import ManagementNav from '../../components/managementNav/ManagementNav';
-import deletebtn from '../../icons/deletebtn.png';
+import deletebtn from '../../icons/delete icon.svg';
 import axios from 'axios';
 import './CourseManagement.css';
 
@@ -82,7 +82,7 @@ const CourseManagement = () => {
   function handleSearchCourse(e) {
     e.preventDefault();
     setSearchErrorMsg();
-    
+
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/course?year=${year}&program=${program}`)
       .then((response) => {
@@ -102,25 +102,23 @@ const CourseManagement = () => {
       });
   }
 
-  function handleDeleteCourse(e){
+  function handleDeleteCourse(e) {
     e.preventDefault();
     var tempCourseList = [...selectedCourse];
     console.log(courseId);
-    console.log(`${process.env.REACT_APP_BACKEND_URL}/course`,{data:{courseId}});
-    axios
-      .delete(`${process.env.REACT_APP_BACKEND_URL}/course`,{data:{courseId}})
-      .then((response) => {
-        console.log(response.data);
-        const { status, data, message } = response.data;
-        if (status !== 'success') {
-          setDeleteErrorMsg(message);
-          return;
-        }
-        // remove the target course from selectedCourse array
-        var index = tempCourseList.findIndex(e => e.course_id === courseId);
-        tempCourseList.splice(index, 1);
-        getCourse(tempCourseList);
-      })
+    console.log(`${process.env.REACT_APP_BACKEND_URL}/course`, { data: { courseId } });
+    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/course`, { data: { courseId } }).then((response) => {
+      console.log(response.data);
+      const { status, data, message } = response.data;
+      if (status !== 'success') {
+        setDeleteErrorMsg(message);
+        return;
+      }
+      // remove the target course from selectedCourse array
+      var index = tempCourseList.findIndex((e) => e.course_id === courseId);
+      tempCourseList.splice(index, 1);
+      getCourse(tempCourseList);
+    });
   }
 
   return (
@@ -219,17 +217,15 @@ const CourseManagement = () => {
       <form onSubmit={handleDeleteCourse}>
         {selectedCourse.length > 0 && (
           <div className="filtered-course">
-            
             <table>
               <tbody>
-                
                 <tr>
                   <th className="id">ID</th>
                   <th>Name</th>
                   <th>Instructor</th>
                   <th className="buttoncolumn"></th>
                 </tr>
-                
+
                 {selectedCourse.map((course) => (
                   <tr value={course.course_id} key={course.course_id}>
                     <td>
@@ -240,7 +236,13 @@ const CourseManagement = () => {
                     <td>{course.course_name}</td>
                     <td>{course.username}</td>
                     <td>
-                      <button className="deletebtn" id="deletebtn" value={course.course_id} type='submit' onClick={(e) => setCourseId(course.course_id)}>
+                      <button
+                        className="deletebtn"
+                        id="deletebtn"
+                        value={course.course_id}
+                        type="submit"
+                        onClick={(e) => setCourseId(course.course_id)}
+                      >
                         <img className="deletebtn" src={deletebtn} />
                       </button>
                     </td>

@@ -40,7 +40,7 @@ function Navbar(props) {
       )}
       {pathname !== '/login' && (
         <div className="navbar__button-container">
-          {role !== 'student' && pathname.includes('/course') && (
+          {role !== 'student' && pathname.includes('/course/') && (
             <Link to={`/course/${courseId}/management`} className="navbar__button-container--add-resource-link">
               Add resource
             </Link>

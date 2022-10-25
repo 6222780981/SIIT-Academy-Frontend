@@ -1,5 +1,47 @@
-.create-week {
-  /* temporary style */
-  height: 400px;
-  border: 1px solid black;
+.create-week__title {
+  font-weight: 600;
+  font-size: 20px;
+  color: #646464;
+  margin-bottom: 30px;
+}
+
+.create-week__card-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 18px;
+}
+
+.create-week__btn-container {
+  margin-top: 40px;
+  display: flex;
+  column-gap: 30px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #fffdf6;
+}
+
+.create-week__btn-container--add-week {
+  background: #672c84;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  column-gap: 17.5px;
+  padding: 7px 30px 7px 25px;
+}
+
+.create-week__btn-container--confirm {
+  background: rgba(175, 32, 53, 0.9);
+  border-radius: 8px;
+  padding: 7px 38px;
+}
+
+.create-week__btn-container--add-week:hover,
+.create-week__btn-container--confirm:hover {
+  cursor: pointer;
+}
+
+.create-week__btn-container--add-week:disabled,
+.create-week__btn-container--confirm:disabled {
+  opacity: 0.8;
+  cursor: wait;
 }

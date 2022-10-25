@@ -255,8 +255,8 @@
 }
 
 .filtered-course img.deletebtn {
-  width: 60%;
-  height: 60%;
+  width: 30px;
+  margin-bottom: -5px;
 }
 
 .filtered-course img.deletebtn:hover {
