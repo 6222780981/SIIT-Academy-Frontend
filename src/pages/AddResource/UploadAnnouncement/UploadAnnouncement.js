@@ -6,22 +6,22 @@ import uploadannouncementbtn from '../../AddResource/icons/upload-material-btn.p
 function UploadAnnouncement() {
   const { courseId } = useParams();
   const fileRef = useRef();
-  const [description,setDescription] = useState('')
+  const [description,setDescription] = useState('');
   const [announcementFilePaths, setAnnouncementFilePaths] = useState([]);
 
   const handleUploadAnnouncement = (event)=>{
-    var tempmaterialFilePaths = [...materialFilePaths];
-    tempmaterialFilePaths = [...tempmaterialFilePaths,event.target.files[0].name]
-    setAnnouncementFilePaths(tempmaterialFilePaths);
+    var tempannouncementFilePaths = [...announcementFilePaths];
+    tempannouncementFilePaths = [...announcementFilePaths,event.target.files[0].name]
+    setAnnouncementFilePaths(tempannouncementFilePaths);
   };
   const handleClearFile = (event) =>{
-    setMaterialFilePaths([]);
+    setAnnouncementFilePaths([]);
   };
   const handleConfirmUploadAnnouncement = (event) =>{
-    if ((materialFilePaths.length === 0) && (week ==='')){
+    if ((announcementFilePaths.length === 0) && (week ==='')){
       return;
     }
-    console.log(materialFilePaths, week);
+    console.log(announcementFilePaths, description);
   }
   return (
     <form className='confirm-upload-announcement' onSubmit={handleConfirmUploadAnnouncement}>
