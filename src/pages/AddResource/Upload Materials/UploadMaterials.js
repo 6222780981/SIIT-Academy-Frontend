@@ -1,49 +1,55 @@
 import './UploadMaterials.css';
-import {useState, useRef} from 'react';
+import {useState, useRef, useEffect} from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import uploadmaterialbtn from '../../AddResource/icons/upload-material-btn.png';
 
-function UploadMaterials() {
-  const { courseId } = useParams();
+function UploadMaterials(props) {
+  
   const fileRef = useRef();
+  const [materialFileNames, setMaterialFileNames] = useState([]);
   const [materialFilePaths, setMaterialFilePaths] = useState([]);
-  const [week, setWeek] = useState('');
-  const [weekArr, setWeekArr] = useState([]);
-
-  if (weekArr.length === 0){
-    console.log(`${process.env.REACT_APP_BACKEND_URL}/week?courseId=${courseId}`);
-    axios
-    .get(`${process.env.REACT_APP_BACKEND_URL}/week?courseId=${courseId}`)
-    .then((response) => {
-      console.log(response.data);
-      const { status, data, message } = response.data;
-      if (status !== 'success') {
-        // setSearchErrorMsg(message);
-        return;
-      }
-      const weekArr = response.data.data.weekArr;
-      setWeekArr(weekArr);
-    })
-  }
-
+  const [weekIndex, setWeek] = useState('');
+  const { uploadFileHandler, weekArr, courseId } = props;
+  
+  console.log(weekArr.length);
   const handleChangeWeek = (event) => {
     setWeek(event.target.value);
   };
   const handleUploadMaterial = (event)=>{
-    // console.log(event.target.files[0].name);
+    var tempmaterialFileNames = [...materialFileNames];
     var tempmaterialFilePaths = [...materialFilePaths];
-    tempmaterialFilePaths = [...tempmaterialFilePaths,event.target.files[0].name]
+    console.log(event.target.files)
+    tempmaterialFilePaths = [...tempmaterialFileNames,`${courseId}/week${weekIndex + 1}/material/${event.target.files[0].name}`]
+    tempmaterialFileNames = [...tempmaterialFileNames,event.target.files[0].name]
     setMaterialFilePaths(tempmaterialFilePaths);
+    setMaterialFileNames(tempmaterialFileNames);
+    console.log(tempmaterialFilePaths);
+    console.log(tempmaterialFileNames);
   };
   const handleClearFile = (event) =>{
+    setMaterialFileNames([]);
     setMaterialFilePaths([]);
+    console.log(materialFileNames);
+    console.log(materialFilePaths);
   };
-  const handleConfirmUploadMaterial = (event) =>{
-    if ((materialFilePaths.length === 0) && (week ==='')){
+  async function handleConfirmUploadMaterial(e){
+    e.preventDefault();
+    if ((materialFilePaths.length === 0) && (weekIndex ==='')){
       return;
     }
-    console.log(materialFilePaths, week);
+    for (fileArr in materialFilePaths){
+      if (fileArr.file && !(await uploadFileHandler(fileArr.file, `${courseId}/week${weekIndex + 1}/material/${fileArr.file.name}`))) {
+        console.log(`error uploading file: ${`${courseId}/week${weekIndex + 1}/material/${fileArr.file.name}`}`);
+        return;
+      }
+      try{
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,materialFilePaths})
+      }catch (err) {
+        console.log(err.message);
+      }
+    }
+    // console.log(materialFilePaths, week);
   }
 
   return (
@@ -73,19 +79,19 @@ function UploadMaterials() {
               <label style={{
                 fontWeight:'300',fontSize:'12px',color:'#672C84'
               }}>Browse your file</label>
-              {materialFilePaths.length > 0 && materialFilePaths.map((filename) => (
+              {materialFileNames.length > 0 && materialFileNames.map((filename) => (
                 <label value={filename} key={filename}>
                   {filename}
                 </label>
               ))}
-              {materialFilePaths.length > 0 && <button className="clearbtn" onClick={handleClearFile}>Clear</button>}
+              {materialFileNames.length > 0 && <button className="clearbtn" onClick={handleClearFile}>Clear</button>}
             </div>
           </div>
           <div className='week-dropdown'>
             <label style={{
               color:'#A2842A',fontWeight:'600',fontSize:'16px',paddingBottom:'10px'
             }}>Upload to Week</label>
-            <select value={week} onChange={handleChangeWeek}>
+            <select value={weekIndex} onChange={handleChangeWeek}>
               <option disabled={true} value="">
                 Select Week
               </option>

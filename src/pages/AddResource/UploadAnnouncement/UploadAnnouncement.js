@@ -8,20 +8,30 @@ function UploadAnnouncement() {
   const fileRef = useRef();
   const [description,setDescription] = useState('');
   const [announcementFilePaths, setAnnouncementFilePaths] = useState([]);
+  const [announcementFileNames, setAnnouncementFileNames] = useState([]);
 
   const handleUploadAnnouncement = (event)=>{
-    var tempannouncementFilePaths = [...announcementFilePaths];
-    tempannouncementFilePaths = [...announcementFilePaths,event.target.files[0].name]
-    setAnnouncementFilePaths(tempannouncementFilePaths);
+    var tempAnnouncementFileNames = [...announcementFileNames];
+    var tempAnnouncementFilePaths = [...announcementFilePaths];
+    tempAnnouncementFileNames = [...announcementFileNames,event.target.files[0].name]
+    tempAnnouncementFilePaths = [...announcementFilePaths,`${courseId}/announcement/${event.target.files[0].name}`,]
+    setAnnouncementFileNames(tempAnnouncementFileNames);
+    setAnnouncementFilePaths(tempAnnouncementFilePaths)
+    console.log(tempAnnouncementFileNames);
+    console.log(tempAnnouncementFilePaths);
   };
   const handleClearFile = (event) =>{
+    setAnnouncementFileNames([]);
     setAnnouncementFilePaths([]);
+    console.log(announcementFileNames);
+    console.log(announcementFilePaths);
   };
   const handleConfirmUploadAnnouncement = (event) =>{
-    if ((announcementFilePaths.length === 0) && (week ==='')){
+    if ((announcementFileNames.length === 0) && (week ==='')){
       return;
     }
-    console.log(announcementFilePaths, description);
+    // work in progress
+    console.log(announcementFileNames, description);
   }
   return (
     <form className='confirm-upload-announcement' onSubmit={handleConfirmUploadAnnouncement}>
@@ -64,12 +74,12 @@ function UploadAnnouncement() {
                 <label style={{
                   fontWeight:'300',fontSize:'12px',color:'#672C84'
                 }}>Browse your file</label>
-                {announcementFilePaths.length > 0 && announcementFilePaths.map((announcementfilename) => (
-                  <label value={announcementfilename} key={announcementfilename}>
-                    {announcementfilename}
+                {announcementFileNames.length > 0 && announcementFileNames.map((filename) => (
+                  <label value={filename} key={filename}>
+                    {filename}
                   </label>
                 ))}
-                {announcementFilePaths.length > 0 && <button className="clearbtn" onClick={handleClearFile}>Clear</button>}
+                {announcementFileNames.length > 0 && <button className="clearbtn" onClick={handleClearFile}>Clear</button>}
               </div>
             </div>
           </div>

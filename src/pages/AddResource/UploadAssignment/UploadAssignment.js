@@ -4,45 +4,37 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import uploadassignmentbtn from '../../AddResource/icons/upload-material-btn.png';
 
-function UploadAssignment() {
-  const { courseId } = useParams();
+function UploadAssignment(props) {
+
+  const { uploadFileHandler, weekArr, courseId } = props;
+
   const fileRef = useRef();
   const [title, setTitle] = useState('');
-  const [description,setDescription] = useState('')
+  const [description,setDescription] = useState('');
+  const [assignmentFileNames, setAssignmentFileNames] = useState([]);
   const [assignmentFilePaths, setAssignmentFilePaths] = useState([]);
-  const [week, setWeek] = useState('');
-  const [weekArr, setWeekArr] = useState([]);
+  const [weekIndex, setWeek] = useState('');
   const [duedate, setDueDate] = useState(new Date());
-  if (weekArr.length === 0){
-    axios
-    .get(`${process.env.REACT_APP_BACKEND_URL}/week?courseId=${courseId}`)
-    .then((response) => {
-    console.log(response.data);
-      const { status, data, message } = response.data;
-      if (status !== 'success') {
-        // setSearchErrorMsg(message);
-        return;
-      }
-      const weekArr = response.data.data.weekArr;
-      setWeekArr(weekArr);
-    })
-  }
-  // console.log(duedate);
+
   const handleChangeWeek = (event) => {
     setWeek(event.target.value);
   };
   const handleUploadAssignment = (event)=>{
     console.log(event.target.files[0].name);
-    var tempFilePaths = [...assignmentFilePaths];
-    tempFilePaths = [...tempFilePaths,event.target.files[0].name]
-    setAssignmentFilePaths(tempFilePaths);
+    var tempAssignmentFileNames = [...assignmentFileNames];
+    var tempAssignmentFilePaths = [...assignmentFilePaths];
+    tempAssignmentFileNames = [...tempAssignmentFileNames,event.target.files[0].name]
+    tempAssignmentFilePaths = [...tempAssignmentFilePaths,`${courseId}/week${weekIndex + 1}/assignment/${event.target.files[0].name}`]
+    setAssignmentFileNames(tempAssignmentFileNames);
+    setAssignmentFilePaths(tempAssignmentFilePaths);
+    console.log(tempAssignmentFileNames);
+    console.log(tempAssignmentFilePaths);
   };
   const handleClearFile = (event) =>{
+    setAssignmentFileNames([]);
     setAssignmentFilePaths([]);
   };
-  const handleChangeDate = (event) => {
 
-  }
   const handleConfirmUploadAssignment = (event) =>{
     // if ((filePaths.length === 0) && (week ==='')){
     //   return;
@@ -101,19 +93,19 @@ function UploadAssignment() {
                 <label style={{
                   fontWeight:'300',fontSize:'12px',color:'#672C84'
                 }}>Browse your file</label>
-                {assignmentFilePaths.length > 0 && assignmentFilePaths.map((assignmentfilename) => (
+                {assignmentFileNames.length > 0 && assignmentFileNames.map((assignmentfilename) => (
                   <label value={assignmentfilename} key={assignmentfilename}>
                     {assignmentfilename}
                   </label>
                 ))}
-                {assignmentFilePaths.length > 0 && <button className="clearbtn" onClick={handleClearFile}>Clear</button>}
+                {assignmentFileNames.length > 0 && <button className="clearbtn" onClick={handleClearFile}>Clear</button>}
               </div>
             </div>
             <div className='assignment-week-dropdown'>
               <label style={{
                 color:'#A2842A',fontWeight:'600',fontSize:'16px',paddingBottom:'10px'
               }}>Upload to Week</label>
-              <select value={week} onChange={handleChangeWeek}>
+              <select value={weekIndex} onChange={handleChangeWeek}>
                 <option disabled={true} value="">
                   Select Week
                 </option>
