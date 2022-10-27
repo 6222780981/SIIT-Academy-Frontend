@@ -7,8 +7,9 @@ import uploadmaterialbtn from '../../AddResource/icons/upload-material-btn.png';
 function UploadMaterials(props) {
   
   const fileRef = useRef();
+  const [materialFiles, setMaterialFiles] = useState([]);
   const [materialFileNames, setMaterialFileNames] = useState([]);
-  const [materialFilePaths, setMaterialFilePaths] = useState([]);
+  
   const [weekIndex, setWeek] = useState('');
   const { uploadFileHandler, weekArr, courseId } = props;
   
@@ -17,28 +18,31 @@ function UploadMaterials(props) {
     setWeek(event.target.value);
   };
   const handleUploadMaterial = (event)=>{
+    var tempmaterialFiles = [...materialFiles];
     var tempmaterialFileNames = [...materialFileNames];
-    var tempmaterialFilePaths = [...materialFilePaths];
-    console.log(event.target.files)
-    tempmaterialFilePaths = [...tempmaterialFileNames,`${courseId}/week${weekIndex + 1}/material/${event.target.files[0].name}`]
-    tempmaterialFileNames = [...tempmaterialFileNames,event.target.files[0].name]
-    setMaterialFilePaths(tempmaterialFilePaths);
+    for (let i = 0; i<event.target.files.length; i++){
+      tempmaterialFileNames = [...tempmaterialFileNames,event.target.files[i].name]
+    }
+    tempmaterialFiles = [...tempmaterialFiles,event.target.files]
+    
+    setMaterialFiles(tempmaterialFiles);
     setMaterialFileNames(tempmaterialFileNames);
-    console.log(tempmaterialFilePaths);
-    console.log(tempmaterialFileNames);
+    // console.log(tempmaterialFiles);
+    // console.log(tempmaterialFileNames);
   };
   const handleClearFile = (event) =>{
+    setMaterialFiles([]);
     setMaterialFileNames([]);
-    setMaterialFilePaths([]);
-    console.log(materialFileNames);
-    console.log(materialFilePaths);
   };
   async function handleConfirmUploadMaterial(e){
     e.preventDefault();
+    console.log(materialFiles);
+    console.log(materialFileNames);
+    return;
     if ((materialFilePaths.length === 0) && (weekIndex ==='')){
       return;
     }
-    for (fileArr in materialFilePaths){
+    for (fileArr in materialFileNames){
       if (fileArr.file && !(await uploadFileHandler(fileArr.file, `${courseId}/week${weekIndex + 1}/material/${fileArr.file.name}`))) {
         console.log(`error uploading file: ${`${courseId}/week${weekIndex + 1}/material/${fileArr.file.name}`}`);
         return;
@@ -66,6 +70,7 @@ function UploadMaterials(props) {
               id="upload-material-btn"
               accept="application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-exce"
               ref={fileRef}
+              multiple="multiple"
               required
               style={{ display: 'none' }}
             ></input>

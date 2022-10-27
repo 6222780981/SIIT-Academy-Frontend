@@ -11,8 +11,8 @@ function UploadAssignment(props) {
   const fileRef = useRef();
   const [title, setTitle] = useState('');
   const [description,setDescription] = useState('');
+  const [assignmentFiles, setAssignmentFiles] = useState([]);
   const [assignmentFileNames, setAssignmentFileNames] = useState([]);
-  const [assignmentFilePaths, setAssignmentFilePaths] = useState([]);
   const [weekIndex, setWeek] = useState('');
   const [duedate, setDueDate] = useState(new Date());
 
@@ -20,22 +20,28 @@ function UploadAssignment(props) {
     setWeek(event.target.value);
   };
   const handleUploadAssignment = (event)=>{
-    console.log(event.target.files[0].name);
-    var tempAssignmentFileNames = [...assignmentFileNames];
-    var tempAssignmentFilePaths = [...assignmentFilePaths];
-    tempAssignmentFileNames = [...tempAssignmentFileNames,event.target.files[0].name]
-    tempAssignmentFilePaths = [...tempAssignmentFilePaths,`${courseId}/week${weekIndex + 1}/assignment/${event.target.files[0].name}`]
-    setAssignmentFileNames(tempAssignmentFileNames);
-    setAssignmentFilePaths(tempAssignmentFilePaths);
-    console.log(tempAssignmentFileNames);
-    console.log(tempAssignmentFilePaths);
+    var tempassignmentFiles = [...assignmentFiles];
+    var tempassignmentFileNames = [...assignmentFileNames];
+    // console.log(event.target.files)
+    for (let i = 0; i<event.target.files.length; i++){
+      tempassignmentFileNames = [...tempassignmentFileNames,event.target.files[i].name]
+    }
+    
+    tempassignmentFiles = [...tempassignmentFiles,event.target.files]
+    
+    setAssignmentFiles(tempassignmentFiles);
+    setAssignmentFileNames(tempassignmentFileNames);
   };
   const handleClearFile = (event) =>{
+    setAssignmentFiles([]);
     setAssignmentFileNames([]);
-    setAssignmentFilePaths([]);
+
   };
 
-  const handleConfirmUploadAssignment = (event) =>{
+  async function handleConfirmUploadAssignment(e){
+    e.preventDefault();
+    console.log(assignmentFiles);
+    console.log(assignmentFileNames);
     // if ((filePaths.length === 0) && (week ==='')){
     //   return;
     // }
@@ -57,6 +63,7 @@ function UploadAssignment(props) {
               className='title-textbox' 
               placeholder="Title" 
               type='text'
+              multiple="multiple"
               // required
               value={title}
               onChange={(e) => setTitle(e.target.value)}

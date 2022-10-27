@@ -7,26 +7,29 @@ function UploadAnnouncement() {
   const { courseId } = useParams();
   const fileRef = useRef();
   const [description,setDescription] = useState('');
-  const [announcementFilePaths, setAnnouncementFilePaths] = useState([]);
+  const [announcementFiles, setAnnouncementFiles] = useState([]);
   const [announcementFileNames, setAnnouncementFileNames] = useState([]);
 
   const handleUploadAnnouncement = (event)=>{
+    var tempAnnouncementFiles = [...announcementFiles];
     var tempAnnouncementFileNames = [...announcementFileNames];
-    var tempAnnouncementFilePaths = [...announcementFilePaths];
-    tempAnnouncementFileNames = [...announcementFileNames,event.target.files[0].name]
-    tempAnnouncementFilePaths = [...announcementFilePaths,`${courseId}/announcement/${event.target.files[0].name}`,]
+    for (let i = 0; i<event.target.files.length; i++){
+      tempAnnouncementFileNames = [...tempAnnouncementFileNames,event.target.files[i].name]
+    }
+    tempAnnouncementFiles = [...tempAnnouncementFiles,event.target.files]
+    
+    setAnnouncementFiles(tempAnnouncementFiles);
     setAnnouncementFileNames(tempAnnouncementFileNames);
-    setAnnouncementFilePaths(tempAnnouncementFilePaths)
-    console.log(tempAnnouncementFileNames);
-    console.log(tempAnnouncementFilePaths);
   };
   const handleClearFile = (event) =>{
+    setAnnouncementFiles([]);
     setAnnouncementFileNames([]);
-    setAnnouncementFilePaths([]);
-    console.log(announcementFileNames);
-    console.log(announcementFilePaths);
   };
-  const handleConfirmUploadAnnouncement = (event) =>{
+  async function handleConfirmUploadAnnouncement(e){
+    e.preventDefault();
+    console.log(announcementFiles);
+    console.log(announcementFileNames);
+    return;
     if ((announcementFileNames.length === 0) && (week ==='')){
       return;
     }
@@ -61,7 +64,8 @@ function UploadAnnouncement() {
                 id="upload-announcement-btn"
                 accept="application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-exce"
                 ref={fileRef}
-                required
+                multiple="multiple"
+                
                 style={{ display: 'none' }}
               ></input>
               <label htmlFor="upload-announcement-btn">
