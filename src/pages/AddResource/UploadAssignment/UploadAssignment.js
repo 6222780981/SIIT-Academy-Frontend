@@ -11,12 +11,12 @@ function UploadAssignment(props) {
   const fileRef = useRef();
   const [title, setTitle] = useState('');
   const [description,setDescription] = useState('');
-  const assignmentFiles = document.querySelector("input[type=file]"); 
+  const assignmentFiles = document.querySelector("input[name='upload-assignment']"); 
   const [assignmentFileNames, setAssignmentFileNames] = useState([]);
   const [assignmentFilePaths, setAssignmentFilePaths] = useState([]);
   const [weekIndex, setWeek] = useState('');
   const [duedate, setDueDate] = useState(new Date());
-
+  var weekId = 1;
   const handleChangeWeek = (event) => {
     setWeek(event.target.value);
   };
@@ -41,7 +41,7 @@ function UploadAssignment(props) {
 
   async function handleConfirmUploadAssignment(e){
     e.preventDefault();
-    console.log(assignmentFiles);
+    // console.log(assignmentFiles);
     const fileList = assignmentFiles.files;
     console.log(fileList);
     console.log(assignmentFileNames);
@@ -60,7 +60,8 @@ function UploadAssignment(props) {
       // }
     }
     try{
-      console.log(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,assignmentFilePaths})
+      var filePath = assignmentFilePaths;
+      console.log(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,title,description,filePath})
       // axios.post(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,materialFilePaths})
     }catch (err) {
       console.log(err.message);
@@ -104,6 +105,7 @@ function UploadAssignment(props) {
               <input onChange={handleUploadAssignment}
                 type="file"
                 id="upload-assignment-btn"
+                name='upload-assignment'
                 accept="application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-exce"
                 ref={fileRef}
                 required

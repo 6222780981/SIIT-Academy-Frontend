@@ -7,34 +7,53 @@ function UploadAnnouncement() {
   const { courseId } = useParams();
   const fileRef = useRef();
   const [description,setDescription] = useState('');
-  const [announcementFiles, setAnnouncementFiles] = useState([]);
+  const announcementFiles = document.querySelector("input[name='upload-announcement']");
+  const [announcementFilePaths, setAnnouncementFilePaths] = useState([]);
   const [announcementFileNames, setAnnouncementFileNames] = useState([]);
 
   const handleUploadAnnouncement = (event)=>{
-    var tempAnnouncementFiles = [...announcementFiles];
+    var tempAnnouncementFilePaths = [...announcementFilePaths];
     var tempAnnouncementFileNames = [...announcementFileNames];
     for (let i = 0; i<event.target.files.length; i++){
       tempAnnouncementFileNames = [...tempAnnouncementFileNames,event.target.files[i].name]
+      tempAnnouncementFilePaths = [...tempAnnouncementFilePaths,`${courseId}/announcement/${event.target.files[i].name}`]
     }
-    tempAnnouncementFiles = [...tempAnnouncementFiles,event.target.files]
     
-    setAnnouncementFiles(tempAnnouncementFiles);
+    setAnnouncementFilePaths(tempAnnouncementFilePaths);
     setAnnouncementFileNames(tempAnnouncementFileNames);
+    // console.log(announcementFiles);
   };
   const handleClearFile = (event) =>{
-    setAnnouncementFiles([]);
+    setAnnouncementFilePaths([]);
     setAnnouncementFileNames([]);
+    announcementFiles.value = null;
   };
   async function handleConfirmUploadAnnouncement(e){
     e.preventDefault();
-    console.log(announcementFiles);
+    const fileList = announcementFiles.files;
+    console.log(fileList);
     console.log(announcementFileNames);
-    return;
-    if ((announcementFileNames.length === 0) && (week ==='')){
+    console.log(announcementFilePaths);
+    // console.log(materialFileNames);
+    // return;
+    if ((fileList.length === 0) && (weekIndex ==='')){
       return;
     }
-    // work in progress
-    console.log(announcementFileNames, description);
+    for (let i=0; i<fileList.length; i++){
+      console.log(fileList.item(i));
+      // console.log(fileList.item(i).name)
+      // if (fileArr.file && !(await uploadFileHandler(fileList.item(i), `${courseId}/announcement/${fileList.item(i).name}`))) {
+      //   console.log(`error uploading file: ${`${courseId}/announcement/${fileList.item(i).name}`}`);
+      //   return;
+      // }
+    }
+    try{
+      var filePath = announcementFilePaths;
+      console.log(`${process.env.REACT_APP_BACKEND_URL}/${courseId}/announcement`,{courseId,description,filePath})
+      // axios.post(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,materialFilePaths})
+    }catch (err) {
+      console.log(err.message);
+    }
   }
   return (
     <form className='confirm-upload-announcement' onSubmit={handleConfirmUploadAnnouncement}>
@@ -62,10 +81,10 @@ function UploadAnnouncement() {
               <input onChange={handleUploadAnnouncement}
                 type="file"
                 id="upload-announcement-btn"
+                name='upload-announcement'
                 accept="application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-exce"
                 ref={fileRef}
                 multiple="multiple"
-                
                 style={{ display: 'none' }}
               ></input>
               <label htmlFor="upload-announcement-btn">

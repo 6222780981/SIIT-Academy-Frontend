@@ -8,7 +8,7 @@ import { compose } from '@reduxjs/toolkit';
 function UploadMaterials(props) {
   
   const fileRef = useRef();
-  const materialFiles = document.querySelector("input[type=file]");
+  const materialFiles = document.querySelector("input[name='upload-material']");
   const [materialFileNames, setMaterialFileNames] = useState([]);
   const [materialFilePaths, setMaterialFilePaths] = useState([]);
   const [weekIndex, setWeek] = useState('');
@@ -58,7 +58,9 @@ function UploadMaterials(props) {
       // }
     }
     try{
-      console.log(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,materialFilePaths})
+      var filePath = materialFilePaths;
+      var weekId = 1;
+      console.log(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,filePath})
       // axios.post(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,materialFilePaths})
     }catch (err) {
       console.log(err.message);
@@ -67,7 +69,7 @@ function UploadMaterials(props) {
   }
 
   return (
-    <form className='confirm-upload-material' onSubmit={handleConfirmUploadMaterial}>
+    <form className='confirm-upload-material'  onSubmit={handleConfirmUploadMaterial}>
       <div className="upload-materials-container">
         <label className='course-container-header'style={{
           fontWeight:'600',fontSize:'20px',color:'#646464'
@@ -78,6 +80,7 @@ function UploadMaterials(props) {
             <input onChange={handleUploadMaterial}
               type="file"
               id="upload-material-btn"
+              name='upload-material'
               accept="application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-exce"
               ref={fileRef}
               multiple="multiple"
