@@ -11,10 +11,10 @@ function UploadMaterials(props) {
   const materialFiles = document.querySelector("input[name='upload-material']");
   const [materialFileNames, setMaterialFileNames] = useState([]);
   const [materialFilePaths, setMaterialFilePaths] = useState([]);
-  const [weekIndex, setWeek] = useState('');
+  const [weekId, setWeek] = useState('');
+  const [msg, setMsg] = useState('')
   const { uploadFileHandler, weekArr, courseId } = props;
   
-  console.log(weekArr.length);
   const handleChangeWeek = (event) => {
     setWeek(event.target.value);
   };
@@ -24,7 +24,7 @@ function UploadMaterials(props) {
 
     for (let i = 0; i<event.target.files.length; i++){
       tempMaterialFileNames = [...tempMaterialFileNames,event.target.files[i].name]
-      tempMaterialFilePaths = [...tempMaterialFilePaths,`${courseId}/week${weekIndex + 1}/material/${event.target.files[i].name}`]
+      tempMaterialFilePaths = [...tempMaterialFilePaths,`${courseId}/week${weekId + 1}/material/${event.target.files[i].name}`]
     }
     // tempmaterialFiles = [...tempmaterialFiles,event.target.files]
     
@@ -46,22 +46,31 @@ function UploadMaterials(props) {
     console.log(materialFilePaths);
     // console.log(materialFileNames);
     // return;
-    if ((fileList.length === 0) && (weekIndex ==='')){
+    if ((fileList.length === 0) && (weekId ==='')){
       return;
     }
     for (let i=0; i<fileList.length; i++){
       console.log(fileList.item(i));
-      // console.log(fileList.item(i).name)
-      // if (fileArr.file && !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekIndex + 1}/material/${fileList.item(i).name}`))) {
-      //   console.log(`error uploading file: ${`${courseId}/week${weekIndex + 1}/material/${fileList.item(i).name}`}`);
-      //   return;
-      // }
+      console.log(fileList.item(i).name)
+      // if there is a file then perform file uploading
+      if ((fileList.length !== 0) && !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekId + 1}/material/${fileList.item(i).name}`))) {
+        console.log(`error uploading file: ${`${courseId}/week${weekId + 1}/material/${fileList.item(i).name}`}`);
+        return;
+      }
     }
     try{
-      var filePath = materialFilePaths;
-      var weekId = 1;
-      console.log(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,filePath})
-      // axios.post(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,materialFilePaths})
+      var materialFilePathArr = materialFilePaths;
+      console.log(`${process.env.REACT_APP_BACKEND_URL}/week/material`,{weekId,materialFilePathArr})
+      axios.post(`${process.env.REACT_APP_BACKEND_URL}/week/material`,{weekId,materialFilePathArr})
+      .then((response) => {
+        console.log(response.data);
+        const { status, data, message } = response.data;
+        if (status !== 'success') {
+          setMsg(message);
+          return;
+        }
+        setMsg(`Successfully added material(s) to ${courseId}`);
+      })
     }catch (err) {
       console.log(err.message);
     }
@@ -109,7 +118,7 @@ function UploadMaterials(props) {
             <label style={{
               color:'#A2842A',fontWeight:'600',fontSize:'16px',paddingBottom:'10px'
             }}>Upload to Week</label>
-            <select value={weekIndex} onChange={handleChangeWeek}>
+            <select value={weekId} onChange={handleChangeWeek}>
               <option disabled={true} value="">
                 Select Week
               </option>
@@ -124,7 +133,9 @@ function UploadMaterials(props) {
         <button className='confirm-upload' type='submit'>
           Confirm
         </button>
+        
       </div>
+      {msg && <label className='status-msg'>{msg}</label>}
     </form>
   );
 }

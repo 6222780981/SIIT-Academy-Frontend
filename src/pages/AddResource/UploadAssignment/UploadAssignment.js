@@ -14,9 +14,10 @@ function UploadAssignment(props) {
   const assignmentFiles = document.querySelector("input[name='upload-assignment']"); 
   const [assignmentFileNames, setAssignmentFileNames] = useState([]);
   const [assignmentFilePaths, setAssignmentFilePaths] = useState([]);
-  const [weekIndex, setWeek] = useState('');
-  const [duedate, setDueDate] = useState(new Date());
-  var weekId = 1;
+  const [weekId, setWeek] = useState('');
+  const [msg, setMsg] = useState('');
+  const [dueDate, setDueDate] = useState(new Date());
+
   const handleChangeWeek = (event) => {
     setWeek(event.target.value);
   };
@@ -26,7 +27,7 @@ function UploadAssignment(props) {
     // console.log(event.target.files)
     for (let i = 0; i<event.target.files.length; i++){
       tempAssignmentFileNames = [...tempAssignmentFileNames,event.target.files[i].name]
-      tempAssignmentFilePaths = [...tempAssignmentFilePaths,`${courseId}/week${weekIndex + 1}/assignment/${event.target.files[i].name}`]
+      tempAssignmentFilePaths = [...tempAssignmentFilePaths,`${courseId}/week${weekId + 1}/assignment/${event.target.files[i].name}`]
     }
         
     setAssignmentFilePaths(tempAssignmentFilePaths);
@@ -48,21 +49,30 @@ function UploadAssignment(props) {
     console.log(assignmentFilePaths);
     // console.log(materialFileNames);
     // return;
-    if ((fileList.length === 0) && (weekIndex ==='')){
+    if ((fileList.length === 0) && (weekId ==='')){
       return;
     }
     for (let i=0; i<fileList.length; i++){
       console.log(fileList.item(i));
-      // console.log(fileList.item(i).name)
-      // if (fileArr.file && !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekIndex + 1}/material/${fileList.item(i).name}`))) {
-      //   console.log(`error uploading file: ${`${courseId}/week${weekIndex + 1}/material/${fileList.item(i).name}`}`);
-      //   return;
-      // }
+      console.log(fileList.item(i).name)
+      if ((fileList.length !== 0) && !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekId + 1}/assignment/${fileList.item(i).name}`))) {
+        console.log(`error uploading file: ${`${courseId}/week${weekId + 1}/assignment/${fileList.item(i).name}`}`);
+        return;
+      }
     }
     try{
       var filePath = assignmentFilePaths;
-      console.log(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,title,description,filePath})
-      // axios.post(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,materialFilePaths})
+      console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment`,{weekId,title,description,filePath,dueDate})
+      axios.post(`${process.env.REACT_APP_BACKEND_URL}/week/assignment`,{weekId,title,description,filePath,dueDate})
+      .then((response) => {
+        console.log(response.data);
+        const { status, data, message } = response.data;
+        if (status !== 'success') {
+          setMsg(message);
+          return;
+        }
+        setMsg(`Successfully added assignment(s) to ${courseId}`);
+      })
     }catch (err) {
       console.log(err.message);
     }
@@ -84,7 +94,7 @@ function UploadAssignment(props) {
               placeholder="Title" 
               type='text'
               multiple="multiple"
-              // required
+              required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -108,7 +118,7 @@ function UploadAssignment(props) {
                 name='upload-assignment'
                 accept="application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-exce"
                 ref={fileRef}
-                required
+                // required
                 style={{ display: 'none' }}
               ></input>
               <label htmlFor="upload-assignment-btn">
@@ -133,7 +143,7 @@ function UploadAssignment(props) {
               <label style={{
                 color:'#A2842A',fontWeight:'600',fontSize:'16px',paddingBottom:'10px'
               }}>Upload to Week</label>
-              <select value={weekIndex} onChange={handleChangeWeek}>
+              <select value={weekId} onChange={handleChangeWeek}>
                 <option disabled={true} value="">
                   Select Week
                 </option>
@@ -151,7 +161,7 @@ function UploadAssignment(props) {
               <input 
                 className='due-date-calendar' 
                 type="date" 
-                value = {duedate} 
+                value = {dueDate} 
                 onChange={(e) => setDueDate(e.target.value)}
               ></input>
             </div>
@@ -161,6 +171,9 @@ function UploadAssignment(props) {
           Confirm
         </button>
       </div>
+      {msg && <label style={{
+        fontWeight:'500',fontSize:'14px', color:'#672C84', paddingTop:'10px'
+      }}className='status-msg'>{msg}</label>}
     </form>
   );
 }

@@ -3,13 +3,16 @@ import {useState, useRef} from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import uploadannouncementbtn from '../../AddResource/icons/upload-material-btn.png';
-function UploadAnnouncement() {
-  const { courseId } = useParams();
+
+function UploadAnnouncement(props) {
+
+  const { uploadFileHandler, courseId } = props;
   const fileRef = useRef();
-  const [description,setDescription] = useState('');
+  const [content,setContent] = useState('');
   const announcementFiles = document.querySelector("input[name='upload-announcement']");
   const [announcementFilePaths, setAnnouncementFilePaths] = useState([]);
   const [announcementFileNames, setAnnouncementFileNames] = useState([]);
+  const [msg, setMsg] = useState('');
 
   const handleUploadAnnouncement = (event)=>{
     var tempAnnouncementFilePaths = [...announcementFilePaths];
@@ -36,21 +39,30 @@ function UploadAnnouncement() {
     console.log(announcementFilePaths);
     // console.log(materialFileNames);
     // return;
-    if ((fileList.length === 0) && (weekIndex ==='')){
-      return;
+    if ((fileList.length !== 0)){
+      for (let i=0; i<fileList.length; i++){
+        // console.log(fileList.item(i));
+        // console.log(fileList.item(i).name)
+        if (!(await uploadFileHandler(fileList.item(i), `${courseId}/announcement/${fileList.item(i).name}`))) {
+          console.log(`error uploading file: ${`${courseId}/announcement/${fileList.item(i).name}`}`);
+          return;
+        }
     }
-    for (let i=0; i<fileList.length; i++){
-      console.log(fileList.item(i));
-      // console.log(fileList.item(i).name)
-      // if (fileArr.file && !(await uploadFileHandler(fileList.item(i), `${courseId}/announcement/${fileList.item(i).name}`))) {
-      //   console.log(`error uploading file: ${`${courseId}/announcement/${fileList.item(i).name}`}`);
-      //   return;
-      // }
     }
     try{
       var filePath = announcementFilePaths;
-      console.log(`${process.env.REACT_APP_BACKEND_URL}/${courseId}/announcement`,{courseId,description,filePath})
-      // axios.post(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,materialFilePaths})
+      var announcementDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
+      console.log(`${process.env.REACT_APP_BACKEND_URL}/course/announcement`,{courseId,announcementDate,content,filePath});
+      axios.post(`${process.env.REACT_APP_BACKEND_URL}/course/announcement`,{courseId,announcementDate,content,filePath})
+      .then((response) => {
+        console.log(response.data);
+        const { status, data, message } = response.data;
+        if (status !== 'success') {
+          setMsg(message);
+          return;
+        }
+        setMsg(`Successfully added announcement to ${courseId}`);
+      })
     }catch (err) {
       console.log(err.message);
     }
@@ -71,8 +83,8 @@ function UploadAnnouncement() {
               className='description-textbox' 
               type='text'
               placeholder='Description'
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
             ></textarea>
             
           </div>
@@ -111,6 +123,7 @@ function UploadAnnouncement() {
           Confirm
         </button>
       </div>
+      {msg && <label className='status-msg'>{msg}</label>}
     </form>
   );
 }
