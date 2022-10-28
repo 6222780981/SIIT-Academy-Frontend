@@ -11,8 +11,9 @@ function UploadAssignment(props) {
   const fileRef = useRef();
   const [title, setTitle] = useState('');
   const [description,setDescription] = useState('');
-  const [assignmentFiles, setAssignmentFiles] = useState([]);
+  const assignmentFiles = document.querySelector("input[type=file]"); 
   const [assignmentFileNames, setAssignmentFileNames] = useState([]);
+  const [assignmentFilePaths, setAssignmentFilePaths] = useState([]);
   const [weekIndex, setWeek] = useState('');
   const [duedate, setDueDate] = useState(new Date());
 
@@ -20,32 +21,50 @@ function UploadAssignment(props) {
     setWeek(event.target.value);
   };
   const handleUploadAssignment = (event)=>{
-    var tempassignmentFiles = [...assignmentFiles];
-    var tempassignmentFileNames = [...assignmentFileNames];
+    var tempAssignmentFilePaths = [...assignmentFilePaths];
+    var tempAssignmentFileNames = [...assignmentFileNames];
     // console.log(event.target.files)
     for (let i = 0; i<event.target.files.length; i++){
-      tempassignmentFileNames = [...tempassignmentFileNames,event.target.files[i].name]
+      tempAssignmentFileNames = [...tempAssignmentFileNames,event.target.files[i].name]
+      tempAssignmentFilePaths = [...tempAssignmentFilePaths,`${courseId}/week${weekIndex + 1}/assignment/${event.target.files[i].name}`]
     }
-    
-    tempassignmentFiles = [...tempassignmentFiles,event.target.files]
-    
-    setAssignmentFiles(tempassignmentFiles);
-    setAssignmentFileNames(tempassignmentFileNames);
+        
+    setAssignmentFilePaths(tempAssignmentFilePaths);
+    setAssignmentFileNames(tempAssignmentFileNames);
   };
   const handleClearFile = (event) =>{
-    setAssignmentFiles([]);
+    setAssignmentFilePaths([]);
     setAssignmentFileNames([]);
+    assignmentFiles.value = null;
 
   };
 
   async function handleConfirmUploadAssignment(e){
     e.preventDefault();
     console.log(assignmentFiles);
+    const fileList = assignmentFiles.files;
+    console.log(fileList);
     console.log(assignmentFileNames);
-    // if ((filePaths.length === 0) && (week ==='')){
-    //   return;
-    // }
-    // console.log(filePaths, week);
+    console.log(assignmentFilePaths);
+    // console.log(materialFileNames);
+    // return;
+    if ((fileList.length === 0) && (weekIndex ==='')){
+      return;
+    }
+    for (let i=0; i<fileList.length; i++){
+      console.log(fileList.item(i));
+      // console.log(fileList.item(i).name)
+      // if (fileArr.file && !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekIndex + 1}/material/${fileList.item(i).name}`))) {
+      //   console.log(`error uploading file: ${`${courseId}/week${weekIndex + 1}/material/${fileList.item(i).name}`}`);
+      //   return;
+      // }
+    }
+    try{
+      console.log(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,assignmentFilePaths})
+      // axios.post(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,materialFilePaths})
+    }catch (err) {
+      console.log(err.message);
+    }
   }
   return (
     <form className='confirm-upload-assignment' onSubmit={handleConfirmUploadAssignment}>

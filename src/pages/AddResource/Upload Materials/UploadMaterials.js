@@ -3,13 +3,14 @@ import {useState, useRef, useEffect} from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import uploadmaterialbtn from '../../AddResource/icons/upload-material-btn.png';
+import { compose } from '@reduxjs/toolkit';
 
 function UploadMaterials(props) {
   
   const fileRef = useRef();
-  const [materialFiles, setMaterialFiles] = useState([]);
+  const materialFiles = document.querySelector("input[type=file]");
   const [materialFileNames, setMaterialFileNames] = useState([]);
-  
+  const [materialFilePaths, setMaterialFilePaths] = useState([]);
   const [weekIndex, setWeek] = useState('');
   const { uploadFileHandler, weekArr, courseId } = props;
   
@@ -18,42 +19,51 @@ function UploadMaterials(props) {
     setWeek(event.target.value);
   };
   const handleUploadMaterial = (event)=>{
-    var tempmaterialFiles = [...materialFiles];
-    var tempmaterialFileNames = [...materialFileNames];
+    var tempMaterialFilePaths = [...materialFilePaths];
+    var tempMaterialFileNames = [...materialFileNames];
+
     for (let i = 0; i<event.target.files.length; i++){
-      tempmaterialFileNames = [...tempmaterialFileNames,event.target.files[i].name]
+      tempMaterialFileNames = [...tempMaterialFileNames,event.target.files[i].name]
+      tempMaterialFilePaths = [...tempMaterialFilePaths,`${courseId}/week${weekIndex + 1}/material/${event.target.files[i].name}`]
     }
-    tempmaterialFiles = [...tempmaterialFiles,event.target.files]
+    // tempmaterialFiles = [...tempmaterialFiles,event.target.files]
     
-    setMaterialFiles(tempmaterialFiles);
-    setMaterialFileNames(tempmaterialFileNames);
+    setMaterialFilePaths(tempMaterialFilePaths);
+    setMaterialFileNames(tempMaterialFileNames);
     // console.log(tempmaterialFiles);
     // console.log(tempmaterialFileNames);
   };
   const handleClearFile = (event) =>{
-    setMaterialFiles([]);
+    setMaterialFilePaths([]);
     setMaterialFileNames([]);
+    materialFiles.value = null;
   };
   async function handleConfirmUploadMaterial(e){
     e.preventDefault();
-    console.log(materialFiles);
+    const fileList = materialFiles.files;
+    console.log(fileList);
     console.log(materialFileNames);
-    return;
-    if ((materialFilePaths.length === 0) && (weekIndex ==='')){
+    console.log(materialFilePaths);
+    // console.log(materialFileNames);
+    // return;
+    if ((fileList.length === 0) && (weekIndex ==='')){
       return;
     }
-    for (fileArr in materialFileNames){
-      if (fileArr.file && !(await uploadFileHandler(fileArr.file, `${courseId}/week${weekIndex + 1}/material/${fileArr.file.name}`))) {
-        console.log(`error uploading file: ${`${courseId}/week${weekIndex + 1}/material/${fileArr.file.name}`}`);
-        return;
-      }
-      try{
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,materialFilePaths})
-      }catch (err) {
-        console.log(err.message);
-      }
+    for (let i=0; i<fileList.length; i++){
+      console.log(fileList.item(i));
+      // console.log(fileList.item(i).name)
+      // if (fileArr.file && !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekIndex + 1}/material/${fileList.item(i).name}`))) {
+      //   console.log(`error uploading file: ${`${courseId}/week${weekIndex + 1}/material/${fileList.item(i).name}`}`);
+      //   return;
+      // }
     }
-    // console.log(materialFilePaths, week);
+    try{
+      console.log(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,materialFilePaths})
+      // axios.post(`${process.env.REACT_APP_BACKEND_URL}/week`,{weekId,materialFilePaths})
+    }catch (err) {
+      console.log(err.message);
+    }
+    
   }
 
   return (
