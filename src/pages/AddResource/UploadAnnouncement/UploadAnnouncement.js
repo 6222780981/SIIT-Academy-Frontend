@@ -123,7 +123,9 @@ function UploadAnnouncement(props) {
           Confirm
         </button>
       </div>
-      {msg && <label className='status-msg'>{msg}</label>}
+      {msg && <label className='status-msg' style={{
+        fontWeight:'500',fontSize:'14px', color:'#672C84', paddingTop:'10px'
+      }}>{msg}</label>}
     </form>
   );
 }
