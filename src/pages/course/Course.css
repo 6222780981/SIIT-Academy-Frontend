@@ -3,3 +3,8 @@
   margin: 0 auto;
   padding: 10px 30px 40px;
 }
+
+.course__body {
+  display: flex;
+  justify-content: space-between;
+}
