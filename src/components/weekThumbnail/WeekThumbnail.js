@@ -20,7 +20,6 @@ function WeekThumbnail(props) {
   }, [videoFilePath]);
 
   function clickHandler() {
-    console.log(weekId);
     dispatch(weekActions.setCurrentWeekId(weekId));
   }
 

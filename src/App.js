@@ -28,13 +28,12 @@ function App() {
       <Route exact path="/management/student">
         <StudentManagement></StudentManagement>
       </Route>
-      <Route exact path="/course/:courseId">
-        <Course></Course>
-      </Route>
       <Route exact path="/course/:courseId/management">
         <AddResource></AddResource>
       </Route>
-
+      <Route path="/course/:courseId">
+        <Course></Course>
+      </Route>
       <Route path="/">
         <Redirect to="/infomation"></Redirect>
       </Route>

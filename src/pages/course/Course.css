@@ -8,3 +8,67 @@
   display: flex;
   justify-content: space-between;
 }
+
+.course__content--title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 24px;
+  color: #3b3b3b;
+  margin-top: 26px;
+}
+
+.course__content--title .week-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 5px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #7a7a7a;
+}
+
+.course__content--title .week-info img {
+  width: 16px;
+}
+
+.course__content--teacher {
+  font-weight: 700;
+  font-size: 16px;
+  color: #3b3b3b;
+  margin-top: 32px;
+}
+
+.course__content--teacher .role {
+  font-size: 12px;
+  color: #666666;
+  margin-top: 6px;
+}
+
+.course__content--link-container {
+  margin-top: 26px;
+  display: flex;
+  column-gap: 16px;
+  margin-bottom: 42px;
+}
+
+.course__content--link-container a {
+  font-weight: 500;
+  font-size: 14px;
+  color: #f5f5f5;
+  background: #646464;
+  border-radius: 6px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+}
+
+.course__content--link-container .active {
+  background: #a2842a;
+}
+
+.course__content--link-container a img {
+  height: 14px;
+  margin-right: 7.5px;
+}
