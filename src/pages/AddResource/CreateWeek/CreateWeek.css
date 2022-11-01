@@ -16,7 +16,6 @@
   display: flex;
   column-gap: 30px;
   font-weight: 600;
-  font-size: 14px;
   color: #fffdf6;
 }
 
@@ -27,12 +26,14 @@
   align-items: center;
   column-gap: 17.5px;
   padding: 7px 30px 7px 25px;
+  font-size: 14px;
 }
 
 .create-week__btn-container--confirm {
   background: rgba(175, 32, 53, 0.9);
   border-radius: 8px;
   padding: 7px 38px;
+  font-size: 14px;
 }
 
 .create-week__btn-container--add-week:hover,
