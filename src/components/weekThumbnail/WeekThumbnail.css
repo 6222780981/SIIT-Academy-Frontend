@@ -1,0 +1,22 @@
+.week-thumbnail {
+  width: 200px;
+}
+
+.week-thumbnail video {
+  display: block;
+  width: 100%;
+  height: 120px;
+  background: #c4c4c4;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.week-thumbnail video:hover {
+  cursor: pointer;
+}
+
+.week-thumbnail p {
+  font-weight: 700;
+  font-size: 14px;
+  color: #3b3b3b;
+}

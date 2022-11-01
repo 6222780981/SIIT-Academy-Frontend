@@ -25,7 +25,8 @@ function Login() {
 
     signInWithPopup(auth, provider)
       .then(async (result) => {
-        const { email } = result.user;
+        const { email, photoURL } = result.user;
+
         const userData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user?email=${email}`);
 
         const { status, data, message } = userData.data;
@@ -35,7 +36,7 @@ function Login() {
           return;
         }
 
-        dispatch(userActions.setUser(data));
+        dispatch(userActions.setUser({ ...data, photoURL }));
         history.push('/home');
       })
       .catch(() => {

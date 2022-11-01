@@ -9,6 +9,7 @@
 .navbar__logo {
   width: 130px;
   margin-bottom: -10px;
+  margin-left: -10px;
 }
 
 .navbar__title {

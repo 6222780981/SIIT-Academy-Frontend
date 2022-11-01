@@ -1,0 +1,12 @@
+.course-sidebar {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+}
+
+.course-sidebar__title {
+  font-weight: 700;
+  font-size: 20px;
+  color: #3b3b3b;
+  margin-bottom: -8px;
+}
