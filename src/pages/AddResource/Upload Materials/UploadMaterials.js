@@ -5,15 +5,21 @@ import uploadmaterialbtn from '../../AddResource/icons/upload-material-btn.png';
 
 function UploadMaterials(props) {
   const fileRef = useRef();
+  
   const materialFiles = document.querySelector("input[name='upload-material']");
   const [materialFileNames, setMaterialFileNames] = useState([]);
   const [materialFilePaths, setMaterialFilePaths] = useState([]);
-  const [weekId, setWeek] = useState('');
+  const [weekId, setWeekId] = useState('');
+  const [weekNum, setWeekNum] = useState('');
   const [msg, setMsg] = useState('');
   const { uploadFileHandler, weekArr, courseId } = props;
+  console.log(weekArr);
 
   const handleChangeWeek = (event) => {
-    setWeek(event.target.value);
+    console.log(event.target[event.target.selectedIndex].dataset.weekId);
+    console.log(event.target[event.target.selectedIndex].dataset.index);
+    setWeekId(event.target[event.target.selectedIndex].dataset.weekId);
+    setWeekNum(event.target[event.target.selectedIndex].dataset.index);
   };
   const handleUploadMaterial = (event) => {
     var tempMaterialFilePaths = [...materialFilePaths];
@@ -21,7 +27,7 @@ function UploadMaterials(props) {
 
     for (let i = 0; i < event.target.files.length; i++) {
       tempMaterialFileNames = [...tempMaterialFileNames, event.target.files[i].name];
-      tempMaterialFilePaths = [...tempMaterialFilePaths, `${courseId}/week${weekId + 1}/material/${event.target.files[i].name}`];
+      tempMaterialFilePaths = [...tempMaterialFilePaths, `${courseId}/week${weekNum}/material/${event.target.files[i].name}`];
     }
     // tempmaterialFiles = [...tempmaterialFiles,event.target.files]
 
@@ -48,13 +54,13 @@ function UploadMaterials(props) {
     }
     for (let i = 0; i < fileList.length; i++) {
       console.log(fileList.item(i));
-      console.log(fileList.item(i).name);
+      // console.log(fileList.item(i).name);
       // if there is a file then perform file uploading
       if (
         fileList.length !== 0 &&
-        !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekId + 1}/material/${fileList.item(i).name}`))
+        !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekNum}/material/${fileList.item(i).name}`))
       ) {
-        console.log(`error uploading file: ${`${courseId}/week${weekId + 1}/material/${fileList.item(i).name}`}`);
+        console.log(`error uploading file: ${`${courseId}/week${weekNum}/material/${fileList.item(i).name}`}`);
         return;
       }
     }
@@ -148,16 +154,18 @@ function UploadMaterials(props) {
             >
               Upload to Week
             </label>
-            <select value={weekId} onChange={handleChangeWeek}>
-              <option disabled={true} value="">
+            <select onChange={handleChangeWeek}>
+              <option selected disabled={true} value="" hidden>
                 Select Week
               </option>
               {weekArr.map((week, index) => (
-                <option value={index + 1} key={index + 1}>
+                <option data-week-id={week.week_id} data-index={index+1} key={index + 1}>
                   {index + 1}
                 </option>
               ))}
             </select>
+            {/* <label>{weekNum}</label>
+            <label>{weekId}</label> */}
           </div>
         </div>
         <button className="confirm-upload" type="submit">

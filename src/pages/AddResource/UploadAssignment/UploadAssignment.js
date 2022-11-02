@@ -12,12 +12,16 @@ function UploadAssignment(props) {
   const assignmentFiles = document.querySelector("input[name='upload-assignment']");
   const [assignmentFileNames, setAssignmentFileNames] = useState([]);
   const [assignmentFilePaths, setAssignmentFilePaths] = useState([]);
-  const [weekId, setWeek] = useState('');
+  const [weekId, setWeekId] = useState('');
+  const [weekNum, setWeekNum] = useState('');
   const [msg, setMsg] = useState('');
   const [dueDate, setDueDate] = useState(new Date());
 
   const handleChangeWeek = (event) => {
-    setWeek(event.target.value);
+    console.log(event.target[event.target.selectedIndex].dataset.weekId);
+    console.log(event.target[event.target.selectedIndex].dataset.index);
+    setWeekId(event.target[event.target.selectedIndex].dataset.weekId);
+    setWeekNum(event.target[event.target.selectedIndex].dataset.index);
   };
   const handleUploadAssignment = (event) => {
     var tempAssignmentFilePaths = [...assignmentFilePaths];
@@ -191,16 +195,18 @@ function UploadAssignment(props) {
               >
                 Upload to Week
               </label>
-              <select value={weekId} onChange={handleChangeWeek}>
-                <option disabled={true} value="">
+              <select onChange={handleChangeWeek}>
+                <option selected disabled={true} value="" hidden>
                   Select Week
                 </option>
                 {weekArr.map((week, index) => (
-                  <option value={index + 1} key={index + 1}>
+                  <option data-week-id= {week.week_id} data-index={index+1} key={index + 1}>
                     {index + 1}
                   </option>
                 ))}
               </select>
+              {/* <label>{weekNum}</label>
+              <label>{weekId}</label> */}
             </div>
             <div className="due-date">
               <label
