@@ -1,14 +1,22 @@
 import './CourseAssignment.css';
 import {useState,useRef} from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import downloadIcon from '../../icons/download icon.svg';
 import uploadworkbtn from '../../icons/upload-material-btn.png';
 function CourseAssignment(props) {
   const fileRef = useRef();
-  const { weekId, getFileUrlHandler } = props;
+
+  // const userId = useSelector((store) => store.user.userId)
+  const userId = 1;
+  const { weekId,courseId,weekIndex,getFileUrlHandler,uploadFileHandler } = props;
   const [filePath, setFilePath] = useState([]);
   const [submissionFileNames, setSubmissionFileNames] = useState([]);
   const submissionFiles = document.querySelector("input[name='upload-work']");
+  const [assignmentId, setAssignmentId] = useState();
+  const [submissionData, setSubmissionData] = useState([]);
+  const [msg, setMsg] = useState('');
+  
   if(filePath.length === 0){
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment?weekId=${weekId}`)
     .then((response) => {
@@ -19,31 +27,87 @@ function CourseAssignment(props) {
         return;
       }
       console.log(data);
+      console.log(userId);
       setFilePath(data);
     });
   };
-
+  if(submissionData.length === 0){
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${assignmentId}`)
+    .then((response) => {
+      console.log(response.data);
+      const { status, data, message } = response.data;
+      if (status !== 'success') {
+        // setMsg(message);
+        return;
+      }
+      console.log(data);
+      console.log(userId);
+      setSubmissionData(data);
+    });
+  }
+  // console.log(userId);
   const handleUploadWork = (event) => {
     var tempSubmissionFileNames = [...submissionFileNames];
     for (let i = 0; i < event.target.files.length; i++) {
       tempSubmissionFileNames = [...tempSubmissionFileNames, event.target.files[i].name];
     }
-    console.log(submissionFiles);
     setSubmissionFileNames(tempSubmissionFileNames);
   };
 
-  // const handleClearFile = (event) => {
-  //   setSubmissionFileNames([]);
-  //   submissionFiles.value = null;
-  // };
+  const handleClearFile = (event) => {
+    setSubmissionFileNames([]);
+    submissionFiles.value = null;
+    console.log(submissionFiles.files);
+  };
   async function handleDownloadMaterial(event){
     var fileUrl = await getFileUrlHandler(event.target.value);
     console.log(fileUrl);
     window.open(fileUrl, '_blank', 'noopener,noreferrer');
   }
-
+  async function handleConfirmUploadWork(e) {
+    e.preventDefault();
+    const fileList = submissionFiles.files;
+    var submissionFilePaths = [];
+    for (let i = 0; i < submissionFileNames.length; i++) {
+      submissionFilePaths = [...submissionFilePaths, `${courseId}/week${weekIndex+1}/assignment/submission/${submissionFileNames[i]}`];
+    }
+    if (fileList.length === 0) {
+      setMsg("No work uploaded")
+      return;
+    }
+    for (let i = 0; i < fileList.length; i++) {
+      console.log(fileList.item(i));
+      console.log(fileList.item(i).name);
+      if (
+        fileList.length !== 0 &&
+        !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekIndex+1}/assignment/submission/${fileList.item(i).name}`))
+      ) {
+        console.log(`error uploading file: ${`${courseId}/week${weekIndex+1}/assignment/submission/${fileList.item(i).name}`}`);
+        return;
+      }
+    }
+    try {
+      var filePath = submissionFilePaths;
+      var submissionDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
+      console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission`, { userId, assignmentId, filePath, submissionDate });
+      axios
+        .post(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission`, { userId, assignmentId, filePath, submissionDate })
+        .then((response) => {
+          console.log(response.data);
+          const { status, data, message } = response.data;
+          if (status !== 'success') {
+            setMsg(message);
+            return;
+          }
+          setMsg(`Successfully submitted work(s) to ${courseId}`);
+        });
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
   
   return (
+    <form onSubmit={handleConfirmUploadWork}>
     <div className='course-assignment-container'>
       {filePath.length > 0 && filePath.map((assignment,index) => (
         <div className='assignment-box'>
@@ -76,20 +140,15 @@ function CourseAssignment(props) {
             <input
               onChange={handleUploadWork}
               type="file"
-              id="upload-work"
+              id="upload-work-btn"
               name="upload-work"
               accept="application/pdf"
-              multiple="multiple"
               ref={fileRef}
+              // required
               style={{ display: 'none' }}
             ></input>
             <label htmlFor="upload-work-btn">
-              <img 
-                className="upload-work-icon" 
-                src={uploadworkbtn} 
-                width="70px"
-                height="70px"
-              />
+              <img className="upload-work-icon" src={uploadworkbtn} />
             </label>
             <div className="upload-work-texts">
               <label
@@ -122,12 +181,29 @@ function CourseAssignment(props) {
                 </button>
               )}
             </div>
-            
           </div>
-            
+          {<button 
+            className='confirm-submit' 
+            value={assignment.assignment_id} 
+            type="submit" 
+            onClick={(e) => setAssignmentId(e.target.value)}>
+              Submit
+          </button>}
+          {msg && (
+            <label
+              className="status-msg"
+              style={{
+                fontWeight: '500',
+                fontSize: '14px',
+                color: '#672C84',
+                paddingTop: '10px',
+              }}>{msg}
+            </label>
+          )}
         </div>
       ))}
     </div>
+  </form>
   );
 }
 

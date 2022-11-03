@@ -55,5 +55,11 @@ label[for='upload-work-btn']:hover {
   padding-left: 30px;
   justify-content: center;
   width: 100%;
-  
+}
+.confirm-submit{
+  background: rgba(175, 32, 53, 0.9);
+  color: #F5F5F5;
+  margin-top: 10px;
+  border-radius: 8px;
+  width: 7%;
 }

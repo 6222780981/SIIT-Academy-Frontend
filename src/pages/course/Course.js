@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
-import { getStorage, ref, getDownloadURL } from 'firebase/storage';
+import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import axios from 'axios';
 
 import Navbar from '../../components/navbar/Navbar';
@@ -31,6 +31,7 @@ async function getFileUrlHandler(filePath) {
   }
 }
 
+
 function Course() {
   const { courseId } = useParams();
 
@@ -46,6 +47,39 @@ function Course() {
 
   const weekIndex = weekArr.findIndex((week) => week.week_id === currentWeekId);
   const { week_title: weekTitle, material_id_arr: materialIdArr, week_date: weekDate } = weekArr[weekIndex] || [];
+
+  async function uploadFileHandler(file, filepath) {
+    /*
+    filepath example
+    video: DES424/week1/video/videoName.mp4
+    material: DES424/week1/material/materialName.pdf
+    assignment: DES424/week1/assignment/assignmentName.pdf
+    announcement: DES424/announcement/announcementName.pdf
+    */
+
+    if (!file.name && typeof filepath !== 'string') {
+      return 0;
+    }
+
+    if (!file.name.endsWith('.mp4') && !file.name.endsWith('.pdf')) {
+      return 0;
+    }
+
+    if (!filepath.startsWith(`${courseId}/week`) && !filepath.startsWith(`${courseId}/announcement`)) {
+      console.log("here1")
+      return 0;
+    }
+
+    const fileRef = ref(storage, filepath);
+
+    try {
+      await uploadBytes(fileRef, file);
+      return 1;
+    } catch(err) {
+      console.log(err.message);
+      return 0;
+    }
+  }
 
   return (
     <div className="course">
@@ -84,10 +118,10 @@ function Course() {
               <CourseMaterial weekId={currentWeekId} getFileUrlHandler={getFileUrlHandler}></CourseMaterial>
             </Route>
             <Route exact path="/course/:courseId/assignment">
-              <CourseAssignment weekId={currentWeekId} getFileUrlHandler={getFileUrlHandler}></CourseAssignment>
+              <CourseAssignment weekId={currentWeekId} courseId={courseId} weekIndex={weekIndex} getFileUrlHandler={getFileUrlHandler} uploadFileHandler={uploadFileHandler}></CourseAssignment>
             </Route>
             <Route exact path="/course/:courseId/announcement">
-              <CourseAnnouncement weekId={currentWeekId} getFileUrlHandler={getFileUrlHandler}></CourseAnnouncement>
+              <CourseAnnouncement weekId={currentWeekId} courseId={courseId} getFileUrlHandler={getFileUrlHandler}></CourseAnnouncement>
             </Route>
             <Route path="/course/:courseId/">
               <Redirect to={`/course/${courseId}/material`}></Redirect>
