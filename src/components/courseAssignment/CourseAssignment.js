@@ -29,22 +29,44 @@ function CourseAssignment(props) {
       console.log(data);
       console.log(userId);
       setFilePath(data);
-    });
+    }
+    );
   };
-  if(submissionData.length === 0){
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${assignmentId}`)
-    .then((response) => {
-      console.log(response.data);
-      const { status, data, message } = response.data;
-      if (status !== 'success') {
-        // setMsg(message);
-        return;
-      }
-      console.log(data);
-      console.log(userId);
-      setSubmissionData(data);
-    });
-  }
+  // if (filePath.length !==0){
+  //   console.log(typeof filePath[0].assignment_id);
+  //   var assignmentId = +filePath[0].assignment_id
+  //   // console.log(typeof userId);
+  //   // console.log(typeof assignmentId);
+  //   console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${assignmentId}`)
+  //   axios.post(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${assignmentId}`)
+  //   .then((response) => {
+  //     console.log(response.data);
+  //     const { status, data, message } = response.data;
+  //     if (status !== 'success') {
+  //       // setMsg(message);
+  //       return;
+  //     }
+  //     console.log(data);
+  //   }
+  //   );
+  // }
+  // if(submissionData.length === 0){
+  //   console.log(filePath);
+  //   // console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath.assignment_id}`)
+  //   axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`)
+  //   .then((response) => {
+  //     console.log(response.data);
+  //     const { status, data, message } = response.data;
+  //     if (status !== 'success') {
+  //       // setMsg(message);
+  //       return;
+  //     }
+  //     console.log(data);
+  //     console.log(userId);
+  //     setSubmissionData(data);
+  //     // console.log(data[0].file_path);
+  //   });
+  // }
   // console.log(userId);
   const handleUploadWork = (event) => {
     var tempSubmissionFileNames = [...submissionFileNames];
