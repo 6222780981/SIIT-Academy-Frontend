@@ -59,7 +59,7 @@ function Course() {
             </p>
             <div className="week-info">
               <img src={eyeIcon} alt=""></img>
-              <p style={{ marginRight: '5px' }}>{materialIdArr ? `${materialIdArr.length} Meterials` : ''}</p>
+              <p style={{ marginRight: '5px' }}>{materialIdArr ? `${materialIdArr.length} Materials` : ''}</p>
               <img src={calenderIcon} alt=""></img>
               <p>{new Date(weekDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
             </div>

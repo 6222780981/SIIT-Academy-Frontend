@@ -8,36 +8,36 @@ function UploadMaterials(props) {
   
   const materialFiles = document.querySelector("input[name='upload-material']");
   const [materialFileNames, setMaterialFileNames] = useState([]);
-  const [materialFilePaths, setMaterialFilePaths] = useState([]);
+  // const [materialFilePaths, setMaterialFilePaths] = useState([]);
   const [weekId, setWeekId] = useState('');
   const [weekNum, setWeekNum] = useState('');
   const [msg, setMsg] = useState('');
   const { uploadFileHandler, weekArr, courseId } = props;
-  console.log(weekArr);
+  // console.log(weekArr);
 
   const handleChangeWeek = (event) => {
-    console.log(event.target[event.target.selectedIndex].dataset.weekId);
-    console.log(event.target[event.target.selectedIndex].dataset.index);
+    // console.log(event.target[event.target.selectedIndex].dataset.weekId);
+    // console.log(event.target[event.target.selectedIndex].dataset.index);
     setWeekId(event.target[event.target.selectedIndex].dataset.weekId);
     setWeekNum(event.target[event.target.selectedIndex].dataset.index);
   };
   const handleUploadMaterial = (event) => {
-    var tempMaterialFilePaths = [...materialFilePaths];
+    
     var tempMaterialFileNames = [...materialFileNames];
 
     for (let i = 0; i < event.target.files.length; i++) {
       tempMaterialFileNames = [...tempMaterialFileNames, event.target.files[i].name];
-      tempMaterialFilePaths = [...tempMaterialFilePaths, `${courseId}/week${weekNum}/material/${event.target.files[i].name}`];
+      // tempMaterialFilePaths = [...tempMaterialFilePaths, `${courseId}/week${weekNum}/material/${event.target.files[i].name}`];
     }
     // tempmaterialFiles = [...tempmaterialFiles,event.target.files]
-
-    setMaterialFilePaths(tempMaterialFilePaths);
+    // console.log(tempMaterialFilePaths);
+    // setMaterialFilePaths(tempMaterialFilePaths);
     setMaterialFileNames(tempMaterialFileNames);
-    // console.log(tempmaterialFiles);
-    // console.log(tempmaterialFileNames);
+    
   };
+
   const handleClearFile = (event) => {
-    setMaterialFilePaths([]);
+    // setMaterialFilePaths([]);
     setMaterialFileNames([]);
     materialFiles.value = null;
   };
@@ -46,9 +46,12 @@ function UploadMaterials(props) {
     const fileList = materialFiles.files;
     console.log(fileList);
     console.log(materialFileNames);
+    var materialFilePaths = [];
+    for (let i = 0; i < materialFileNames.length; i++) {
+      materialFilePaths = [...materialFilePaths, `${courseId}/week${weekNum}/material/${materialFileNames[i]}`];
+    }
     console.log(materialFilePaths);
     // console.log(materialFileNames);
-    // return;
     if (fileList.length === 0 && weekId === '') {
       return;
     }

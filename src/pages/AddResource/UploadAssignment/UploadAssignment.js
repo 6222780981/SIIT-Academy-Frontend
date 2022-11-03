@@ -11,45 +11,36 @@ function UploadAssignment(props) {
   const [description, setDescription] = useState('');
   const assignmentFiles = document.querySelector("input[name='upload-assignment']");
   const [assignmentFileNames, setAssignmentFileNames] = useState([]);
-  const [assignmentFilePaths, setAssignmentFilePaths] = useState([]);
   const [weekId, setWeekId] = useState('');
   const [weekNum, setWeekNum] = useState('');
   const [msg, setMsg] = useState('');
   const [dueDate, setDueDate] = useState(new Date());
 
   const handleChangeWeek = (event) => {
-    console.log(event.target[event.target.selectedIndex].dataset.weekId);
-    console.log(event.target[event.target.selectedIndex].dataset.index);
     setWeekId(event.target[event.target.selectedIndex].dataset.weekId);
     setWeekNum(event.target[event.target.selectedIndex].dataset.index);
   };
   const handleUploadAssignment = (event) => {
-    var tempAssignmentFilePaths = [...assignmentFilePaths];
     var tempAssignmentFileNames = [...assignmentFileNames];
-    // console.log(event.target.files)
     for (let i = 0; i < event.target.files.length; i++) {
       tempAssignmentFileNames = [...tempAssignmentFileNames, event.target.files[i].name];
-      tempAssignmentFilePaths = [...tempAssignmentFilePaths, `${courseId}/week${weekId + 1}/assignment/${event.target.files[i].name}`];
     }
 
-    setAssignmentFilePaths(tempAssignmentFilePaths);
+    // setAssignmentFilePaths(tempAssignmentFilePaths);
     setAssignmentFileNames(tempAssignmentFileNames);
   };
   const handleClearFile = (event) => {
-    setAssignmentFilePaths([]);
     setAssignmentFileNames([]);
     assignmentFiles.value = null;
   };
 
   async function handleConfirmUploadAssignment(e) {
     e.preventDefault();
-    // console.log(assignmentFiles);
     const fileList = assignmentFiles.files;
-    console.log(fileList);
-    console.log(assignmentFileNames);
-    console.log(assignmentFilePaths);
-    // console.log(materialFileNames);
-    // return;
+    var assignmentFilePaths = [];
+    for (let i = 0; i < assignmentFileNames.length; i++) {
+      assignmentFilePaths = [...assignmentFilePaths, `${courseId}/week${weekNum}/assignment/${assignmentFileNames[i]}`];
+    }
     if (fileList.length === 0 && weekId === '') {
       return;
     }
@@ -167,16 +158,15 @@ function UploadAssignment(props) {
                     fontWeight: '300',
                     fontSize: '12px',
                     color: '#672C84',
-                  }}
-                >
-                  Browse your file
+                  }}>Browse your file
                 </label>
                 {assignmentFileNames.length > 0 &&
                   assignmentFileNames.map((assignmentfilename) => (
                     <label value={assignmentfilename} key={assignmentfilename}>
                       {assignmentfilename}
                     </label>
-                  ))}
+                  ))
+                }
                 {assignmentFileNames.length > 0 && (
                   <button className="clearbtn" onClick={handleClearFile}>
                     Clear

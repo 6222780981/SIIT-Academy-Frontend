@@ -1,0 +1,59 @@
+.course-assignment-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+
+.assignment-box{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  background: #F5F5F5;
+  border-radius: 20px;
+  border-color: #3b3b3b;
+  padding: 15px;
+}
+
+.download-work-btn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  background: #D9D9D9;
+  border-radius: 10px;
+  padding: 10px;
+  width: 40%;
+  margin-right: 50px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.download-work-btn:hover{
+  background: #d9d9d99f;
+}
+
+.upload-work-box {
+  display: flex;
+  flex-direction: row;
+  background: rgba(103, 44, 132, 0.1);
+  border: 1px dashed #672c84;
+  border-radius: 8px;
+  padding: 15px 10px;
+  width:30%;
+  height: 50%;
+}
+label[for='upload-work-btn'] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+label[for='upload-work-btn']:hover {
+  opacity: 0.5;
+}
+.upload-work-texts {
+  display: flex;
+  flex-direction: column;
+  padding-left: 30px;
+  justify-content: center;
+  width: 100%;
+  
+}
