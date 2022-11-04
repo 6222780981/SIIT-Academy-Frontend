@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
-import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+import { getStorage, ref, getDownloadURL, uploadBytes, deleteObject } from 'firebase/storage';
 import axios from 'axios';
 
 import Navbar from '../../components/navbar/Navbar';
@@ -26,6 +26,17 @@ async function getFileUrlHandler(filePath) {
 
   try {
     return await getDownloadURL(fileRef);
+  } catch {
+    return 0;
+  }
+}
+
+async function deleteFileHandler(filePath) {
+  const fileRef = ref(storage, filePath);
+
+  try {
+    await deleteObject(fileRef);
+    return 1;
   } catch {
     return 0;
   }
