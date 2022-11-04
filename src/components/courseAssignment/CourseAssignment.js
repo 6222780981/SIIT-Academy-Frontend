@@ -1,5 +1,5 @@
 import './CourseAssignment.css';
-import {useState,useRef} from 'react';
+import {useState,useRef,useEffect} from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import downloadIcon from '../../icons/download icon.svg';
@@ -13,10 +13,14 @@ function CourseAssignment(props) {
   const [filePath, setFilePath] = useState([]);
   const [submissionFileNames, setSubmissionFileNames] = useState([]);
   const submissionFiles = document.querySelector("input[name='upload-work']");
-  const [assignmentId, setAssignmentId] = useState();
+  // const [assignmentId, setAssignmentId] = useState();
   const [submissionData, setSubmissionData] = useState([]);
   const [msg, setMsg] = useState('');
-  
+
+  // useEffect(()=> {
+  //   console.log(assignmentId);
+  // }, [assignmentId]);
+  // get list of assignment of the selected week
   if(filePath.length === 0){
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment?weekId=${weekId}`)
     .then((response) => {
@@ -32,48 +36,36 @@ function CourseAssignment(props) {
     }
     );
   };
-  // if (filePath.length !==0){
-  //   console.log(typeof filePath[0].assignment_id);
-  //   var assignmentId = +filePath[0].assignment_id
-  //   // console.log(typeof userId);
-  //   // console.log(typeof assignmentId);
-  //   console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${assignmentId}`)
-  //   axios.post(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${assignmentId}`)
-  //   .then((response) => {
-  //     console.log(response.data);
-  //     const { status, data, message } = response.data;
-  //     if (status !== 'success') {
-  //       // setMsg(message);
-  //       return;
-  //     }
-  //     console.log(data);
-  //   }
-  //   );
-  // }
-  // if(submissionData.length === 0){
-  //   console.log(filePath);
-  //   // console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath.assignment_id}`)
-  //   axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`)
-  //   .then((response) => {
-  //     console.log(response.data);
-  //     const { status, data, message } = response.data;
-  //     if (status !== 'success') {
-  //       // setMsg(message);
-  //       return;
-  //     }
-  //     console.log(data);
-  //     console.log(userId);
-  //     setSubmissionData(data);
-  //     // console.log(data[0].file_path);
-  //   });
-  // }
-  // console.log(userId);
+  //get list of submissions
+  if (filePath.length !==0 && submissionData.length ===0){
+    // console.log(typeof filePath[0].assignment_id);
+    // var assignmentId = filePath[0].assignment_id;
+    // console.log(typeof userId);
+    // console.log(typeof assignmentId);
+    console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`)
+    .then((response) => {
+      console.log(response.data);
+      const { status, data, message } = response.data;
+      if (status !== 'success') {
+        // setMsg(message);
+        return;
+      }
+      console.log(data);
+      setSubmissionData(data.submissionArr);
+    }
+    );
+  }
+
   const handleUploadWork = (event) => {
     var tempSubmissionFileNames = [...submissionFileNames];
+    
     for (let i = 0; i < event.target.files.length; i++) {
       tempSubmissionFileNames = [...tempSubmissionFileNames, event.target.files[i].name];
     }
+    console.log(tempSubmissionFileNames);
     setSubmissionFileNames(tempSubmissionFileNames);
+    setMsg('');
   };
 
   const handleClearFile = (event) => {
@@ -86,8 +78,9 @@ function CourseAssignment(props) {
     console.log(fileUrl);
     window.open(fileUrl, '_blank', 'noopener,noreferrer');
   }
-  async function handleConfirmUploadWork(e) {
-    e.preventDefault();
+  async function handleConfirmUploadWork(event) {
+    event.preventDefault();
+    const assignmentId = +event.target.value;
     const fileList = submissionFiles.files;
     var submissionFilePaths = [];
     for (let i = 0; i < submissionFileNames.length; i++) {
@@ -122,14 +115,29 @@ function CourseAssignment(props) {
             return;
           }
           setMsg(`Successfully submitted work(s) to ${courseId}`);
+          setSubmissionFileNames([]);
         });
     } catch (err) {
       console.log(err.message);
     }
   }
-  
+  const handleConfirmDeleteWork = (event) =>{
+    event.preventDefault();
+    const assignmentId = +event.target.value;
+    console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission`, {userId, assignmentId});
+    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission`, {data: {userId, assignmentId}})
+    .then((response) => {
+      console.log(response.data);
+      const { status, data, message } = response.data;
+      if (status !== 'success') {
+        setMsg(message);
+        return;
+      }
+      setMsg(`Successfully deleted work from ${courseId}`);
+      setSubmissionData([]);
+    });
+  }
   return (
-    <form onSubmit={handleConfirmUploadWork}>
     <div className='course-assignment-container'>
       {filePath.length > 0 && filePath.map((assignment,index) => (
         <div className='assignment-box'>
@@ -197,6 +205,16 @@ function CourseAssignment(props) {
                     }}>{filename}
                   </label>
               ))}
+              {submissionData.length > 0 &&
+                submissionData.map((filename) => (
+                  <label value={filename} key={filename}
+                    style={{
+                      fontWeight: '500',
+                      fontSize: '12px',
+                      color: '#3b3b3b',
+                    }}>{filename.file_path.split('/')[4]}
+                  </label>
+              ))}
               {submissionFileNames.length > 0 && (
                 <button className="clearbtn" onClick={handleClearFile}>
                   Clear
@@ -204,13 +222,23 @@ function CourseAssignment(props) {
               )}
             </div>
           </div>
-          {<button 
-            className='confirm-submit' 
-            value={assignment.assignment_id} 
-            type="submit" 
-            onClick={(e) => setAssignmentId(e.target.value)}>
-              Submit
-          </button>}
+          
+            {submissionFileNames.length > 0 && <button 
+              id='submit-file'
+              className='confirm-submit' 
+              value={assignment.assignment_id} 
+              type="submit" 
+              onClick={handleConfirmUploadWork}>
+                Submit
+            </button>}
+            {submissionData.length > 0 && <button 
+              // id='delete-file'
+              className='confirm-submit' 
+              value={assignment.assignment_id} 
+              type="button"
+              onClick={handleConfirmDeleteWork}>
+                Unsubmit
+            </button>}
           {msg && (
             <label
               className="status-msg"
@@ -225,7 +253,6 @@ function CourseAssignment(props) {
         </div>
       ))}
     </div>
-  </form>
   );
 }
 
