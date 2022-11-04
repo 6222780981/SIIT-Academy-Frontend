@@ -57,7 +57,7 @@ function CreateWeek(props) {
           const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/week`, {
             courseId,
             weekTitle: week.week_title,
-            weekDate: `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`,
+            weekDate: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
             videoFilePath: week.file ? `${courseId}/week${i + 1}/video/${week.file.name}` : '',
           });
 

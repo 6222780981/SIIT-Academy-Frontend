@@ -49,7 +49,7 @@ function UploadAnnouncement(props) {
     }
     try {
       var filePath = announcementFilePaths;
-      var announcementDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
+      var announcementDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
       console.log(`${process.env.REACT_APP_BACKEND_URL}/course/announcement`, { courseId, announcementDate, content, filePath });
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/course/announcement`, { courseId, announcementDate, content, filePath })
