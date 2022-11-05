@@ -13,6 +13,11 @@
   border-color: #3b3b3b;
   padding: 15px;
 }
+.assignment-box-header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 
 .download-work-btn{
   display: flex;

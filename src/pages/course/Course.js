@@ -46,7 +46,7 @@ function Course() {
   const { courseId } = useParams();
 
   const weekArr = useSelector((store) => store.week.weekArr);
-  const currentWeekId = useSelector((store) => store.week.currentWeekId);
+  const currentWeekId =  useSelector((store) => store.week.currentWeekId);
 
   const [teacherUsername, setTeacherUsername] = useState();
   const [courseName, setCourseName] = useState();

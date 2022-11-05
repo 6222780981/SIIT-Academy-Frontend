@@ -13,7 +13,11 @@
   justify-content: left;
   padding-top: 10px;
 }
-
+.announcement-post-header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 .download-work-btn{
   display: flex;
   align-items: center;

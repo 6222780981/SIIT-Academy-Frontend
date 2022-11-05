@@ -4,11 +4,17 @@ import { useSelector } from 'react-redux'
 import axios from 'axios';
 import downloadIcon from '../../icons/download icon.svg';
 import uploadworkbtn from '../../icons/upload-material-btn.png';
+import deleteIcon from '../../icons/delete icon.svg';
 function CourseAssignment(props) {
   const fileRef = useRef();
-
-  // const userId = useSelector((store) => store.user.userId)
-  const userId = 1;
+  const userId = useSelector((store) => store.user.userId)
+  const role = useSelector((store) => store.user.role);
+  // console.log(tempUserId);
+  // if (tempUserId !== undefined){
+  //   console.log('test');
+  //   var userId = tempUserId;
+  // }
+  // const userId = 1;
   const { weekId,courseId,weekIndex,getFileUrlHandler,uploadFileHandler,deleteFileHandler } = props;
   const [filePath, setFilePath] = useState([]);
   const [submissionFileNames, setSubmissionFileNames] = useState([]);
@@ -58,6 +64,12 @@ function CourseAssignment(props) {
     console.log(tempSubmissionFileNames);
     setSubmissionFileNames(tempSubmissionFileNames);
     setMsg('');
+  };
+
+  const handleDeleteAssignment = (event) =>{
+    event.preventDefault();
+    const assignmentId = event.target.value;
+    console.log(assignmentId);
   };
 
   const handleClearFile = (event) => {
@@ -144,13 +156,21 @@ function CourseAssignment(props) {
     <div className='course-assignment-container'>
       {filePath.length > 0 && filePath.map((assignment,index) => (
         <div className='assignment-box'>
-          <label style={{
-            fontWeight: '700',
-            fontSize: '16px',
-            color:'#3b3b3b',
-            paddingBottom:'10px'
-            }}>Assignment {index+1}: {assignment.assignment_title} | Due Date: {assignment.due_date.slice(0,10)}
-          </label>
+          <div className='assignment-box-header'>
+            <label style={{
+              fontWeight: '700',
+              fontSize: '16px',
+              color:'#3b3b3b',
+              paddingBottom:'10px'
+              }}>Assignment {index+1}: {assignment.assignment_title} | Due Date: {assignment.due_date.slice(0,10)}
+            </label>
+            {role === 'teacher' || 'staff' &&<input 
+              type="image" 
+              value={assignment.assignment_id}  
+              src={deleteIcon} 
+              onClick={handleDeleteAssignment}
+            />}
+          </div>
           <label style={{
             paddingBottom: '10px'
             }}>{assignment.description}
