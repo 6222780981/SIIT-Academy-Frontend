@@ -1,25 +1,20 @@
 import './CourseAssignment.css';
 import {useState,useRef,useEffect} from 'react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 import downloadIcon from '../../icons/download icon.svg';
 import uploadworkbtn from '../../icons/upload-material-btn.png';
 function CourseAssignment(props) {
   const fileRef = useRef();
 
-  // const userId = useSelector((store) => store.user.userId)
-  const userId = 1;
+  const userId = useSelector((store) => store.user.userId)
+  // const userId = 1;
   const { weekId,courseId,weekIndex,getFileUrlHandler,uploadFileHandler } = props;
   const [filePath, setFilePath] = useState([]);
   const [submissionFileNames, setSubmissionFileNames] = useState([]);
   const submissionFiles = document.querySelector("input[name='upload-work']");
-  // const [assignmentId, setAssignmentId] = useState();
   const [submissionData, setSubmissionData] = useState([]);
   const [msg, setMsg] = useState('');
 
-  // useEffect(()=> {
-  //   console.log(assignmentId);
-  // }, [assignmentId]);
   // get list of assignment of the selected week
   if(filePath.length === 0){
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment?weekId=${weekId}`)
@@ -38,10 +33,6 @@ function CourseAssignment(props) {
   };
   //get list of submissions
   if (filePath.length !==0 && submissionData.length ===0){
-    // console.log(typeof filePath[0].assignment_id);
-    // var assignmentId = filePath[0].assignment_id;
-    // console.log(typeof userId);
-    // console.log(typeof assignmentId);
     console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`)
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`)
     .then((response) => {
@@ -174,7 +165,6 @@ function CourseAssignment(props) {
               name="upload-work"
               accept="application/pdf"
               ref={fileRef}
-              // required
               style={{ display: 'none' }}
             ></input>
             <label htmlFor="upload-work-btn">
@@ -232,7 +222,6 @@ function CourseAssignment(props) {
                 Submit
             </button>}
             {submissionData.length > 0 && <button 
-              // id='delete-file'
               className='confirm-submit' 
               value={assignment.assignment_id} 
               type="button"
