@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
-import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+import { getStorage, ref, getDownloadURL, uploadBytes, deleteObject } from 'firebase/storage';
 import axios from 'axios';
 
 import Navbar from '../../components/navbar/Navbar';
@@ -31,6 +31,16 @@ async function getFileUrlHandler(filePath) {
   }
 }
 
+async function deleteFileHandler(filePath) {
+  const fileRef = ref(storage, filePath);
+
+  try {
+    await deleteObject(fileRef);
+    return 1;
+  } catch {
+    return 0;
+  }
+}
 
 function Course() {
   const { courseId } = useParams();
@@ -39,10 +49,19 @@ function Course() {
   const currentWeekId = useSelector((store) => store.week.currentWeekId);
 
   const [teacherUsername, setTeacherUsername] = useState();
+  const [courseName, setCourseName] = useState();
 
   useEffect(async () => {
     const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/course?courseId=${courseId}`);
-    setTeacherUsername(response.data.data.courseArr[0].username);
+
+    const { status, data } = response.data;
+
+    if (status === 'success') {
+      const { course_name: courseName, username: teacherUsername } = data.courseArr[0];
+
+      setCourseName(courseName);
+      setTeacherUsername(teacherUsername);
+    }
   }, [courseId]);
 
   const weekIndex = weekArr.findIndex((week) => week.week_id === currentWeekId);
@@ -66,7 +85,7 @@ function Course() {
     }
 
     if (!filepath.startsWith(`${courseId}/week`) && !filepath.startsWith(`${courseId}/announcement`)) {
-      console.log("here1")
+      console.log('here1');
       return 0;
     }
 
@@ -75,7 +94,7 @@ function Course() {
     try {
       await uploadBytes(fileRef, file);
       return 1;
-    } catch(err) {
+    } catch (err) {
       console.log(err.message);
       return 0;
     }
@@ -86,7 +105,13 @@ function Course() {
       <Navbar></Navbar>
       <div className="course__body">
         <div className="course__content">
-          <VideoPlayer currentWeekId={currentWeekId} weekArr={weekArr} getFileUrlHandler={getFileUrlHandler}></VideoPlayer>
+          <VideoPlayer
+            currentWeekId={currentWeekId}
+            weekArr={weekArr}
+            courseId={courseId}
+            courseName={courseName}
+            getFileUrlHandler={getFileUrlHandler}
+          ></VideoPlayer>
           <div className="course__content--title">
             <p>
               Week {weekIndex + 1} - {weekTitle}
@@ -118,7 +143,13 @@ function Course() {
               <CourseMaterial weekId={currentWeekId} getFileUrlHandler={getFileUrlHandler}></CourseMaterial>
             </Route>
             <Route exact path="/course/:courseId/assignment">
-              <CourseAssignment weekId={currentWeekId} courseId={courseId} weekIndex={weekIndex} getFileUrlHandler={getFileUrlHandler} uploadFileHandler={uploadFileHandler}></CourseAssignment>
+              <CourseAssignment
+                weekId={currentWeekId}
+                courseId={courseId}
+                weekIndex={weekIndex}
+                getFileUrlHandler={getFileUrlHandler}
+                uploadFileHandler={uploadFileHandler}
+              ></CourseAssignment>
             </Route>
             <Route exact path="/course/:courseId/announcement">
               <CourseAnnouncement weekId={currentWeekId} courseId={courseId} getFileUrlHandler={getFileUrlHandler}></CourseAnnouncement>

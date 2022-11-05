@@ -1,5 +1,6 @@
 .week-thumbnail {
   width: 200px;
+  position: relative;
 }
 
 .week-thumbnail video {
@@ -9,6 +10,7 @@
   background: #c4c4c4;
   border-radius: 10px;
   margin-bottom: 8px;
+  filter: brightness(95%);
 }
 
 .week-thumbnail video:hover {
@@ -19,4 +21,32 @@
   font-weight: 700;
   font-size: 14px;
   color: #3b3b3b;
+}
+
+.week-thumbnail__progress-container {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 83.5%;
+}
+
+.week-thumbnail__progress {
+  position: relative;
+  height: 7px;
+}
+
+.week-thumbnail__progress--current {
+  position: absolute;
+  background: #af2035;
+  border-radius: 20px;
+  height: 100%;
+}
+
+.week-thumbnail__progress--background {
+  position: absolute;
+  background: #fff;
+  border-radius: 20px;
+  width: 100%;
+  height: 100%;
 }

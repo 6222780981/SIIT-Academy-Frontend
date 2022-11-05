@@ -64,7 +64,7 @@ function CourseAssignment(props) {
     submissionFiles.value = null;
     console.log(submissionFiles.files);
   };
-  async function handleDownloadMaterial(event){
+  async function handleDownloadMaterial(event) {
     var fileUrl = await getFileUrlHandler(event.target.value);
     console.log(fileUrl);
     window.open(fileUrl, '_blank', 'noopener,noreferrer');
@@ -75,10 +75,10 @@ function CourseAssignment(props) {
     const fileList = submissionFiles.files;
     var submissionFilePaths = [];
     for (let i = 0; i < submissionFileNames.length; i++) {
-      submissionFilePaths = [...submissionFilePaths, `${courseId}/week${weekIndex+1}/assignment/submission/${submissionFileNames[i]}`];
+      submissionFilePaths = [...submissionFilePaths, `${courseId}/week${weekIndex + 1}/assignment/submission/${submissionFileNames[i]}`];
     }
     if (fileList.length === 0) {
-      setMsg("No work uploaded")
+      setMsg('No work uploaded');
       return;
     }
     for (let i = 0; i < fileList.length; i++) {
@@ -86,15 +86,15 @@ function CourseAssignment(props) {
       console.log(fileList.item(i).name);
       if (
         fileList.length !== 0 &&
-        !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekIndex+1}/assignment/submission/${fileList.item(i).name}`))
+        !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekIndex + 1}/assignment/submission/${fileList.item(i).name}`))
       ) {
-        console.log(`error uploading file: ${`${courseId}/week${weekIndex+1}/assignment/submission/${fileList.item(i).name}`}`);
+        console.log(`error uploading file: ${`${courseId}/week${weekIndex + 1}/assignment/submission/${fileList.item(i).name}`}`);
         return;
       }
     }
     try {
       var filePath = submissionFilePaths;
-      var submissionDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
+      var submissionDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
       console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission`, { userId, assignmentId, filePath, submissionDate });
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission`, { userId, assignmentId, filePath, submissionDate })
@@ -173,17 +173,20 @@ function CourseAssignment(props) {
             <div className="upload-work-texts">
               <label
                 style={{
-                  fontWeight: '500',
-                  fontSize: '14px',
-                  color: '#672C84',
-                }}>Upload your work
+                  fontWeight: '700',
+                  fontSize: '16px',
+                  color: '#3b3b3b',
+                  paddingBottom: '10px',
+                }}
+              >
+                Assignment {index + 1}: {assignment.assignment_title} | Due Date: {assignment.due_date.slice(0, 10)}
               </label>
               <label
                 style={{
-                  fontWeight: '300',
-                  fontSize: '12px',
-                  color: '#672C84',
-                }}>Browse your file
+                  paddingBottom: '10px',
+                }}
+              >
+                {assignment.description}
               </label>
               {submissionFileNames.length > 0 &&
                 submissionFileNames.map((filename) => (
@@ -209,6 +212,94 @@ function CourseAssignment(props) {
                 <button className="clearbtn" onClick={handleClearFile}>
                   Clear
                 </button>
+              )}
+              <label
+                style={{
+                  fontWeight: '700',
+                  fontSize: '16px',
+                  color: '#3b3b3b',
+                  paddingTop: '10px',
+                  paddingBottom: '10px',
+                }}
+              >
+                Your Work
+              </label>
+              <div className="upload-work-box">
+                <input
+                  onChange={handleUploadWork}
+                  type="file"
+                  id="upload-work-btn"
+                  name="upload-work"
+                  accept="application/pdf"
+                  ref={fileRef}
+                  // required
+                  style={{ display: 'none' }}
+                ></input>
+                <label htmlFor="upload-work-btn">
+                  <img className="upload-work-icon" src={uploadworkbtn} />
+                </label>
+                <div className="upload-work-texts">
+                  <label
+                    style={{
+                      fontWeight: '500',
+                      fontSize: '14px',
+                      color: '#672C84',
+                    }}
+                  >
+                    Upload your work
+                  </label>
+                  <label
+                    style={{
+                      fontWeight: '300',
+                      fontSize: '12px',
+                      color: '#672C84',
+                    }}
+                  >
+                    Browse your file
+                  </label>
+                  {submissionFileNames.length > 0 &&
+                    submissionFileNames.map((filename) => (
+                      <label
+                        value={filename}
+                        key={filename}
+                        style={{
+                          fontWeight: '500',
+                          fontSize: '12px',
+                          color: '#3b3b3b',
+                        }}
+                      >
+                        {filename}
+                      </label>
+                    ))}
+                  {submissionFileNames.length > 0 && (
+                    <button className="clearbtn" onClick={handleClearFile}>
+                      Clear
+                    </button>
+                  )}
+                </div>
+              </div>
+              {
+                <button
+                  className="confirm-submit"
+                  value={assignment.assignment_id}
+                  type="submit"
+                  onClick={(e) => setAssignmentId(e.target.value)}
+                >
+                  Submit
+                </button>
+              }
+              {msg && (
+                <label
+                  className="status-msg"
+                  style={{
+                    fontWeight: '500',
+                    fontSize: '14px',
+                    color: '#672C84',
+                    paddingTop: '10px',
+                  }}
+                >
+                  {msg}
+                </label>
               )}
             </div>
           </div>
