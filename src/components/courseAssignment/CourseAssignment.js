@@ -1,14 +1,15 @@
 import './CourseAssignment.css';
-import {useState,useRef,useEffect} from 'react';
+import {useState,useRef} from 'react';
+import { useSelector } from 'react-redux'
 import axios from 'axios';
 import downloadIcon from '../../icons/download icon.svg';
 import uploadworkbtn from '../../icons/upload-material-btn.png';
 function CourseAssignment(props) {
   const fileRef = useRef();
 
-  const userId = useSelector((store) => store.user.userId)
-  // const userId = 1;
-  const { weekId,courseId,weekIndex,getFileUrlHandler,uploadFileHandler } = props;
+  // const userId = useSelector((store) => store.user.userId)
+  const userId = 1;
+  const { weekId,courseId,weekIndex,getFileUrlHandler,uploadFileHandler,deleteFileHandler } = props;
   const [filePath, setFilePath] = useState([]);
   const [submissionFileNames, setSubmissionFileNames] = useState([]);
   const submissionFiles = document.querySelector("input[name='upload-work']");
@@ -92,6 +93,7 @@ function CourseAssignment(props) {
         return;
       }
     }
+    // insert submission file url to database
     try {
       var filePath = submissionFilePaths;
       var submissionDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
@@ -112,9 +114,19 @@ function CourseAssignment(props) {
       console.log(err.message);
     }
   }
-  const handleConfirmDeleteWork = (event) =>{
+  async function handleConfirmDeleteWork(event){
     event.preventDefault();
     const assignmentId = +event.target.value;
+    // delete file from Firebase
+    if (submissionData.length !== 0){
+      for (let i=0; i<submissionData.length;i++){
+        if(!(await deleteFileHandler(submissionData[i].file_path))){
+          console.log(`error deleting file: ${submissionData[i].file_path}`);
+          return;
+        }
+      }
+    }
+      
     console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission`, {userId, assignmentId});
     axios.delete(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission`, {data: {userId, assignmentId}})
     .then((response) => {
@@ -157,7 +169,7 @@ function CourseAssignment(props) {
             paddingBottom:'10px'
             }}>Your Work
           </label>
-          <div className='upload-work-box'>
+          <div className="upload-work-box">
             <input
               onChange={handleUploadWork}
               type="file"
@@ -165,6 +177,7 @@ function CourseAssignment(props) {
               name="upload-work"
               accept="application/pdf"
               ref={fileRef}
+              // required
               style={{ display: 'none' }}
             ></input>
             <label htmlFor="upload-work-btn">
@@ -173,152 +186,73 @@ function CourseAssignment(props) {
             <div className="upload-work-texts">
               <label
                 style={{
-                  fontWeight: '700',
-                  fontSize: '16px',
-                  color: '#3b3b3b',
-                  paddingBottom: '10px',
+                  fontWeight: '500',
+                  fontSize: '14px',
+                  color: '#672C84',
                 }}
               >
-                Assignment {index + 1}: {assignment.assignment_title} | Due Date: {assignment.due_date.slice(0, 10)}
+                Upload your work
               </label>
               <label
                 style={{
-                  paddingBottom: '10px',
+                  fontWeight: '300',
+                  fontSize: '12px',
+                  color: '#672C84',
                 }}
               >
-                {assignment.description}
+                Browse your file
               </label>
               {submissionFileNames.length > 0 &&
                 submissionFileNames.map((filename) => (
-                  <label value={filename} key={filename}
+                  <label
+                    value={filename}
+                    key={filename}
                     style={{
                       fontWeight: '500',
                       fontSize: '12px',
                       color: '#3b3b3b',
-                    }}>{filename}
+                    }}
+                  >
+                    {filename}
                   </label>
-              ))}
-              {submissionData.length > 0 &&
-                submissionData.map((filename) => (
-                  <label value={filename} key={filename}
-                    style={{
-                      fontWeight: '500',
-                      fontSize: '12px',
-                      color: '#3b3b3b',
-                    }}>{filename.file_path.split('/')[4]}
-                  </label>
-              ))}
+                ))}
               {submissionFileNames.length > 0 && (
                 <button className="clearbtn" onClick={handleClearFile}>
                   Clear
                 </button>
               )}
-              <label
-                style={{
-                  fontWeight: '700',
-                  fontSize: '16px',
-                  color: '#3b3b3b',
-                  paddingTop: '10px',
-                  paddingBottom: '10px',
-                }}
-              >
-                Your Work
-              </label>
-              <div className="upload-work-box">
-                <input
-                  onChange={handleUploadWork}
-                  type="file"
-                  id="upload-work-btn"
-                  name="upload-work"
-                  accept="application/pdf"
-                  ref={fileRef}
-                  // required
-                  style={{ display: 'none' }}
-                ></input>
-                <label htmlFor="upload-work-btn">
-                  <img className="upload-work-icon" src={uploadworkbtn} />
-                </label>
-                <div className="upload-work-texts">
+              {submissionData.length > 0 &&
+                submissionData.map((filename) =>(
                   <label
+                    value={filename}
+                    key={filename}
                     style={{
                       fontWeight: '500',
-                      fontSize: '14px',
-                      color: '#672C84',
-                    }}
-                  >
-                    Upload your work
-                  </label>
-                  <label
-                    style={{
-                      fontWeight: '300',
                       fontSize: '12px',
-                      color: '#672C84',
+                      color: '#3b3b3b',
                     }}
                   >
-                    Browse your file
+                    {filename.file_path.split('/')[4]}
                   </label>
-                  {submissionFileNames.length > 0 &&
-                    submissionFileNames.map((filename) => (
-                      <label
-                        value={filename}
-                        key={filename}
-                        style={{
-                          fontWeight: '500',
-                          fontSize: '12px',
-                          color: '#3b3b3b',
-                        }}
-                      >
-                        {filename}
-                      </label>
-                    ))}
-                  {submissionFileNames.length > 0 && (
-                    <button className="clearbtn" onClick={handleClearFile}>
-                      Clear
-                    </button>
-                  )}
-                </div>
-              </div>
-              {
-                <button
-                  className="confirm-submit"
-                  value={assignment.assignment_id}
-                  type="submit"
-                  onClick={(e) => setAssignmentId(e.target.value)}
-                >
-                  Submit
-                </button>
-              }
-              {msg && (
-                <label
-                  className="status-msg"
-                  style={{
-                    fontWeight: '500',
-                    fontSize: '14px',
-                    color: '#672C84',
-                    paddingTop: '10px',
-                  }}
-                >
-                  {msg}
-                </label>
-              )}
+                ))}
             </div>
           </div>
           
-            {submissionFileNames.length > 0 && <button 
-              id='submit-file'
-              className='confirm-submit' 
-              value={assignment.assignment_id} 
-              type="submit" 
-              onClick={handleConfirmUploadWork}>
-                Submit
-            </button>}
-            {submissionData.length > 0 && <button 
-              className='confirm-submit' 
-              value={assignment.assignment_id} 
-              type="button"
-              onClick={handleConfirmDeleteWork}>
-                Unsubmit
-            </button>}
+          {submissionFileNames.length > 0 && <button 
+            id='submit-file'
+            className='confirm-submit' 
+            value={assignment.assignment_id} 
+            type="submit" 
+            onClick={handleConfirmUploadWork}>
+              Submit
+          </button>}
+          {submissionData.length > 0 && <button 
+            className='confirm-submit' 
+            value={assignment.assignment_id} 
+            type="button"
+            onClick={handleConfirmDeleteWork}>
+              Unsubmit
+          </button>}
           {msg && (
             <label
               className="status-msg"

@@ -149,6 +149,7 @@ function Course() {
                 weekIndex={weekIndex}
                 getFileUrlHandler={getFileUrlHandler}
                 uploadFileHandler={uploadFileHandler}
+                deleteFileHandler={deleteFileHandler}
               ></CourseAssignment>
             </Route>
             <Route exact path="/course/:courseId/announcement">
