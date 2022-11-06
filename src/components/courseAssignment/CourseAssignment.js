@@ -9,12 +9,6 @@ function CourseAssignment(props) {
   const fileRef = useRef();
   const userId = useSelector((store) => store.user.userId)
   const role = useSelector((store) => store.user.role);
-  // console.log(tempUserId);
-  // if (tempUserId !== undefined){
-  //   console.log('test');
-  //   var userId = tempUserId;
-  // }
-  // const userId = 1;
   const { weekId,courseId,weekIndex,getFileUrlHandler,uploadFileHandler,deleteFileHandler } = props;
   const [filePath, setFilePath] = useState([]);
   const [submissionFileNames, setSubmissionFileNames] = useState([]);

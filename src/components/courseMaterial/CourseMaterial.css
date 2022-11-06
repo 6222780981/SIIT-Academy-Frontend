@@ -1,3 +1,23 @@
+
+
+
+.course-material-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+.course-material{
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  margin-bottom: 42px;
+}
+
+.material-container{
+  display:flex;
+  flex-direction: row;
+  margin-right: 50px;
+}
 .download-btn{
   display: flex;
   align-items: center;
@@ -12,15 +32,10 @@
 button.download-btn:hover{
   background: #d9d9d99f;
 }
-
-.course-material-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-}
-
-.material-container{
-  display:flex;
-  flex-direction: row;
-  margin-right: 50px;
+.send-question-btn{
+  width: 11%;
+  color: #F5F5F5;
+  background: rgba(175, 32, 53, 0.9);
+  border-radius: 10px;
+  padding:6px 12px;
 }

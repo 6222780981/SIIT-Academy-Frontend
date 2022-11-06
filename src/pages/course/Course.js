@@ -140,7 +140,11 @@ function Course() {
           </div>
           <Switch>
             <Route exact path="/course/:courseId/material">
-              <CourseMaterial weekId={currentWeekId} getFileUrlHandler={getFileUrlHandler}></CourseMaterial>
+              <CourseMaterial 
+                weekId={currentWeekId} 
+                getFileUrlHandler={getFileUrlHandler} 
+                deleteFileHandler={deleteFileHandler}
+              ></CourseMaterial>
             </Route>
             <Route exact path="/course/:courseId/assignment">
               <CourseAssignment
@@ -153,7 +157,12 @@ function Course() {
               ></CourseAssignment>
             </Route>
             <Route exact path="/course/:courseId/announcement">
-              <CourseAnnouncement weekId={currentWeekId} courseId={courseId} getFileUrlHandler={getFileUrlHandler}></CourseAnnouncement>
+              <CourseAnnouncement 
+                weekId={currentWeekId} 
+                courseId={courseId} 
+                getFileUrlHandler={getFileUrlHandler} 
+                deleteFileHandler={deleteFileHandler}
+              ></CourseAnnouncement>
             </Route>
             <Route path="/course/:courseId/">
               <Redirect to={`/course/${courseId}/material`}></Redirect>
