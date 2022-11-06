@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState,useEffect} from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux'
 import './CourseAnnouncement.css';
@@ -8,13 +8,9 @@ function CourseAnnouncement(props) {
   const { weekId, courseId, getFileUrlHandler, deleteFileHandler } = props;
   const [announcementData, setAnnouncementData] = useState([]);
   const role = useSelector((store) => store.user.role);
-  const [fetchStatus, setFetchStatus] = useState('false');
   
-  function delay(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
-  }
-  if (fetchStatus ==='false'){
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/course/announcement?courseId=${courseId}`)
+  useEffect(async() => {
+    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/course/announcement?courseId=${courseId}`)
     .then((response) => {
       console.log(response.data);
       const { status, data, message } = response.data;
@@ -24,9 +20,8 @@ function CourseAnnouncement(props) {
       }
       console.log(data);
       setAnnouncementData(data.reverse());
-      setFetchStatus('true')
     });
-  };
+  },[courseId])
 
   async function handleDownloadMaterial(event){
     var fileUrl = await getFileUrlHandler(event.target.value);

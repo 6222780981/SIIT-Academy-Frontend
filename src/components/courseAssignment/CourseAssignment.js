@@ -1,5 +1,5 @@
 import './CourseAssignment.css';
-import {useState,useRef} from 'react';
+import {useState,useRef,useEffect} from 'react';
 import { useSelector } from 'react-redux'
 import axios from 'axios';
 import downloadIcon from '../../icons/download icon.svg';
@@ -16,22 +16,26 @@ function CourseAssignment(props) {
   const [submissionData, setSubmissionData] = useState([]);
   const [msg, setMsg] = useState('');
 
-  // get list of assignment of the selected week
-  if(filePath.length === 0){
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment?weekId=${weekId}`)
+  useEffect(async() => {
+    // get list of assignment of the selected week
+    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment?weekId=${weekId}`)
     .then((response) => {
       console.log(response.data);
       const { status, data, message } = response.data;
-      if (status !== 'success') {
+      if (status === 'fail'){
+        setFilePath([]);
+        return;
+      }
+      else if (status !== 'success') {
         // setMsg(message);
         return;
       }
-      console.log(data);
-      console.log(userId);
+      // console.log(data);
       setFilePath(data);
     }
     );
-  };
+  },[weekId])
+  
   //get list of submissions
   if (filePath.length !==0 && submissionData.length ===0){
     console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`)
@@ -148,6 +152,13 @@ function CourseAssignment(props) {
   }
   return (
     <div className='course-assignment-container'>
+      {filePath.length === 0 && 
+        <label style={{
+          textAlign:'center',
+          fontWeight:'500',
+          fontSize:'15px'
+        }}>There is no assignment for this week.</label>
+      }
       {filePath.length > 0 && filePath.map((assignment,index) => (
         <div className='assignment-box'>
           <div className='assignment-box-header'>
