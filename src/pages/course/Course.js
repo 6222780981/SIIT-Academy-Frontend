@@ -47,7 +47,7 @@ function Course() {
   const { courseId } = useParams();
 
   const weekArr = useSelector((store) => store.week.weekArr);
-  const currentWeekId = useSelector((store) => store.week.currentWeekId);
+  const currentWeekId =  useSelector((store) => store.week.currentWeekId);
 
   const [teacherUsername, setTeacherUsername] = useState();
   const [courseName, setCourseName] = useState();
@@ -141,7 +141,11 @@ function Course() {
           </div>
           <Switch>
             <Route exact path="/course/:courseId/material">
-              <CourseMaterial weekId={currentWeekId} getFileUrlHandler={getFileUrlHandler}></CourseMaterial>
+              <CourseMaterial 
+                weekId={currentWeekId} 
+                getFileUrlHandler={getFileUrlHandler} 
+                deleteFileHandler={deleteFileHandler}
+              ></CourseMaterial>
             </Route>
             <Route exact path="/course/:courseId/assignment">
               <CourseAssignment
@@ -150,10 +154,16 @@ function Course() {
                 weekIndex={weekIndex}
                 getFileUrlHandler={getFileUrlHandler}
                 uploadFileHandler={uploadFileHandler}
+                deleteFileHandler={deleteFileHandler}
               ></CourseAssignment>
             </Route>
             <Route exact path="/course/:courseId/announcement">
-              <CourseAnnouncement weekId={currentWeekId} courseId={courseId} getFileUrlHandler={getFileUrlHandler}></CourseAnnouncement>
+              <CourseAnnouncement 
+                weekId={currentWeekId} 
+                courseId={courseId} 
+                getFileUrlHandler={getFileUrlHandler} 
+                deleteFileHandler={deleteFileHandler}
+              ></CourseAnnouncement>
             </Route>
             <Route path="/course/:courseId/">
               <Redirect to={`/course/${courseId}/material`}></Redirect>
