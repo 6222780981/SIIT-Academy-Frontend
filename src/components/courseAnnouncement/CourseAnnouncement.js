@@ -15,7 +15,6 @@ function CourseAnnouncement(props) {
       console.log(response.data);
       const { status, data, message } = response.data;
       if (status !== 'success') {
-        // setMsg(message);
         return;
       }
       console.log(data);
@@ -33,49 +32,21 @@ function CourseAnnouncement(props) {
     const dataArr = event.target.value.split('|');
     const announcementId = +dataArr[0];
     const announcementFilePath = dataArr[1];
-    // console.log(materialId);
-    // console.log(materialFilePath);
-    // var deleteStatus = false;
-
     console.log(`${process.env.REACT_APP_BACKEND_URL}/course/announcement`,{data: {announcementId,courseId}});
     axios.delete(`${process.env.REACT_APP_BACKEND_URL}/course/announcement`,{data: {announcementId,courseId}})
     .then((response) => {
       console.log(response.data);
       const { status, data, message } = response.data;
       if (status !== 'success') {
-        // setMsg(message);
         return;
       }
       const tempArr = announcementData.filter(data => data.announcement_id !== announcementId);
       setAnnouncementData(tempArr);
     });
-    // deleteStatus = true;
     
-
     if((announcementFilePath !== "") && !(await deleteFileHandler(announcementFilePath))){
       console.log(`error deleting file: ${announcementFilePath}`);
     }
-    // console.log("here1")
-    // // refetch the data
-    // await axios.get(`${process.env.REACT_APP_BACKEND_URL}/course/announcement?courseId=${courseId}`)
-    // .then((response) => {
-    //   console.log(response.data);
-    //   const { status, data, message } = response.data;
-    //   if (status === 'error') {
-    //     // setMsg(message);
-    //     return;
-    //   }
-    //   else if(status ==='fail'){
-    //     setFilePath([]);
-    //     return;
-    //   }
-    //   else{
-    //     console.log(data);
-    //     setAnnouncementData(data.reverse());
-    //   }
-      
-    // });
-    // console.log(materialId);
   };
   return(
     <div className='announcement-container'>

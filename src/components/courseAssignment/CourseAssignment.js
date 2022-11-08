@@ -27,10 +27,8 @@ function CourseAssignment(props) {
         return;
       }
       else if (status !== 'success') {
-        // setMsg(message);
         return;
       }
-      // console.log(data);
       setFilePath(data);
     }
     );
@@ -44,7 +42,6 @@ function CourseAssignment(props) {
       console.log(response.data);
       const { status, data, message } = response.data;
       if (status !== 'success') {
-        // setMsg(message);
         return;
       }
       console.log(data);
@@ -64,10 +61,43 @@ function CourseAssignment(props) {
     setMsg('');
   };
 
-  const handleDeleteAssignment = (event) =>{
+  async function handleDeleteAssignment(event){
     event.preventDefault();
-    const assignmentId = event.target.value;
-    console.log(assignmentId);
+    const dataArr = event.target.value.split('|');
+    const assignmentId = +dataArr[0];
+    const assignmentFilePath = dataArr[1];
+    const assignmentFilePathSplit = assignmentFilePath.split("/");
+    const assignmentDir = assignmentFilePathSplit[0] + "/" + assignmentFilePathSplit[1] + "/" + assignmentFilePathSplit[2] + "/"+"submission"
+    console.log(assignmentFilePath);
+    console.log(assignmentDir)
+
+    console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment`,{data: {assignmentId,weekId}});
+    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/week/assignment`,{data: {assignmentId,weekId}})
+    .then((response) => {
+      console.log(response.data);
+      const { status, data, message } = response.data;
+      if (status !== 'success') {
+        return;
+      }
+      console.log(data);
+      const tempArr = filePath.filter(data => data.assignment_id !== assignmentId);
+      setFilePath(tempArr);
+    });
+    if((assignmentFilePath !== "") && !(await deleteFileHandler(assignmentFilePath))){
+      console.log(`error deleting file: ${assignmentFilePath}`);
+      return;
+    }
+    if(submissionData.length > 0){
+      for (let i=0; i< submissionData.length;i++){
+        if(!(await deleteFileHandler(submissionData[i].file_path))){
+          console.log(`error deleting file: ${submissionData[i].file_path}`);
+        }
+        else{
+          console.log(`success deleting file: ${submissionData[i].file_path}`);
+        }
+      }
+    }
+    
   };
 
   const handleClearFile = (event) => {
@@ -76,8 +106,10 @@ function CourseAssignment(props) {
     console.log(submissionFiles.files);
   };
   async function handleDownloadMaterial(event) {
+    event.preventDefault();
     var fileUrl = await getFileUrlHandler(event.target.value);
     console.log(fileUrl);
+    return;
     window.open(fileUrl, '_blank', 'noopener,noreferrer');
   }
   async function handleConfirmUploadWork(event) {
@@ -171,7 +203,7 @@ function CourseAssignment(props) {
             </label>
             {role === 'teacher' || 'staff' &&<input 
               type="image" 
-              value={assignment.assignment_id}  
+              value={assignment.assignment_id+"|"+assignment.file_path}  
               src={deleteIcon} 
               onClick={handleDeleteAssignment}
             />}
@@ -202,7 +234,6 @@ function CourseAssignment(props) {
               name="upload-work"
               accept="application/pdf"
               ref={fileRef}
-              // required
               style={{ display: 'none' }}
             ></input>
             <label htmlFor="upload-work-btn">

@@ -8,16 +8,12 @@ function UploadMaterials(props) {
   
   const materialFiles = document.querySelector("input[name='upload-material']");
   const [materialFileNames, setMaterialFileNames] = useState([]);
-  // const [materialFilePaths, setMaterialFilePaths] = useState([]);
   const [weekId, setWeekId] = useState('');
   const [weekNum, setWeekNum] = useState('');
   const [msg, setMsg] = useState('');
   const { uploadFileHandler, weekArr, courseId } = props;
-  // console.log(weekArr);
 
   const handleChangeWeek = (event) => {
-    // console.log(event.target[event.target.selectedIndex].dataset.weekId);
-    // console.log(event.target[event.target.selectedIndex].dataset.index);
     setWeekId(event.target[event.target.selectedIndex].dataset.weekId);
     setWeekNum(event.target[event.target.selectedIndex].dataset.index);
   };
@@ -27,17 +23,13 @@ function UploadMaterials(props) {
 
     for (let i = 0; i < event.target.files.length; i++) {
       tempMaterialFileNames = [...tempMaterialFileNames, event.target.files[i].name];
-      // tempMaterialFilePaths = [...tempMaterialFilePaths, `${courseId}/week${weekNum}/material/${event.target.files[i].name}`];
     }
-    // tempmaterialFiles = [...tempmaterialFiles,event.target.files]
-    // console.log(tempMaterialFilePaths);
-    // setMaterialFilePaths(tempMaterialFilePaths);
+
     setMaterialFileNames(tempMaterialFileNames);
     
   };
 
   const handleClearFile = (event) => {
-    // setMaterialFilePaths([]);
     setMaterialFileNames([]);
     materialFiles.value = null;
   };
@@ -51,13 +43,11 @@ function UploadMaterials(props) {
       materialFilePaths = [...materialFilePaths, `${courseId}/week${weekNum}/material/${materialFileNames[i]}`];
     }
     console.log(materialFilePaths);
-    // console.log(materialFileNames);
     if (fileList.length === 0 && weekId === '') {
       return;
     }
     for (let i = 0; i < fileList.length; i++) {
       console.log(fileList.item(i));
-      // console.log(fileList.item(i).name);
       // if there is a file then perform file uploading
       if (
         fileList.length !== 0 &&
@@ -167,8 +157,6 @@ function UploadMaterials(props) {
                 </option>
               ))}
             </select>
-            {/* <label>{weekNum}</label>
-            <label>{weekId}</label> */}
           </div>
         </div>
         <button className="confirm-upload" type="submit">

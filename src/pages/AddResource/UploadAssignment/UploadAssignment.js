@@ -26,7 +26,6 @@ function UploadAssignment(props) {
       tempAssignmentFileNames = [...tempAssignmentFileNames, event.target.files[i].name];
     }
 
-    // setAssignmentFilePaths(tempAssignmentFilePaths);
     setAssignmentFileNames(tempAssignmentFileNames);
   };
   const handleClearFile = (event) => {
@@ -49,9 +48,9 @@ function UploadAssignment(props) {
       console.log(fileList.item(i).name);
       if (
         fileList.length !== 0 &&
-        !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekId + 1}/assignment/${fileList.item(i).name}`))
+        !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekNum}/assignment/${fileList.item(i).name}`))
       ) {
-        console.log(`error uploading file: ${`${courseId}/week${weekId + 1}/assignment/${fileList.item(i).name}`}`);
+        console.log(`error uploading file: ${`${courseId}/week${weekNum}/assignment/${fileList.item(i).name}`}`);
         return;
       }
     }
@@ -137,7 +136,6 @@ function UploadAssignment(props) {
                 name="upload-assignment"
                 accept="application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-exce"
                 ref={fileRef}
-                // required
                 style={{ display: 'none' }}
               ></input>
               <label htmlFor="upload-assignment-btn">
@@ -195,8 +193,6 @@ function UploadAssignment(props) {
                   </option>
                 ))}
               </select>
-              {/* <label>{weekNum}</label>
-              <label>{weekId}</label> */}
             </div>
             <div className="due-date">
               <label

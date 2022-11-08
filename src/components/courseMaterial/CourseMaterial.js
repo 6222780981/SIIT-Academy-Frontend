@@ -8,7 +8,6 @@ function CourseMaterial(props) {
   const { weekId, getFileUrlHandler, deleteFileHandler } = props;
   const role = useSelector((store) => store.user.role);
   const [filePath, setFilePath] = useState([]);
-  // console.log(`${process.env.REACT_APP_BACKEND_URL}/week/material?weekId=${weekId}`)
   useEffect(async() => {
     await axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/material?weekId=${weekId}`)
     .then((response) => {
@@ -19,7 +18,6 @@ function CourseMaterial(props) {
         return;
       }
       else if (status !== 'success') {
-        // setMsg(message);
         return;
       }
       else{
@@ -53,7 +51,7 @@ function CourseMaterial(props) {
       setFilePath(tempArr);
     });
 
-    if(!(await deleteFileHandler(materialFilePath))){
+    if((materialFilePath !== "") && !(await deleteFileHandler(materialFilePath))){
       console.log(`error deleting file: ${materialFilePath}`);
       return;
     }
