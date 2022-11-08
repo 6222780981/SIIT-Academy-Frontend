@@ -25,7 +25,8 @@ async function getFileUrlHandler(filePath) {
   const fileRef = ref(storage, filePath);
 
   try {
-    return await getDownloadURL(fileRef);
+    await getDownloadURL(fileRef);
+    return `${process.env.REACT_APP_CLOUD_STORAGE_URL}/${filePath}`;
   } catch {
     return 0;
   }

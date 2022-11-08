@@ -45,7 +45,7 @@ function WeekThumbnail(props) {
 
   return (
     <div className="week-thumbnail">
-      <video src={thumbnailUrl} preload="metadata" onClick={clickHandler} ref={videoRef}></video>
+      <video src={thumbnailUrl} onClick={clickHandler} ref={videoRef}></video>
       <p>Week {order + 1}</p>
       {progress > 0 && (
         <div className="week-thumbnail__progress-container">
