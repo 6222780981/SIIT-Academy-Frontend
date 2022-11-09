@@ -1,11 +1,11 @@
 import './UploadMaterials.css';
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import uploadmaterialbtn from '../../AddResource/icons/upload-material-btn.png';
+import uploadmaterialbtn from '../../../icons/upload-material-btn.png';
 
 function UploadMaterials(props) {
   const fileRef = useRef();
-  
+
   const materialFiles = document.querySelector("input[name='upload-material']");
   const [materialFileNames, setMaterialFileNames] = useState([]);
   const [weekId, setWeekId] = useState('');
@@ -18,7 +18,6 @@ function UploadMaterials(props) {
     setWeekNum(event.target[event.target.selectedIndex].dataset.index);
   };
   const handleUploadMaterial = (event) => {
-    
     var tempMaterialFileNames = [...materialFileNames];
 
     for (let i = 0; i < event.target.files.length; i++) {
@@ -26,7 +25,6 @@ function UploadMaterials(props) {
     }
 
     setMaterialFileNames(tempMaterialFileNames);
-    
   };
 
   const handleClearFile = (event) => {
@@ -152,7 +150,7 @@ function UploadMaterials(props) {
                 Select Week
               </option>
               {weekArr.map((week, index) => (
-                <option data-week-id={week.week_id} data-index={index+1} key={index + 1}>
+                <option data-week-id={week.week_id} data-index={index + 1} key={index + 1}>
                   {index + 1}
                 </option>
               ))}

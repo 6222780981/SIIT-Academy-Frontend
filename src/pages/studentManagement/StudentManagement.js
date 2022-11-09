@@ -1,4 +1,6 @@
 import { useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import readXlsxFile from 'read-excel-file';
 
@@ -7,11 +9,20 @@ import ManagementNav from '../../components/managementNav/ManagementNav';
 import './StudentManagement.css';
 
 function StudentManagement() {
+  const history = useHistory();
+  const role = useSelector((store) => store.user.role);
+
   const [errorMsg, setErrorMsg] = useState();
   const [loading, setLoading] = useState();
 
   const courseIdRef = useRef();
   const fileRef = useRef();
+
+  useEffect(() => {
+    if (role !== 'staff') {
+      history.replace('/login');
+    }
+  }, [role]);
 
   function submitHandler(e) {
     e.preventDefault();

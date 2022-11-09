@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
 import { getStorage, ref, getDownloadURL, uploadBytes, deleteObject } from 'firebase/storage';
 import axios from 'axios';
@@ -21,6 +21,7 @@ import bookIcon from '../../icons/book icon.svg';
 import assignmentIcon from '../../icons/assignment icon.svg';
 import speakerIcon from '../../icons/speaker icon.svg';
 import deleteIcon from '../../icons/delete icon.svg';
+import emailIcon from '../../icons/email icon.svg';
 
 const storage = getStorage();
 
@@ -48,6 +49,7 @@ async function deleteFileHandler(filePath) {
 
 function Course() {
   const { courseId } = useParams();
+  const history = useHistory();
 
   const dispatch = useDispatch();
   const weekArr = useSelector((store) => store.week.weekArr);
@@ -55,7 +57,14 @@ function Course() {
   const role = useSelector((store) => store.user.role);
 
   const [teacherUsername, setTeacherUsername] = useState();
+  const [teacherEmail, setTeacherEmail] = useState();
   const [courseName, setCourseName] = useState();
+
+  useEffect(() => {
+    if (!role) {
+      history.replace('/login');
+    }
+  }, [role]);
 
   useEffect(async () => {
     const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/course?courseId=${courseId}`);
@@ -63,10 +72,11 @@ function Course() {
     const { status, data } = response.data;
 
     if (status === 'success') {
-      const { course_name: courseName, username: teacherUsername } = data.courseArr[0];
+      const { course_name: courseName, username: teacherUsername, email: teacherEmail } = data.courseArr[0];
 
       setCourseName(courseName);
       setTeacherUsername(teacherUsername);
+      setTeacherEmail(teacherEmail);
     }
   }, [courseId]);
 
@@ -162,6 +172,11 @@ function Course() {
             <NavLink to={`/course/${courseId}/announcement`} activeClassName="active">
               <img src={speakerIcon} alt=""></img> <p>Announcement</p>
             </NavLink>
+            {role === 'student' && (
+              <a href={`mailto:${teacherEmail}`} target="_blank" rel="noreferrer">
+                <img src={emailIcon} alt=""></img> <p>Send question</p>
+              </a>
+            )}
           </div>
           <Switch>
             <Route exact path="/course/:courseId/material">

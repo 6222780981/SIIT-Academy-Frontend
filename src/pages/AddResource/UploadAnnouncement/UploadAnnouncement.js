@@ -1,7 +1,7 @@
 import './UploadAnnouncement.css';
 import { useState, useRef } from 'react';
 import axios from 'axios';
-import uploadannouncementbtn from '../../AddResource/icons/upload-material-btn.png';
+import uploadannouncementbtn from '../../../icons/upload-material-btn.png';
 
 function UploadAnnouncement(props) {
   const { uploadFileHandler, courseId } = props;

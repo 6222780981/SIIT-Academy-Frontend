@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useParams, useHistory } from 'react-router-dom';
 import { getStorage, ref, uploadBytes } from 'firebase/storage';
 
 import Navbar from '../../components/navbar/Navbar';
@@ -13,12 +14,17 @@ const storage = getStorage();
 
 function AddResource(props) {
   const { courseId } = useParams();
+  const history = useHistory();
+
+  const role = useSelector((store) => store.user.role);
 
   const [weekArr, setWeekArr] = useState([]);
 
   useEffect(() => {
-    console.log(weekArr);
-  }, [weekArr]);
+    if (role !== 'staff' && role !== 'teacher') {
+      history.replace('/login');
+    }
+  }, [role]);
 
   async function uploadFileHandler(file, filepath) {
     /*

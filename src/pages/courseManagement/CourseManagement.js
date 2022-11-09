@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Navbar from '../../components/navbar/Navbar';
 import ManagementNav from '../../components/managementNav/ManagementNav';
 import deletebtn from '../../icons/delete icon.svg';
@@ -7,6 +8,10 @@ import axios from 'axios';
 import './CourseManagement.css';
 
 const CourseManagement = () => {
+  const history = useHistory();
+
+  const role = useSelector((store) => store.user.role);
+
   const [courseId, setCourseId] = useState('');
   // const [delCourseId, setDelCourseId] = useState('');
   const [courseName, setCourseName] = useState('');
@@ -29,6 +34,13 @@ const CourseManagement = () => {
   // var yearArr = [];
   // var programArr = [];
   // var courseArr = [];
+
+  useEffect(() => {
+    if (role !== 'staff') {
+      history.replace('/login');
+    }
+  }, [role]);
+
   const handleChangeYear = (event) => {
     setYear(event.target.value);
   };
