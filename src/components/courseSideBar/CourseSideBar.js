@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
 import { weekActions } from '../../store/weekSlice';
@@ -11,8 +11,7 @@ function CourseSideBar(props) {
   const { courseId, getFileUrlHandler } = props;
 
   const dispatch = useDispatch();
-
-  const [weekArr, setWeekArr] = useState([]);
+  const weekArr = useSelector((store) => store.week.weekArr);
 
   useEffect(() => {
     dispatch(weekActions.resetStates());
@@ -24,9 +23,7 @@ function CourseSideBar(props) {
 
         if (status === 'success') {
           const weekArr = data.weekArr;
-          setWeekArr(weekArr);
           dispatch(weekActions.setWeekArr(weekArr));
-          dispatch(weekActions.setCurrentWeekId(weekArr[0].week_id));
         }
       })
       .catch((err) => {
