@@ -63,8 +63,14 @@ function VideoPlayer(props) {
       <p className="video-player__title">
         <span>{courseId}</span> {courseName}
       </p>
-      <video src={videoUrl} controls onProgress={progressChangeHandler} onPause={progressChangeHandler} ref={videoRef}></video>
-      {!videoUrl && <p className="video-player__overlay">The video hasn’t been uploaded</p>}
+      <video
+        src={currentWeekId && videoUrl}
+        controls
+        onProgress={progressChangeHandler}
+        onPause={progressChangeHandler}
+        ref={videoRef}
+      ></video>
+      {(!videoUrl || !currentWeekId) && <p className="video-player__overlay">The video hasn’t been uploaded</p>}
     </div>
   );
 }

@@ -33,6 +33,18 @@
   width: 16px;
 }
 
+.course__content--title .week-info p {
+  margin-right: 5px;
+}
+
+.course__content--title .week-info .week-info__delete-btn {
+  width: 30px;
+}
+
+.course__content--title .week-info .week-info__delete-btn:hover {
+  cursor: pointer;
+}
+
 .course__content--teacher {
   font-weight: 700;
   font-size: 16px;

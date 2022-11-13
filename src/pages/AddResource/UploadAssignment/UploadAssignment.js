@@ -1,7 +1,7 @@
 import './UploadAssignment.css';
 import { useState, useRef } from 'react';
 import axios from 'axios';
-import uploadassignmentbtn from '../../AddResource/icons/upload-material-btn.png';
+import uploadassignmentbtn from '../../../icons/upload-material-btn.png';
 
 function UploadAssignment(props) {
   const { uploadFileHandler, weekArr, courseId } = props;
@@ -156,15 +156,16 @@ function UploadAssignment(props) {
                     fontWeight: '300',
                     fontSize: '12px',
                     color: '#672C84',
-                  }}>Browse your file
+                  }}
+                >
+                  Browse your file
                 </label>
                 {assignmentFileNames.length > 0 &&
                   assignmentFileNames.map((assignmentfilename) => (
                     <label value={assignmentfilename} key={assignmentfilename}>
                       {assignmentfilename}
                     </label>
-                  ))
-                }
+                  ))}
                 {assignmentFileNames.length > 0 && (
                   <button className="clearbtn" onClick={handleClearFile}>
                     Clear
@@ -188,7 +189,7 @@ function UploadAssignment(props) {
                   Select Week
                 </option>
                 {weekArr.map((week, index) => (
-                  <option data-week-id= {week.week_id} data-index={index+1} key={index + 1}>
+                  <option data-week-id={week.week_id} data-index={index + 1} key={index + 1}>
                     {index + 1}
                   </option>
                 ))}

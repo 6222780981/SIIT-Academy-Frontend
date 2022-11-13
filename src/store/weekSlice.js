@@ -5,7 +5,15 @@ const weekSlice = createSlice({
   initialState: { weekArr: [], currentWeekId: undefined },
   reducers: {
     setWeekArr(state, action) {
-      state.weekArr = action.payload;
+      const weekArr = action.payload;
+
+      state.weekArr = weekArr;
+
+      if (weekArr.length > 0) {
+        state.currentWeekId = weekArr[0].week_id;
+      } else {
+        state.currentWeekId = undefined;
+      }
     },
     setCurrentWeekId(state, action) {
       state.currentWeekId = action.payload;

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams, useHistory } from 'react-router-dom';
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
 import { getStorage, ref, getDownloadURL, uploadBytes, deleteObject } from 'firebase/storage';
 import axios from 'axios';
+
+import { weekActions } from '../../store/weekSlice';
 
 import Navbar from '../../components/navbar/Navbar';
 import VideoPlayer from '../../components/videoPlayer/VideoPlayer';
@@ -18,6 +20,8 @@ import calenderIcon from '../../icons/calendar icon.svg';
 import bookIcon from '../../icons/book icon.svg';
 import assignmentIcon from '../../icons/assignment icon.svg';
 import speakerIcon from '../../icons/speaker icon.svg';
+import deleteIcon from '../../icons/delete icon.svg';
+import emailIcon from '../../icons/email icon.svg';
 
 const storage = getStorage();
 
@@ -45,12 +49,22 @@ async function deleteFileHandler(filePath) {
 
 function Course() {
   const { courseId } = useParams();
+  const history = useHistory();
 
+  const dispatch = useDispatch();
   const weekArr = useSelector((store) => store.week.weekArr);
-  const currentWeekId =  useSelector((store) => store.week.currentWeekId);
+  const currentWeekId = useSelector((store) => store.week.currentWeekId);
+  const role = useSelector((store) => store.user.role);
 
   const [teacherUsername, setTeacherUsername] = useState();
+  const [teacherEmail, setTeacherEmail] = useState();
   const [courseName, setCourseName] = useState();
+
+  useEffect(() => {
+    if (!role) {
+      history.replace('/login');
+    }
+  }, [role]);
 
   useEffect(async () => {
     const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/course?courseId=${courseId}`);
@@ -58,10 +72,11 @@ function Course() {
     const { status, data } = response.data;
 
     if (status === 'success') {
-      const { course_name: courseName, username: teacherUsername } = data.courseArr[0];
+      const { course_name: courseName, username: teacherUsername, email: teacherEmail } = data.courseArr[0];
 
       setCourseName(courseName);
       setTeacherUsername(teacherUsername);
+      setTeacherEmail(teacherEmail);
     }
   }, [courseId]);
 
@@ -101,6 +116,22 @@ function Course() {
     }
   }
 
+  function deleteWeekHandler() {
+    axios
+      .delete(`${process.env.REACT_APP_BACKEND_URL}/week`, { data: { courseId, weekId: currentWeekId } })
+      .then((response) => {
+        const { status, message } = response.data;
+
+        if (status === 'success') {
+          dispatch(weekActions.setWeekArr(weekArr.filter((week) => week.week_id !== currentWeekId)));
+          return;
+        }
+
+        console.log(message);
+      })
+      .catch((err) => console.log(err.message));
+  }
+
   return (
     <div className="course">
       <Navbar></Navbar>
@@ -113,17 +144,20 @@ function Course() {
             courseName={courseName}
             getFileUrlHandler={getFileUrlHandler}
           ></VideoPlayer>
-          <div className="course__content--title">
-            <p>
-              Week {weekIndex + 1} - {weekTitle}
-            </p>
-            <div className="week-info">
-              <img src={eyeIcon} alt=""></img>
-              <p style={{ marginRight: '5px' }}>{materialIdArr ? `${materialIdArr.length} Materials` : ''}</p>
-              <img src={calenderIcon} alt=""></img>
-              <p>{new Date(weekDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          {currentWeekId && (
+            <div className="course__content--title">
+              <p>
+                Week {weekIndex + 1} - {weekTitle}
+              </p>
+              <div className="week-info">
+                <img src={eyeIcon} alt=""></img>
+                <p>{materialIdArr ? `${materialIdArr.length} Materials` : ''}</p>
+                <img src={calenderIcon} alt=""></img>
+                <p>{new Date(weekDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                {role !== 'student' && <img src={deleteIcon} alt="" className="week-info__delete-btn" onClick={deleteWeekHandler}></img>}
+              </div>
             </div>
-          </div>
+          )}
           <div className="course__content--teacher">
             <p>{teacherUsername}</p>
             <p className="role">Teacher</p>
@@ -138,12 +172,17 @@ function Course() {
             <NavLink to={`/course/${courseId}/announcement`} activeClassName="active">
               <img src={speakerIcon} alt=""></img> <p>Announcement</p>
             </NavLink>
+            {role === 'student' && (
+              <a href={`mailto:${teacherEmail}`} target="_blank" rel="noreferrer">
+                <img src={emailIcon} alt=""></img> <p>Send question</p>
+              </a>
+            )}
           </div>
           <Switch>
             <Route exact path="/course/:courseId/material">
-              <CourseMaterial 
-                weekId={currentWeekId} 
-                getFileUrlHandler={getFileUrlHandler} 
+              <CourseMaterial
+                weekId={currentWeekId}
+                getFileUrlHandler={getFileUrlHandler}
                 deleteFileHandler={deleteFileHandler}
               ></CourseMaterial>
             </Route>
@@ -158,10 +197,10 @@ function Course() {
               ></CourseAssignment>
             </Route>
             <Route exact path="/course/:courseId/announcement">
-              <CourseAnnouncement 
-                weekId={currentWeekId} 
-                courseId={courseId} 
-                getFileUrlHandler={getFileUrlHandler} 
+              <CourseAnnouncement
+                weekId={currentWeekId}
+                courseId={courseId}
+                getFileUrlHandler={getFileUrlHandler}
                 deleteFileHandler={deleteFileHandler}
               ></CourseAnnouncement>
             </Route>
