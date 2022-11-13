@@ -69,7 +69,7 @@ function CourseMaterial(props) {
             <div className="material-container">
               <button className="download-btn" value={file.material_file_path} onClick={handleDownloadMaterial}>
                 <img src={downloadIcon} width="25px" />
-                {file.material_file_path.split('/')[3]}
+                <span className='text'>{file.material_file_path.split('/')[3]}</span>
               </button>
               {role === 'teacher' ||
                 ('staff' && (
