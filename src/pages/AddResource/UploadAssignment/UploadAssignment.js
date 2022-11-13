@@ -67,6 +67,11 @@ function UploadAssignment(props) {
             return;
           }
           setMsg(`Successfully added assignment(s) to ${courseId}`);
+          setTitle('');
+          setDescription('');
+          setWeekId('');
+          setWeekNum('');
+          setDueDate(new Date());
         });
     } catch (err) {
       console.log(err.message);

@@ -32,9 +32,6 @@ function UploadAnnouncement(props) {
   async function handleConfirmUploadAnnouncement(e) {
     e.preventDefault();
     const fileList = announcementFiles.files;
-    console.log(fileList);
-    console.log(announcementFileNames);
-    console.log(announcementFilePaths);
     // console.log(materialFileNames);
     // return;
     if (fileList.length !== 0) {
@@ -61,6 +58,9 @@ function UploadAnnouncement(props) {
             return;
           }
           setMsg(`Successfully added announcement to ${courseId}`);
+          setContent('');
+          setAnnouncementFileNames([]);
+          setAnnouncementFilePaths([]);
         });
     } catch (err) {
       console.log(err.message);

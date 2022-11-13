@@ -67,6 +67,9 @@ function UploadMaterials(props) {
           return;
         }
         setMsg(`Successfully added material(s) to ${courseId}`);
+        setWeekId('');
+        setWeekNum('');
+        setMaterialFileNames([]);
       });
     } catch (err) {
       console.log(err.message);
