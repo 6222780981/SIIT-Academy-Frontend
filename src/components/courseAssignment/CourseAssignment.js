@@ -109,7 +109,6 @@ function CourseAssignment(props) {
     event.preventDefault();
     var fileUrl = await getFileUrlHandler(event.target.value);
     console.log(fileUrl);
-    return;
     window.open(fileUrl, '_blank', 'noopener,noreferrer');
   }
   async function handleConfirmUploadWork(event) {
