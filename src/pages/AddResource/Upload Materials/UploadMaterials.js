@@ -43,7 +43,8 @@ function UploadMaterials(props) {
       materialFilePaths = [...materialFilePaths, `${courseId}/week${weekNum}/material/${materialFileNames[i]}`];
     }
     console.log(materialFilePaths);
-    if (fileList.length === 0 && weekId === '') {
+    if (fileList.length === 0 || weekId === '') {
+      setMsg("Please select week");
       return;
     }
     for (let i = 0; i < fileList.length; i++) {
@@ -147,7 +148,7 @@ function UploadMaterials(props) {
             >
               Upload to Week
             </label>
-            <select onChange={handleChangeWeek}>
+            <select onChange={handleChangeWeek} required>
               <option selected disabled={true} value="" hidden>
                 Select Week
               </option>

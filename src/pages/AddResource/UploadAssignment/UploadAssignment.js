@@ -183,7 +183,7 @@ function UploadAssignment(props) {
               >
                 Upload to Week
               </label>
-              <select onChange={handleChangeWeek}>
+              <select onChange={handleChangeWeek} required>
                 <option selected disabled={true} value="" hidden>
                   Select Week
                 </option>
@@ -205,7 +205,7 @@ function UploadAssignment(props) {
               >
                 Due Date
               </label>
-              <input className="due-date-calendar" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)}></input>
+              <input className="due-date-calendar" type="date" value={dueDate} required onChange={(e) => setDueDate(e.target.value)}></input>
             </div>
           </div>
         </div>
