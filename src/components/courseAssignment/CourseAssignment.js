@@ -218,7 +218,7 @@ function CourseAssignment(props) {
             onClick={handleDownloadMaterial}>
             <img src={downloadIcon} width='25px'/>{assignment.file_path.split('/')[3]}
           </button>}
-          {role !== 'teacher' || 'staff' &&<div className='work-container'>
+          {role === "student" && <div className='work-container'>
             <label style={{
               fontWeight: '700',
               fontSize: '16px',
