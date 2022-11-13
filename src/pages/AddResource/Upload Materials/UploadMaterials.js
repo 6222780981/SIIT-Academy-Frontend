@@ -13,6 +13,10 @@ function UploadMaterials(props) {
   const [msg, setMsg] = useState('');
   const { uploadFileHandler, weekArr, courseId } = props;
 
+  const delay = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
+
   const handleChangeWeek = (event) => {
     setWeekId(event.target[event.target.selectedIndex].dataset.weekId);
     setWeekNum(event.target[event.target.selectedIndex].dataset.index);
@@ -74,6 +78,8 @@ function UploadMaterials(props) {
     } catch (err) {
       console.log(err.message);
     }
+    await delay(3000);
+    setMsg('');
   }
 
   return (
@@ -173,6 +179,7 @@ function UploadMaterials(props) {
             fontSize: '14px',
             color: '#672C84',
             paddingTop: '10px',
+            position:'absolute'
           }}
         >
           {msg}

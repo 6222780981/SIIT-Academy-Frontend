@@ -12,6 +12,9 @@ function UploadAnnouncement(props) {
   const [announcementFileNames, setAnnouncementFileNames] = useState([]);
   const [msg, setMsg] = useState('');
 
+  const delay = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
   const handleUploadAnnouncement = (event) => {
     var tempAnnouncementFilePaths = [...announcementFilePaths];
     var tempAnnouncementFileNames = [...announcementFileNames];
@@ -22,7 +25,6 @@ function UploadAnnouncement(props) {
 
     setAnnouncementFilePaths(tempAnnouncementFilePaths);
     setAnnouncementFileNames(tempAnnouncementFileNames);
-    // console.log(announcementFiles);
   };
   const handleClearFile = (event) => {
     setAnnouncementFilePaths([]);
@@ -32,12 +34,8 @@ function UploadAnnouncement(props) {
   async function handleConfirmUploadAnnouncement(e) {
     e.preventDefault();
     const fileList = announcementFiles.files;
-    // console.log(materialFileNames);
-    // return;
     if (fileList.length !== 0) {
       for (let i = 0; i < fileList.length; i++) {
-        // console.log(fileList.item(i));
-        // console.log(fileList.item(i).name)
         if (!(await uploadFileHandler(fileList.item(i), `${courseId}/announcement/${fileList.item(i).name}`))) {
           console.log(`error uploading file: ${`${courseId}/announcement/${fileList.item(i).name}`}`);
           return;
@@ -65,6 +63,8 @@ function UploadAnnouncement(props) {
     } catch (err) {
       console.log(err.message);
     }
+    await delay(3000);
+    setMsg('');
   }
   return (
     <form className="confirm-upload-announcement" onSubmit={handleConfirmUploadAnnouncement}>
@@ -162,6 +162,7 @@ function UploadAnnouncement(props) {
             fontSize: '14px',
             color: '#672C84',
             paddingTop: '10px',
+            position:'absolute'
           }}
         >
           {msg}

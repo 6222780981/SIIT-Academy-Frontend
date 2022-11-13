@@ -32,7 +32,9 @@ function UploadAssignment(props) {
     setAssignmentFileNames([]);
     assignmentFiles.value = null;
   };
-
+  const delay = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
   async function handleConfirmUploadAssignment(e) {
     e.preventDefault();
     const fileList = assignmentFiles.files;
@@ -69,13 +71,14 @@ function UploadAssignment(props) {
           setMsg(`Successfully added assignment(s) to ${courseId}`);
           setTitle('');
           setDescription('');
-          setWeekId('');
-          setWeekNum('');
           setDueDate(new Date());
+          
         });
     } catch (err) {
       console.log(err.message);
     }
+    await delay(3000);
+    setMsg('');
   }
   return (
     <form className="confirm-upload-assignment" onSubmit={handleConfirmUploadAssignment}>
@@ -226,6 +229,7 @@ function UploadAssignment(props) {
             fontSize: '14px',
             color: '#672C84',
             paddingTop: '10px',
+            position:'absolute'
           }}
           className="status-msg"
         >
