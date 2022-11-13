@@ -24,8 +24,14 @@ function CourseMaterial(props) {
   }, [weekId]);
 
   async function handleDownloadMaterial(event) {
+    console.log(event.target.value);
     var fileUrl = await getFileUrlHandler(event.target.value);
     console.log(fileUrl);
+    if (fileUrl === 0){
+      console.log("cannot get file");
+      return;
+    }
+    
     window.open(fileUrl, '_blank', 'noopener,noreferrer');
   }
 
@@ -69,7 +75,7 @@ function CourseMaterial(props) {
             <div className="material-container">
               <button className="download-btn" value={file.material_file_path} onClick={handleDownloadMaterial}>
                 <img src={downloadIcon} width="25px" />
-                <span className='text'>{file.material_file_path.split('/')[3]}</span>
+                {file.material_file_path.split('/')[3]}
               </button>
               {role === 'teacher' ||
                 ('staff' && (

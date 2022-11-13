@@ -63,7 +63,7 @@ function CourseAnnouncement(props) {
             <label className='announcement-date'>{post.announcement_date.slice(0,10)}</label>
             {role === 'teacher' || 'staff' && <input 
               className='delete-btn'
-              type="image" 
+              type="image"
               value={post.announcement_id+"|"+post.file_path}  
               src={deleteIcon} 
               onClick={handleDeleteAnnouncement}
@@ -72,7 +72,9 @@ function CourseAnnouncement(props) {
           <label style={{
             paddingLeft:'10px',
             paddingTop:'10px',
-            paddingBottom:'10px'
+            paddingBottom:'10px',
+            flexWrap:'wrap',
+            paddingRight:'40px'
           }}>{post.content}
           </label>
           {post.file_path && <button 

@@ -208,7 +208,8 @@ function CourseAssignment(props) {
             />}
           </div>
           <label style={{
-            paddingBottom: '10px'
+            paddingBottom: '10px',
+            paddingRight:'40px'
             }}>{assignment.description}
           </label>
           {assignment.file_path && <button 
