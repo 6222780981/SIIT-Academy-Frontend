@@ -61,7 +61,7 @@ function CourseAnnouncement(props) {
         <div className='announcement-post'>
           <div className='announcement-post-header'>
             <label className='announcement-date'>{post.announcement_date.slice(0,10)}</label>
-            {role === 'teacher' || 'staff' && <input 
+            {role !== "student" && <input 
               className='delete-btn'
               type="image"
               value={post.announcement_id+"|"+post.file_path}  

@@ -200,7 +200,7 @@ function CourseAssignment(props) {
               paddingBottom:'10px'
               }}>Assignment {index+1}: {assignment.assignment_title} | Due Date: {assignment.due_date.slice(0,10)}
             </label>
-            {role === 'teacher' || 'staff' &&<input 
+            {role !== "student" &&<input 
               type="image" 
               value={assignment.assignment_id+"|"+assignment.file_path}  
               src={deleteIcon} 

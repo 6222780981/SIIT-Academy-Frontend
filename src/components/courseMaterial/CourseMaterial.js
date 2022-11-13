@@ -77,8 +77,7 @@ function CourseMaterial(props) {
                 <img src={downloadIcon} width="25px" />
                 {file.material_file_path.split('/')[3]}
               </button>
-              {role === 'teacher' ||
-                ('staff' && (
+              {role !== "student" && 
                   <input
                     className="delete-btn"
                     type="image"
@@ -86,7 +85,7 @@ function CourseMaterial(props) {
                     src={deleteIcon}
                     onClick={handleDeleteMaterial}
                   />
-                ))}
+              }
             </div>
           ))}
       </div>
