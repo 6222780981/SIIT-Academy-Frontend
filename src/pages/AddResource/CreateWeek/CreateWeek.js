@@ -45,14 +45,12 @@ function CreateWeek(props) {
         return { ...week, week_title: week.week_title || week.title };
       });
     setLocalWeekArr(filteredLocalWeekArr);
-
     async function modifyWeekHandler(week, i) {
       if (week.isNew) {
         if (week.file && !(await uploadFileHandler(week.file, `${courseId}/week${i + 1}/video/${week.file.name}`))) {
           console.log(`error uploading file: ${`${courseId}/week${i + 1}/video/${week.file.name}`}`);
           return;
         }
-
         try {
           const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/week`, {
             courseId,

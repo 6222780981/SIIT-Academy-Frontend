@@ -7,8 +7,8 @@ function UploadAssignment(props) {
   const { uploadFileHandler, weekArr, courseId } = props;
 
   const fileRef = useRef();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [tempTitle, setTitle] = useState('');
+  const [tmepDescription, setDescription] = useState('');
   const assignmentFiles = document.querySelector("input[name='upload-assignment']");
   const [assignmentFileNames, setAssignmentFileNames] = useState([]);
   const [weekId, setWeekId] = useState('');
@@ -38,6 +38,9 @@ function UploadAssignment(props) {
   async function handleConfirmUploadAssignment(e) {
     e.preventDefault();
     const fileList = assignmentFiles.files;
+    const title = tempTitle.replaceAll("'", '\'\'');
+    const description = tmepDescription.replaceAll("'", '\'\'');
+    
     var assignmentFilePaths = [];
     for (let i = 0; i < assignmentFileNames.length; i++) {
       assignmentFilePaths = [...assignmentFilePaths, `${courseId}/week${weekNum}/assignment/${assignmentFileNames[i]}`];
@@ -112,7 +115,7 @@ function UploadAssignment(props) {
               type="text"
               multiple="multiple"
               required
-              value={title}
+              value={tempTitle}
               onChange={(e) => setTitle(e.target.value)}
             />
             <label
@@ -131,7 +134,7 @@ function UploadAssignment(props) {
               className="description-textbox"
               type="text"
               placeholder="Description"
-              value={description}
+              value={tmepDescription}
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>

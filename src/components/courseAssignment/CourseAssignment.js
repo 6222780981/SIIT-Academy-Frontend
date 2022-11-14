@@ -322,6 +322,11 @@ function CourseAssignment(props) {
               </label>
             )}
           </div>}
+          {role !== "student" && <div className='student-work-container'>
+          <button className="student-work-btn" value={assignment.assignment_id} onClick={handleDownloadMaterial}>
+            View Student Work
+          </button>
+          </div>}
         </div>
       ))}
     </div>

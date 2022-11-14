@@ -6,7 +6,7 @@ import uploadannouncementbtn from '../../../icons/upload-material-btn.png';
 function UploadAnnouncement(props) {
   const { uploadFileHandler, courseId } = props;
   const fileRef = useRef();
-  const [content, setContent] = useState('');
+  const [tempContent, setContent] = useState('');
   const announcementFiles = document.querySelector("input[name='upload-announcement']");
   const [announcementFilePaths, setAnnouncementFilePaths] = useState([]);
   const [announcementFileNames, setAnnouncementFileNames] = useState([]);
@@ -15,6 +15,7 @@ function UploadAnnouncement(props) {
   const delay = ms => new Promise(
     resolve => setTimeout(resolve, ms)
   );
+
   const handleUploadAnnouncement = (event) => {
     var tempAnnouncementFilePaths = [...announcementFilePaths];
     var tempAnnouncementFileNames = [...announcementFileNames];
@@ -34,6 +35,8 @@ function UploadAnnouncement(props) {
   async function handleConfirmUploadAnnouncement(e) {
     e.preventDefault();
     const fileList = announcementFiles.files;
+    const content = tempContent.replaceAll("'", '\'\'');
+    console.log(tempContent);
     if (fileList.length !== 0) {
       for (let i = 0; i < fileList.length; i++) {
         if (!(await uploadFileHandler(fileList.item(i), `${courseId}/announcement/${fileList.item(i).name}`))) {
@@ -45,6 +48,7 @@ function UploadAnnouncement(props) {
     try {
       var filePath = announcementFilePaths;
       var announcementDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
+      
       console.log(`${process.env.REACT_APP_BACKEND_URL}/course/announcement`, { courseId, announcementDate, content, filePath });
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/course/announcement`, { courseId, announcementDate, content, filePath })
@@ -97,7 +101,7 @@ function UploadAnnouncement(props) {
               className="description-textbox"
               type="text"
               placeholder="Description"
-              value={content}
+              value={tempContent}
               onChange={(e) => setContent(e.target.value)}
             ></textarea>
           </div>

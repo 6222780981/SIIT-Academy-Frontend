@@ -68,3 +68,18 @@ label[for='upload-work-btn']:hover {
   border-radius: 8px;
   width: 7%;
 }
+.student-work-btn {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  color: #F5F5F5;
+  background: rgba(175, 32, 53, 0.9);
+  border-radius: 10px;
+  padding: 10px;
+  margin-right: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.student-work-btn:hover{
+  opacity: 0.5;
+}
