@@ -31,7 +31,7 @@ function Navbar(props) {
   return (
     <nav className="navbar">
       <Link to={userId ? '/home' : '/information'}>
-        <img src={logo} className="navbar__logo"></img>
+        <img src={`${process.env.REACT_APP_CLOUD_STORAGE_URL}/Others/siitlogo.png`} className="navbar__logo"></img>
       </Link>
       {showTitle && (
         <p className="navbar__title">
