@@ -14,8 +14,6 @@ function CourseSideBar(props) {
   const weekArr = useSelector((store) => store.week.weekArr);
 
   useEffect(() => {
-    dispatch(weekActions.resetStates());
-
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/week?course_id=${courseId}`)
       .then((response) => {

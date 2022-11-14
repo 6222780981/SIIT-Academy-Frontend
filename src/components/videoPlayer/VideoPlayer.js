@@ -11,6 +11,7 @@ function VideoPlayer(props) {
 
   const [videoUrl, setVideoUrl] = useState();
   const [doneInitial, setDoneInitial] = useState(false);
+  const [showControl, setShowControl] = useState(false);
 
   const videoRef = useRef();
 
@@ -58,19 +59,24 @@ function VideoPlayer(props) {
     }, 500);
   }
 
+  function canPlayHandler() {
+    setShowControl(true);
+  }
+
   return (
     <div className="video-player">
       <p className="video-player__title">
         <span>{courseId}</span> {courseName}
       </p>
       <video
-        src={currentWeekId && videoUrl}
-        controls
+        src={videoUrl}
+        controls={showControl}
         onProgress={progressChangeHandler}
         onPause={progressChangeHandler}
+        onCanPlay={canPlayHandler}
         ref={videoRef}
       ></video>
-      {(!videoUrl || !currentWeekId) && <p className="video-player__overlay">The video hasn’t been uploaded</p>}
+      {!videoUrl && <p className="video-player__overlay">The video hasn’t been uploaded</p>}
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+
+import { weekActions } from '../../store/weekSlice';
 
 import Navbar from '../../components/navbar/Navbar';
 import HomeStaff from './homeStaff/HomeStaff';
@@ -9,6 +11,7 @@ import './Home.css';
 
 function Home() {
   const history = useHistory();
+  const dispatch = useDispatch();
   const role = useSelector((store) => store.user.role);
 
   useEffect(() => {
@@ -16,6 +19,10 @@ function Home() {
       history.replace('/login');
     }
   }, [role]);
+
+  useEffect(() => {
+    dispatch(weekActions.resetStates());
+  }, [dispatch]);
 
   return (
     <div className="home">
