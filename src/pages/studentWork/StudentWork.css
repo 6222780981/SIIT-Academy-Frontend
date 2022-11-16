@@ -1,0 +1,77 @@
+.student-work {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 10px 30px 40px;
+}
+
+.student-work__title {
+  text-align: center;
+  font-weight: 600;
+  font-size: 24px;
+  color: #a2842a;
+  margin-bottom: 60px;
+}
+
+.student-work__submission-container {
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.student-work__submission-container--title {
+  font-weight: 600;
+  font-size: 20px;
+  color: #646464;
+  margin-bottom: 46px;
+}
+
+.student-work__submission-container--submission {
+  display: flex;
+  align-items: center;
+  margin-bottom: 33px;
+}
+
+.student-work__submission-container--submission p {
+  font-size: 20px;
+  color: #646464;
+  width: 400px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 20px;
+}
+
+.student-work__submission-container--submission a {
+  font-weight: 700;
+  font-size: 14px;
+  color: #666666;
+  padding: 9px 30px 9px 43px;
+  background: #d9d9d9;
+  border-radius: 10px;
+  max-width: 400px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+}
+
+.student-work__submission-container--submission a::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  position: absolute;
+  left: 10px;
+}
+
+.student-work__submission-container--back {
+  background: rgba(175, 32, 53, 0.9);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #fffdf6;
+  padding: 7px 14px;
+  margin: 0 auto;
+  display: block;
+  margin-top: 66px;
+}
