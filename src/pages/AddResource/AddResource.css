@@ -3,11 +3,27 @@
   margin: 0 auto;
   padding: 10px 30px 40px;
 }
-
-.add-resource__title {
-  text-align: center;
+.add-resource_header{
+  display: flex;
+  align-items: center;
   margin-top: 60px;
   margin-bottom: 65px;
+}
+.back__button-container--course-link{
+  font-weight: 600;
+  font-size: 24px;
+  color: #a2842a;
+  margin-left: 90px;
+  
+}
+.back__button-container--course-link:hover{
+  opacity: 0.6;
+}
+.add-resource__title {
+  position: absolute;
+  align-items: center;
+  left: 46%;
+  margin-right: -50%;
   font-weight: 600;
   font-size: 24px;
   color: #a2842a;

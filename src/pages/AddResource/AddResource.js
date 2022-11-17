@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
 import { getStorage, ref, uploadBytes } from 'firebase/storage';
 
 import Navbar from '../../components/navbar/Navbar';
@@ -60,7 +60,12 @@ function AddResource(props) {
   return (
     <div className="add-resource">
       <Navbar></Navbar>
-      <p className="add-resource__title">Add Resources</p>
+      <div className='add-resource_header'>
+        <Link to={`/course/${courseId}`} className="back__button-container--course-link">
+          &lt;&lt; Back
+        </Link>
+        <p className="add-resource__title">Add Resources</p>
+      </div>
       <div className="add-resource__container">
         <CreateWeek uploadFileHandler={uploadFileHandler} setWeekArr={setWeekArr} courseId={courseId}></CreateWeek>
         <UploadMaterials uploadFileHandler={uploadFileHandler} weekArr={weekArr} courseId={courseId}></UploadMaterials>
