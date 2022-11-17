@@ -9,6 +9,7 @@ import CourseManagement from './pages/courseManagement/CourseManagement';
 import StudentManagement from './pages/studentManagement/StudentManagement';
 import Course from './pages/course/Course';
 import AddResource from './pages/AddResource/AddResource';
+import StudentWork from './pages/studentWork/StudentWork';
 
 function App() {
   return (
@@ -33,6 +34,9 @@ function App() {
       </Route>
       <Route path="/course/:courseId">
         <Course></Course>
+      </Route>
+      <Route path="/assignment/:assignmentId">
+        <StudentWork></StudentWork>
       </Route>
       <Route path="/">
         <Redirect to="/infomation"></Redirect>

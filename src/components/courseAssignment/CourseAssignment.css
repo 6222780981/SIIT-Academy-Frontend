@@ -1,30 +1,30 @@
-.course-assignment-container{
+.course-assignment-container {
   display: flex;
   flex-direction: column;
   justify-content: left;
 }
 
-.assignment-box{
+.assignment-box {
   display: flex;
   flex-direction: column;
   justify-content: left;
-  background: #F5F5F5;
+  background: #f5f5f5;
   border-radius: 20px;
   border-color: #3b3b3b;
   padding: 15px;
 }
-.assignment-box-header{
+.assignment-box-header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.download-work-btn{
+.download-work-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  background: #D9D9D9;
+  background: #d9d9d9;
   border-radius: 10px;
   padding: 10px;
   width: 40%;
@@ -32,7 +32,7 @@
   font-size: 14px;
   font-weight: 500;
 }
-.download-work-btn:hover{
+.download-work-btn:hover {
   background: #d9d9d99f;
 }
 
@@ -43,7 +43,7 @@
   border: 1px dashed #672c84;
   border-radius: 8px;
   padding: 15px 10px;
-  width:30%;
+  width: 30%;
   height: 50%;
 }
 label[for='upload-work-btn'] {
@@ -61,25 +61,22 @@ label[for='upload-work-btn']:hover {
   justify-content: center;
   width: 100%;
 }
-.confirm-submit{
+.confirm-submit {
   background: rgba(175, 32, 53, 0.9);
-  color: #F5F5F5;
+  color: #f5f5f5;
   margin-top: 10px;
   border-radius: 8px;
   width: 7%;
 }
 .student-work-btn {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  color: #F5F5F5;
+  color: #f5f5f5;
   background: rgba(175, 32, 53, 0.9);
   border-radius: 10px;
-  padding: 10px;
+  padding: 10px 15px;
   margin-right: 10px;
   font-size: 14px;
   font-weight: 500;
 }
-.student-work-btn:hover{
+.student-work-btn:hover {
   opacity: 0.5;
 }
