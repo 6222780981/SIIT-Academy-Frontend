@@ -9,6 +9,10 @@
   justify-content: space-between;
 }
 
+.course__content {
+  max-width: 1120px;
+}
+
 .course__content--title {
   display: flex;
   justify-content: space-between;
