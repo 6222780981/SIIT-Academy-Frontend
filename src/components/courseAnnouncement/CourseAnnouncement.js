@@ -77,13 +77,14 @@ function CourseAnnouncement(props) {
             paddingRight:'40px'
           }}>{post.content}
           </label>
-          {post.file_path && <button 
+          {post.file_path && <div className='announcement-file'>
+          <button 
             className='download-work-btn' 
             value={post.file_path}
-            
             onClick={handleDownloadMaterial}>
             <img src={downloadIcon} width='25px'/>{post.file_path.split('/')[2]}
-          </button>}
+          </button>
+          </div>}
           {/* if this is not the last element then display horizontal line */}
           {index+1 < announcementData.length && <hr/>}
         </div>

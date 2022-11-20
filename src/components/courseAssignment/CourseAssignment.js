@@ -32,7 +32,9 @@ function CourseAssignment(props) {
       setFilePath(data);
     });
   }, [weekId]);
-
+  const delay = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
   //get list of submissions
   if (filePath.length !== 0 && submissionData.length === 0) {
     console.log(
@@ -153,6 +155,8 @@ function CourseAssignment(props) {
     } catch (err) {
       console.log(err.message);
     }
+    await delay(3000)
+    setMsg('')
   }
   async function handleConfirmDeleteWork(event) {
     event.preventDefault();
@@ -178,6 +182,8 @@ function CourseAssignment(props) {
       setMsg(`Successfully deleted work from ${courseId}`);
       setSubmissionData([]);
     });
+    await delay(3000)
+    setMsg('')
   }
   return (
     <div className="course-assignment-container">
@@ -224,10 +230,12 @@ function CourseAssignment(props) {
               {assignment.description}
             </label>
             {assignment.file_path && (
-              <button className="download-work-btn" value={assignment.file_path} onClick={handleDownloadMaterial}>
-                <img src={downloadIcon} width="25px" />
-                {assignment.file_path.split('/')[3]}
-              </button>
+              <div className='assignment-file'>
+                <button className="download-work-btn" value={assignment.file_path} onClick={handleDownloadMaterial}>
+                  <img src={downloadIcon} width="25px" />
+                  {assignment.file_path.split('/')[3]}
+                </button>
+              </div>
             )}
             {role === 'student' && (
               <div className="work-container">
