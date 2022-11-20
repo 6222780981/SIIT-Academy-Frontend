@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import Navbar from '../../components/navbar/Navbar';
@@ -9,7 +10,15 @@ function StudentWork(props) {
   const { assignmentId } = useParams();
   const history = useHistory();
 
+  const role = useSelector((store) => store.user.role);
+
   const [submissionArr, setSubmissionArr] = useState([]);
+
+  useEffect(() => {
+    if (!role) {
+      history.replace('/login');
+    }
+  }, [role]);
 
   useEffect(async () => {
     const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/all-submission?assignmentId=${assignmentId}`);
