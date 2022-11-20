@@ -39,9 +39,6 @@ function CourseAssignment(props) {
   );
   //get list of submissions
   useEffect(async () => {
-    // console.log(
-    //   `${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`
-    // );
     await axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`)
       .then((response) => {
@@ -108,7 +105,6 @@ function CourseAssignment(props) {
   const handleClearFile = (event) => {
     setSubmissionFileNames([]);
     submissionFiles.value = null;
-    // console.log(submissionFiles.files);
   };
   async function handleDownloadMaterial(event) {
     event.preventDefault();
@@ -129,8 +125,6 @@ function CourseAssignment(props) {
       return;
     }
     for (let i = 0; i < fileList.length; i++) {
-      // console.log(fileList.item(i));
-      // console.log(fileList.item(i).name);
       if (
         fileList.length !== 0 &&
         !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekIndex + 1}/assignment/submission/${fileList.item(i).name}`))
@@ -155,7 +149,6 @@ function CourseAssignment(props) {
           }
           setMsg(`Successfully submitted work(s) to ${courseId}`);
           setDisplayUnsubmitBtn(1)
-          // console.log(filePath)
           setSubmissionData(filePath[0])
         });
     } catch (err) {
@@ -163,23 +156,19 @@ function CourseAssignment(props) {
     }
     await delay(5000)
     setMsg('')
-    // submissionFiles.value = null;
   }
-  // console.log(submissionData)
   async function handleConfirmDeleteWork(event) {
     event.preventDefault();
     const assignmentId = +event.target.value;
     // delete file from Firebase
-    // console.log(submissionData)
     if (submissionData !== "") {
       if (!(await deleteFileHandler(submissionData))) {
         console.log(`error deleting file: ${submissionData}`);
         return;
       }
     }
-    // console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission`, { userId, assignmentId });
+
     axios.delete(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission`, { data: { userId, assignmentId } }).then((response) => {
-      // console.log(response.data);
       const { status, data, message } = response.data;
       if (status !== 'success') {
         setMsg(message);
