@@ -15,7 +15,8 @@ function CourseAssignment(props) {
   const [filePath, setFilePath] = useState([]);
   const [submissionFileNames, setSubmissionFileNames] = useState([]);
   const submissionFiles = document.querySelector("input[name='upload-work']");
-  const [submissionData, setSubmissionData] = useState([]);
+  const [submissionData, setSubmissionData] = useState("");
+  const [displayUnsubmitBtn, setDisplayUnsubmitBtn] = useState(0);
   const [msg, setMsg] = useState('');
 
   useEffect(async () => {
@@ -38,26 +39,24 @@ function CourseAssignment(props) {
   );
   //get list of submissions
   useEffect(async () => {
-    console.log(
-      `${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`
-    );
+    // console.log(
+    //   `${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`
+    // );
     await axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`)
       .then((response) => {
-        console.log(response.data);
         const { status, data, message } = response.data;
-        console.log(data);
         if (status === 'error') {
           return;
         }
         else if (status === 'fail'){
-          setSubmissionData('');
+          setSubmissionData("");
+          setDisplayUnsubmitBtn(0);
         }
         else if (status === 'success'){
-          setSubmissionData(data.submissionArr);
+          setSubmissionData(data.submissionArr[0].file_path);
+          setDisplayUnsubmitBtn(1);
         }
-        
-        
       });
   }, [userId, filePath]);
 
@@ -67,11 +66,8 @@ function CourseAssignment(props) {
     for (let i = 0; i < event.target.files.length; i++) {
       tempSubmissionFileNames = [...tempSubmissionFileNames, event.target.files[i].name];
     }
-    console.log(tempSubmissionFileNames);
     setSubmissionFileNames(tempSubmissionFileNames);
-    setMsg('');
   };
-
   async function handleDeleteAssignment(event) {
     event.preventDefault();
     const dataArr = event.target.value.split('|');
@@ -112,7 +108,7 @@ function CourseAssignment(props) {
   const handleClearFile = (event) => {
     setSubmissionFileNames([]);
     submissionFiles.value = null;
-    console.log(submissionFiles.files);
+    // console.log(submissionFiles.files);
   };
   async function handleDownloadMaterial(event) {
     event.preventDefault();
@@ -133,8 +129,8 @@ function CourseAssignment(props) {
       return;
     }
     for (let i = 0; i < fileList.length; i++) {
-      console.log(fileList.item(i));
-      console.log(fileList.item(i).name);
+      // console.log(fileList.item(i));
+      // console.log(fileList.item(i).name);
       if (
         fileList.length !== 0 &&
         !(await uploadFileHandler(fileList.item(i), `${courseId}/week${weekIndex + 1}/assignment/submission/${fileList.item(i).name}`))
@@ -158,39 +154,43 @@ function CourseAssignment(props) {
             return;
           }
           setMsg(`Successfully submitted work(s) to ${courseId}`);
-          setSubmissionFileNames([]);
+          setDisplayUnsubmitBtn(1)
+          // console.log(filePath)
+          setSubmissionData(filePath[0])
         });
     } catch (err) {
       console.log(err.message);
     }
-    await delay(3000)
+    await delay(5000)
     setMsg('')
+    // submissionFiles.value = null;
   }
-  console.log(submissionData)
+  // console.log(submissionData)
   async function handleConfirmDeleteWork(event) {
     event.preventDefault();
     const assignmentId = +event.target.value;
     // delete file from Firebase
-    if (submissionData.length !== 0) {
-      if (!(await deleteFileHandler(submissionData[0].file_path))) {
-        console.log(`error deleting file: ${submissionData[0].file_path}`);
+    // console.log(submissionData)
+    if (submissionData !== "") {
+      if (!(await deleteFileHandler(submissionData))) {
+        console.log(`error deleting file: ${submissionData}`);
         return;
       }
-      
     }
-
-    console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission`, { userId, assignmentId });
+    // console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission`, { userId, assignmentId });
     axios.delete(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission`, { data: { userId, assignmentId } }).then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       const { status, data, message } = response.data;
       if (status !== 'success') {
         setMsg(message);
         return;
       }
       setMsg(`Successfully deleted work from ${courseId}`);
-      setSubmissionData([]);
+      setDisplayUnsubmitBtn(0)
+      setSubmissionData("");
+      setSubmissionFileNames([]);
     });
-    await delay(3000)
+    await delay(5000)
     setMsg('')
   }
   return (
@@ -304,29 +304,28 @@ function CourseAssignment(props) {
                           {filename}
                         </label>
                       ))}
-                    {submissionFileNames.length > 0 && (
-                      <button className="clearbtn" onClick={handleClearFile}>
-                        Clear
-                      </button>
-                    )}
-                    {submissionData.length > 0 &&
-                      submissionData.map((filename) => (
+                    {submissionData !== "" && submissionFileNames.length === 0 &&
                         <label
-                          value={filename}
-                          key={filename}
+                          value={submissionData}
+                          key={submissionData}
                           style={{
                             fontWeight: '500',
                             fontSize: '12px',
                             color: '#3b3b3b',
                           }}
                         >
-                          {filename.file_path.split('/')[4]}
+                          {submissionData.split('/')[4]}
                         </label>
-                      ))}
+                    }
+                    {submissionFileNames.length > 0 && submissionData.length === 0 && displayUnsubmitBtn === 0 &&(
+                      <button className="clearbtn" onClick={handleClearFile}>
+                        Clear
+                      </button>
+                    )}
+                    
                   </div>
                 </div>
-
-                {submissionFileNames.length > 0 && (
+                {displayUnsubmitBtn === 0 && (
                   <button
                     id="submit-file"
                     className="confirm-submit"
@@ -337,7 +336,7 @@ function CourseAssignment(props) {
                     Submit
                   </button>
                 )}
-                {submissionData.length > 0 && (
+                {displayUnsubmitBtn === 1 && (
                   <button className="confirm-submit" value={assignment.assignment_id} type="button" onClick={handleConfirmDeleteWork}>
                     Unsubmit
                   </button>

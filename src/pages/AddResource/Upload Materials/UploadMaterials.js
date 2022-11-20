@@ -78,7 +78,7 @@ function UploadMaterials(props) {
     } catch (err) {
       console.log(err.message);
     }
-    await delay(3000);
+    await delay(5000);
     setMsg('');
   }
 
