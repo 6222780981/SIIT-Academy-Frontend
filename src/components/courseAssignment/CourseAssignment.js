@@ -20,7 +20,8 @@ function CourseAssignment(props) {
 
   useEffect(async () => {
     // get list of assignment of the selected week
-    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment?weekId=${weekId}`).then((response) => {
+    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment?weekId=${weekId}`)
+    .then((response) => {
       console.log(response.data);
       const { status, data, message } = response.data;
       if (status === 'fail') {
@@ -158,17 +159,17 @@ function CourseAssignment(props) {
     await delay(3000)
     setMsg('')
   }
+  console.log(submissionData)
   async function handleConfirmDeleteWork(event) {
     event.preventDefault();
     const assignmentId = +event.target.value;
     // delete file from Firebase
     if (submissionData.length !== 0) {
-      for (let i = 0; i < submissionData.length; i++) {
-        if (!(await deleteFileHandler(submissionData[i].file_path))) {
-          console.log(`error deleting file: ${submissionData[i].file_path}`);
-          return;
-        }
+      if (!(await deleteFileHandler(submissionData[0].file_path))) {
+        console.log(`error deleting file: ${submissionData[0].file_path}`);
+        return;
       }
+      
     }
 
     console.log(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission`, { userId, assignmentId });
