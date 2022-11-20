@@ -37,22 +37,29 @@ function CourseAssignment(props) {
     resolve => setTimeout(resolve, ms)
   );
   //get list of submissions
-  if (filePath.length !== 0 && submissionData.length === 0) {
+  useEffect(async () => {
     console.log(
       `${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`
     );
-    axios
+    await axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`)
       .then((response) => {
         console.log(response.data);
         const { status, data, message } = response.data;
-        if (status !== 'success') {
+        console.log(data);
+        if (status === 'error') {
           return;
         }
-        console.log(data);
-        setSubmissionData(data.submissionArr);
+        else if (status === 'fail'){
+          setSubmissionData('');
+        }
+        else if (status === 'success'){
+          setSubmissionData(data.submissionArr);
+        }
+        
+        
       });
-  }
+  }, [userId, filePath]);
 
   const handleUploadWork = (event) => {
     var tempSubmissionFileNames = [...submissionFileNames];
