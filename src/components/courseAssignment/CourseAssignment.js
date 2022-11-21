@@ -58,11 +58,8 @@ function CourseAssignment(props) {
   }, [userId, filePath]);
 
   const handleUploadWork = (event) => {
-    var tempSubmissionFileNames = [...submissionFileNames];
-
-    for (let i = 0; i < event.target.files.length; i++) {
-      tempSubmissionFileNames = [...tempSubmissionFileNames, event.target.files[i].name];
-    }
+    console.log(event.target.files);
+    var tempSubmissionFileNames = [event.target.files[0].name];
     setSubmissionFileNames(tempSubmissionFileNames);
   };
   async function handleDeleteAssignment(event) {
@@ -177,7 +174,7 @@ function CourseAssignment(props) {
       setMsg(`Successfully deleted work from ${courseId}`);
       setDisplayUnsubmitBtn(0)
       setSubmissionData("");
-      setSubmissionFileNames([]);
+      handleClearFile();
     });
     await delay(5000)
     setMsg('')
