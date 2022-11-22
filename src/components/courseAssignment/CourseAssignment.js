@@ -43,7 +43,6 @@ function CourseAssignment(props) {
       .get(`${process.env.REACT_APP_BACKEND_URL}/week/assignment/submission?userId=${userId}&assignmentId=${filePath[0].assignment_id}`)
       .then((response) => {
         const { status, data, message } = response.data;
-        console.log(status)
         if (status === 'error') {
           return;
         }
@@ -58,7 +57,6 @@ function CourseAssignment(props) {
         }
       });
   }, [userId, filePath]);
-  console.log(submissionFileNames);
   const handleUploadWork = (event) => {
     console.log(event.target.files);
     var tempSubmissionFileNames = [event.target.files[0].name];
