@@ -31,7 +31,7 @@ npm install
 npm start
 ```
 
-## Contributions
+## Contributors
 
 - Mr. Nontawat Thanundonsuk 6222770735@g.siit.tu.ac.th
 - Mr. Phakin Chutipanich 6222780882@g.siit.tu.ac.th
